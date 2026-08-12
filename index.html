@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Growth RPG</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="game">
+
+    <h1>⚔️ Growth RPG ⚔️</h1>
+
+    <div class="status">
+
+        <h2 id="playerName">勇者</h2>
+
+        <p>Lv <span id="level">1</span></p>
+
+        <p>HP <span id="hp">100</span> / <span id="maxHp">100</span></p>
+
+<div class="bar">
+    <div id="hpBar" class="hpBar"></div>
+</div>
+
+<p>EXP <span id="exp">0</span> / <span id="nextExp">100</span></p>
+
+<div class="bar">
+    <div id="expBar" class="expBar"></div>
+</div>
+
+        <p>攻撃 <span id="atk">10</span></p>
+
+        <p>防御 <span id="def">5</span></p>
+
+        <p>所持金 <span id="gold">100</span> G</p>
+
+        <p>武器 <span id="weapon">なし</span></p>
+        
+        <p>防具 <span id="armor">なし</span></p>
+
+    </div>
+
+    <div class="buttons">
+
+        <button onclick="train()">🏋️ 訓練</button>
+
+        <button onclick="adventure()">🌳 冒険</button>
+
+        <button onclick="heal()">❤️ 回復</button>
+
+        <button onclick="openEquipment()">装備</button>
+
+        <button onclick="shop()">🏪 ショップ</button>
+
+        <button onclick="saveGame()">💾 セーブ</button>
+
+        <button onclick="loadGame()">📂 ロード</button>
+
+      
+
+    </div>
+
+    <div class="log">
+
+        <h3>ログ</h3>
+
+        <p id="log">ゲーム開始！</p>
+
+    </div>
+<div id="battle" class="battle" style="display:none;">
+    <h2 id="enemyName">スライム</h2>
+
+    <p>
+        HP
+        <span id="enemyHp">20</span> /
+        <span id="enemyMaxHp">20</span>
+    </p>
+<p>MP <span id="mp">20</span> / <span id="maxMp">20</span></p>
+
+<div class="bar">
+    <div id="mpBar" class="mpBar"></div>
+</div>
+    <div class="bar">
+        <div id="enemyHpBar" class="hpBar"></div>
+    </div>
+
+    <button onclick="attack()">⚔️ 攻撃</button>
+    <button onclick="defend()">🛡️ 防御</button>
+    <button onclick="openSkillMenu()">✨ スキル</button>
+<div id="skillMenu" style="display:none;">
+
+    <h3>✨ スキル選択</h3>
+
+    <div id="skillList"></div>
+
+    <button onclick="closeSkillMenu()">
+        戻る
+    </button>
+
+</div>
+
+
+
+    <button onclick="useItem()">🎒 アイテム</button>
+    <button onclick="runAway()">🏃 逃げる</button>
+</div>
+<div id="equipmentScreen" class="screen">
+    <h2>装備一覧</h2>
+
+<button onclick="removeEquipment()">装備を外す</button>
+
+<button onclick="closeEquipment()">戻る</button>
+    <h3>現在の装備</h3>
+    <p id="weaponText">武器：なし</p>
+    <p id="armorText">防具：なし</p>
+    
+    <div id="equipmentList"></div>
+</div>
+
+    
+</div>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
+
+
+
+
+
+
+<button onclick="testGold()">テスト：1000G</button>

@@ -1,0 +1,1521 @@
+@charset "utf-8";
+/* CSS Document */
+
+.clsA2X{
+	display:			None;
+}
+
+.clsDT{
+	display:			None;
+}
+
+.clsDTS{
+	display:			None;
+}
+
+.clsN11K{
+	display:			None;
+}
+
+.clsN11N{
+	display:			None;
+}
+
+.clsN13S{
+	display:			None;
+}
+
+.clsSol{
+	/*display:			None;*/
+}
+
+.clsN14{
+	display:			None;
+}
+
+.clsN14S{
+	display:			None;
+}
+
+.clsN16{
+	display:			None;
+}
+
+.clsN15{
+	display:			None;
+}
+
+.clsN15R{
+	display:			None;
+}
+
+.clsN15S{
+	display:			None;
+}
+
+.clsNX{
+	display:			None;
+}
+
+.clsGX{
+	display:			None;
+}
+
+.clsPM{
+	display:			None;
+}
+
+.clsPMX{
+	display:			None;
+}
+
+.clsKBFnNormal{
+	/*display:			None;*/
+}
+.clsKBFnReverse{
+	/*display:			None;*/
+}
+
+.clsDESK{
+	display:			None;
+}
+.clsNOTE{
+	/* display:			None; */
+}
+
+/*-----------------------------------------------------------*/
+.debug{
+	display:			None;
+}
+/*-----------------------------------------------------------*/
+.debug_hw{
+	display:			None;
+}
+/*-----------------------------------------------------------*/
+
+.clsLink{
+	color: #0000FF;
+	border-bottom: 1px solid blue;
+	cursor:pointer;
+}
+
+/******************	要素の定義　ここから			******************/
+
+body{
+	margin:0;
+	padding:10px 25px 10px 25px;/* マージン相殺回避のため余白はpaddingで固定 */
+	color:#000000;
+	background-color:#FFFFFF;
+	font-family:"メイリオ";
+	font-size:1rem;/*before 80%*/
+}
+
+p,li,div,td,th{
+	font-weight:normal;
+}
+
+div,p,form,select,input,h1,h2,h3,h4,img{
+	margin:0;
+	padding:0;
+	border-width:0;
+}
+
+ul{
+	margin-top:		0.4em;
+	margin-bottom:	0;
+	margin-left:	1em;/* NMP */
+	margin-right:	30px;/*before 0*/
+}
+
+/*Add NMP*/
+ol{
+	margin-top:		0.4em;
+	margin-bottom:	0;
+	margin-left:	1em;
+	margin-right:	30px;
+}
+
+li{
+	margin-bottom:	0.875rem;/*before 0.4em*/
+}
+
+ul li ol,
+ul li ul{
+	margin-top:		0.2em;
+}
+
+ul li ul li,
+ul li ol li{
+	margin-bottom:	0.2em;
+}
+
+ol li ul{
+	list-style:disc;
+}
+
+ol li ul li ul{
+	list-style:circle;
+}
+
+td ol{
+	margin-top:		0.2em;
+	margin-left:	25px;
+}
+
+a:link{
+	color:#3333CC;
+	text-decoration:underline;
+}
+
+a:visited,a:active{
+	color:#3333CC;
+	text-decoration:underline;
+}
+
+a:hover{
+	color:#3399FF;
+}
+/******************	要素の定義　ここまで			******************/
+
+
+/******************	共通スタイル　ここから			******************/
+
+/***************** h4 Start ********************/
+/* h4 アプリナビコンテンツ中の使用実績無しのため、転用:NMP */
+body.int_main h4,
+
+body.qa_contents h4{
+	/* position:relative; *//*addto*/
+	margin:				1em 0.5rem;/* before 0.7em 0em 0.3em 1.1em;NMP */
+	font-size:			1rem;/* before 120%;NMP */
+	padding-left:		2rem; /* NMP */
+	line-height:		1.3em;
+	font-weight: 		normal; /* before bold;NMP */
+}
+
+body.int_main h4:before,
+body.qa_contents h4:before{
+	/* position:absolute; *//* Add by NMP */
+	/* left:0; *//* Add by NMP */
+	/* font-size:1.125rem;*/ /* Add by NMP */
+
+	display:			inline-block;
+	content:			"◇";
+	margin-left:		-1.22em;/* NMP */
+	width:				1.22em;/* NMP */
+	/* font-size:			90%; *//* NMP */
+	/* vertical-align:		10%; *//* NMP */
+
+}
+
+body.int_main h4:after,
+body.qa_contents h4:after{
+	display:			inline-block; /* Add by NMP */
+	margin-left:		0.22em;/* Add by NMP */
+	content:			"◇"; /* Add by NMP */
+	width:				1.22em; /* Add by NMP */
+}
+
+body.int_main h4 img,
+body.qa_contents h4 img{
+	vertical-align:			middle;
+}
+/****************** h4 End *********************/
+
+/***************** Mark Start ********************/
+
+/* 「とくに重要」 */
+div.primary_box{
+	margin:				20px 30px 10px;/*before 20px 0px 10px 5px*/
+	padding:			30px 5px 10px;
+	border:				2px solid #ea5514;/*before 2px solid #999999*/
+	border-radius:		0;/*before 10px*/
+}
+
+div.primary_box:before{
+	content:url(../img/mark_primary.astpng);
+	position:			absolute;
+	margin-left:		-25px;
+	margin-top:			-45px;
+	z-index:			1;
+}
+
+div.primary_box *{
+	font-weight:bold;
+}
+
+div.primary_box p,
+div.primary_box ul,
+div.primary_box ol{
+	line-height:		1.5em;
+}
+div.primary_box ul{
+	margin-left:0;/*addto*/
+}
+
+/* 「重要」 */
+div.important_box{
+	margin-top:			10px;
+	min-height:			28px;
+}
+
+div.important_box *{
+	font-weight:bold;
+	margin-bottom:1.250em;/*addto*/
+}
+
+p.important_title{
+	margin:0 142px 5px;/*addto*/
+	/* padding-left:112px;/*before 90px NMP*/
+	/* margin:0 30px 5px;/*addto*/
+}
+
+p.important_title:before{
+	content:url(../img/mark_important.astpng);
+	margin-left:-128px;/*before -112px NMP*//*before -90px NMP*/
+	display:inline-block;
+	vertical-align:middle;
+	width:112px;/*before 90px NMP*/
+}
+
+p.important_title + p,
+p.important_title + ul,
+p.important_title + ol{
+	margin-top:		0px;
+	line-height:	1.5em;
+	margin:0px 30px 10px 30px;/*addto*/
+}
+
+p.important_title + p img,
+p.important_title + li img{
+	vertical-align:		middle;
+}
+
+/* 「参考」 */
+div.consult_box{
+	margin-top:			10px;
+	min-height:			28px;
+}
+
+div.consult_box *{
+	font-weight:normal;
+}
+
+p.consult_title{
+	/*padding-left:		90px;*/
+	font-weight:		bold;
+	margin:0 120px 5px;/*add to NMP*/
+}
+
+p.consult_title:before{
+	content:url(../img/mark_reference2.astpng); /* before image "mark_consult.astpng" NMP */
+	margin-left:-98px;/* before -90px:NMP */
+	display:inline-block;
+	vertical-align:middle;
+	width:90px;
+}
+
+p.consult_title + p,
+p.consult_title + ul,
+p.consult_title + ol{
+	line-height:		1.5em;
+	margin:0px 30px 10px 30px;/*addto NMP*/
+}
+
+p.consult_title + p img,
+p.consult_title + li img{
+	vertical-align:		middle;
+}
+
+/* 「参照」 */
+div.reference_box{
+	margin:			10px 30px 10px 22px;/* before 10px 55px 10px -NMP *//*before 10px 0*/
+	min-height:		24px;
+}
+
+div.reference_box:before{
+	content:			url(../img/mark_reference.astpng);
+}
+
+div.reference_box *{
+	font-weight:normal;
+}
+
+div.reference_box p:first-child,
+div.reference_box ul:first-child,
+div.reference_box ol:first-child{
+	margin-top:-30px;/*before -24px*/
+	font-size:0.8125rem;/*addto*/
+}
+
+div.reference_box p,
+div.reference_box ul,
+div.reference_box ol{
+	margin-left:		96px;/*before 110px*//*before 88px*/
+	line-height:		1.5em;
+}
+
+div.reference_box img{
+	vertical-align:		middle;
+}
+
+/***************** Mark End ********************/
+
+/***************** Table Start ********************/
+/* 表スタイル（グレー）　ここから */
+table.launch{
+	background-color:	#FFFFFF;
+	border-bottom:		Solid 1px #999999;
+	border-collapse:	Collapse;
+	font-weight:		normal;
+	font-family:		"メイリオ";
+	margin:				12px 0px 10px 0px;
+	text-align:			left;
+	vertical-align:		middle;
+	width:				100%;
+}
+
+table.launch th{
+	border:				solid 1px #999999;
+	width:				200px;
+}
+
+table.launch td{
+	border:				solid 1px #999999;
+	margin:				0px;
+	padding:			7px;
+}
+
+table.launch td.type_normal{
+	background:			#EEEEEE;
+	font-weight:		bold;
+}
+table.launch td.type_center{
+	background:			#EEEEEE;
+	font-weight:		bold;
+	text-align:			center;
+}
+table.launch td.type_thick{
+	background:			#DADADA;
+	font-weight:		bold;
+}
+table.launch td.type_top{
+	vertical-align:		top;
+}
+table.launch td.type_top ul{
+	margin-top:			0px;
+	margin-left:		16px;
+}
+table.launch td.type_top li{
+	margin-bottom:		0px;
+}
+/* 表スタイル（グレー）　ここまで */
+
+div.int_detail{
+	text-align:			center;
+	margin:				16px 32px 0px 0px;
+}
+
+/* 表スタイル　パソコンの情報　ここから */
+table.launch_pcinfo{
+	padding:	14px 0px 16px 17px;
+	background:	#FFFFFF;
+	width:		100%;
+	border:		solid 1px #D1D1D0;
+}
+
+table.launch_pcinfo tr td table tr td{
+	text-align:		left;
+	vertical-align:	top;
+	width:			230px;
+}
+table.launch_pcinfo tr td table tr td.title_pcinfo{
+	font-weight:	bold;
+}
+/* 表スタイル　パソコンの情報　ここまで */
+
+
+/****************** Table End *********************/
+
+/***************** Annotation Start ********************/
+
+/* 注釈 通常*/
+p.annotation{
+	/* margin-left:2em; *//* CO NMP */
+	margin-left:3.5em;/* ADD NMP*/
+	margin-right:30px;/* ADD NMP*/
+}
+p.annotation:before{
+	content:"※：";
+	display:inline-block;
+	min-width:2em;
+	margin-left:-2em;
+	/* margin-left:0px; */
+}
+
+/* 注釈 連番*/
+ul.annotation_list{
+	list-style:none;
+	margin-left:5em;/* CO NMP */
+	/* margin-left:7.0em;/* ADD NMP*/
+	margin-right:30px;
+	padding:0em;
+	counter-reset:annotation_number;
+}
+ul.annotation_list >li:before{
+	counter-increment:	annotation_number;
+	content:"※"counter(annotation_number)"：";
+	display:inline-block;
+	min-width:3.5em;
+	margin-left:-3.5em;
+}
+
+div.step_noindent p.annotation,
+div.step_noindent ul.annotation_list{
+	margin-top:		8px;
+}
+
+/***************** Annotation Start ********************/
+
+
+/***************** 汎用 Style Start ********************/
+
+/* 右寄せ */
+.alignr{
+	text-align:			right;
+	margin-top:			28px;
+}
+.alignr img{
+	margin-left:		6px;
+	vertical-align:		middle;
+}
+
+.valign_mid{
+	vertical-align:		middle;
+}
+
+.valign_top{
+	vertical-align:		top;
+}
+
+/* 中央寄せ*/
+.alignc{
+	text-align:			center;
+}
+
+/* 左寄せ */
+.alignl{
+	text-align:			left;
+}
+
+.alignl img{
+	margin-right:		6px;
+}
+
+.small{
+	margin-top:			6px;
+	font-size:			90%;
+}
+
+/* 電話番号 */
+.call_text{
+	font-size:			medium;
+	vertical-align:		middle;
+}
+
+/* URLの折り返し */
+.url_turn{
+	/* word-wrap:break-word; */
+	word-break:break-all;
+}
+
+/* 強調 */
+.emphasis{
+	font-weight:bold;
+}
+
+/* フォントサイズアップ */
+.sizeup_level1{
+	font-size:140%;
+}
+
+/* 改行禁止 */
+.no_return{
+	white-space:nowrap;
+}
+
+/****************** 汎用 Style End *********************/
+
+/******************	共通スタイル　ここまで			******************/
+
+
+/******************	通常コンテンツ　ここから		******************/
+
+body.int_main{
+	margin:		0;/*before 2px 10px 10px 10px*/
+}
+
+@media screen{
+	body.int_main{
+		padding-bottom:	0;/*before 60px*/
+	}
+}
+
+@media print{
+	body.int_main div.int_main div.table_comment_print{
+		margin-top:		1em;
+	}
+}
+
+/***************** h1（ページタイトル） *****************/
+
+body.int_main h1{
+	margin:				0em;
+	padding:			2px 2px 5px 0px;
+	font-size:			1.5rem;/*before 200%*/
+	font-weight:		normal;
+	line-height:		1.3em;
+}
+
+body.int_main h1 img{
+	vertical-align:		middle;
+}
+
+/*********************** h1 END *************************/
+
+/***************** h2（大タイトル） *****************/
+
+body.int_main h2{
+	/* margin:			10px 25px 15px;*//*before 1em 0 0.3em*/
+	margin-bottom:	15px;/*NMP*/
+	padding:			0.625em 2px 0.625em 18px;/*before 0.3em 2px 0.2em 8px*/
+	font-weight:		bold;
+	font-size:			1.375rem;/*before 150%*/
+	line-height:		1.3em;
+	border-left:solid 8px #ea5514;/*addto*/
+	border-bottom:solid 1px #ea5514;/*addto*/
+/*  色別CSSで指定する */
+/*	border-left:		solid 7px #66CCFF;	*/
+/*	border-bottom:		solid 1px #66CCFF;	*/
+}
+
+body.int_main h2 img{
+	vertical-align:		middle;
+}
+
+/***************** h2 END *****************/
+
+/***************** h3（中タイトル） *****************/
+
+body.int_main h3{
+	position:relative;/*addto*/
+	margin:				1em 0.5rem;/*before 1em 0em 0.5em 0em*/
+	/* padding-left:	30px; *//*before 15px*/
+	padding-left:		1.5rem; /* NMP */
+	font-weight:		normal;/*before bold*/
+	font-size:			1rem;/*before 130%*/
+	line-height:		1.3em;
+}
+
+/*addto*/
+body.int_main h3:before{
+	position:absolute;
+	left:0;
+	content:"▲";
+	transform:rotate(90deg);
+	font-size:1.125rem;
+}
+
+body.int_main h3 img{
+	vertical-align:			middle;
+}
+
+/***************** h3 END *****************/
+
+/***************** 活用コンテンツ用追加:NMP *****************/
+/* h4は活用コンテンツのみでの仕様だったのでh3に変更し、h4は別の表記に転用 */
+/*
+body.int_main h4.katsu{
+	position:relative;
+	margin:				1em 0.5rem;
+	padding-left:		1.0rem;
+	padding-right:		1.0rem;
+	padding-top:		0.25rem;
+	padding-bottom:		0.25rem;
+	border-radius:		0.5rem;
+	font-weight:		bold;
+	font-size:			1rem;
+	color:				#FFF;
+	background-color:	#ea5514;
+	line-height:		1.3em;
+}
+*/
+/* 全体指定の打ち消し */
+/*
+body.int_main h4.katsu:before{
+	display:			inline-block;
+	content:			none;
+	margin-left:		0;
+	width:				0;
+}
+*/
+/*
+body.int_main h4.katsu{
+	vertical-align:			middle;
+}
+*/
+
+/* h3 */
+/* コメントアウトは全体設定と同値 */
+body.int_main h3.katsu{
+	/* position:relative; */
+	/* margin:				1em 0.5rem; */
+	padding-left:		1.0rem;
+	padding-right:		1.0rem;
+	padding-top:		0.25rem;
+	padding-bottom:		0.25rem;
+	border-radius:		0.5rem;
+	font-weight:		bold;
+	/* font-size:			1rem; */
+	color:				#FFF;
+	background-color:	#ea5514;
+	/* line-height:		1.3em; */
+}
+
+/* 全体指定の打ち消し */
+body.int_main h3.katsu:before{
+	/* display:			inline-block; */
+	content:			none;
+	/* margin-left:		0; */
+	/* width:				0; */
+}
+
+/*
+body.int_main h3.katsu{
+	vertical-align:			middle;
+}
+*/
+
+/* ヒントパラグラフ */
+p.hint{
+	position:relative;
+	padding-left:		0.5rem;
+	padding-right:		0.5rem;
+	padding-top:		0.5rem;
+	padding-bottom:		0.5rem;
+	border-radius:		1.0rem;
+	border-color:		#F6BB48;
+	border-style:		dashed;
+	border-width:		4px;
+}
+
+/***************** 活用コンテンツ用追加 ここまで *****************/
+
+/***************** 印刷ボタン、ソフト起動ボタン　ここから *****************/
+body.int_main p.print_button,
+body.qa_contents p.print_button{
+	text-align:			right;
+	padding-top:		2px;
+	padding-bottom:		10px;
+}
+body.int_main p.right_button{
+	text-align:			right;
+	padding-top:		2px;
+	padding-bottom:		10px;
+}
+body.int_main p.runSoft_button{
+	padding:		5px 25px 0px;/*before 10px 0*/
+}
+img.pgPrint,
+img.button,
+img.office_action{
+	cursor:				Pointer;
+}
+
+img.runSoft,
+img.movie{
+	cursor:				Pointer;
+	padding-right:4px;
+}
+
+@media screen{
+	img.pgPrint:hover,
+	img.runSoft:hover,
+	img.movie:hover,
+	img.office_action:hover{
+	}
+}
+
+/*addto ------------------*/
+body.int_main .operation_button a{
+	border-bottom:0;
+	text-decoration:none;
+}
+body.int_main .operation_button a{
+	/* width:auto; min-width:200px; */
+	width:auto; min-width:260px;
+	padding:15px;
+	margin-bottom:10px;
+	display:inline-block;
+	color:#333;
+	font-size:1rem;
+	font-weight:bold;
+	text-align:center;
+	cursor:pointer;
+	box-shadow:2.12px 2.12px 1px 1px rgba(35,24,21,.2);/* Add NMP 201805 */
+}
+body.int_main .operation_button a span{
+	display:inline-block;
+	background-repeat:no-repeat;
+	background-position:0 center;
+	background-size:30px auto;
+	padding-left:35px;
+}
+body.int_main .operation_button a.icon_move span{
+	background-image:url("../img/move.astpng");
+}
+body.int_main .operation_button a.icon_manual span{
+	background-image:url("../img/manual.astpng");
+}
+body.int_main .operation_button a.icon_help span{
+	background-image:url("../img/help.astpng");
+}
+body.int_main .operation_button a{background:#F6CB49;}
+body.int_main .operation_button a:hover{background:#F6BB48;}
+body.int_main .operation_button a:active,
+body.int_main .operation_button a:focus{
+	background:#F29119; color:#fff;
+}
+body.int_main .operation_button a.icon_move:active span,
+body.int_main .operation_button a.icon_move:focus span{
+	background-image:url("../img/move_down.astpng");
+}
+body.int_main .operation_button a.icon_manual:active span,
+body.int_main .operation_button a.icon_manual:focus span{
+	background-image:url("../img/manual_down.astpng");
+}
+body.int_main .operation_button a.icon_help:active span,
+body.int_main .operation_button a.icon_help:focus span{
+	background-image:url("../img/help_down.astpng");
+}
+
+/*ADD NMP*/ 
+body.int_main .operation_button a.icon_site span{
+	background-image:url("../img/site.astpng");
+}
+
+body.int_main .operation_button a.icon_site:active span,
+body.int_main .operation_button a.icon_site:focus span{
+	background-image:url("../img/site_down.astpng");
+}
+/*ADD NMP*/ 
+
+/***************** 印刷ボタン、ソフト起動ボタン　ここまで *****************/
+
+/*h2（サブタイトル）ナビゲーション用*/
+body.int_main ul.page_nav{
+	margin-left:0em;
+	padding-left:1.5em;
+	padding-top:14px;
+}
+
+/* 本文 */
+body.int_main p.pra_normal{
+	line-height:	1.6em;/*before 1.7em*/
+	margin-left:	30px;
+	margin-right:	30px;
+	margin-bottom:	10px;
+	/* margin:0 55px 10px;*//*addto*/
+}
+
+
+/* 箇条書き */
+body.int_main ul.dot_normal li,
+body.int_main ul.dot_normal li ol,
+body.int_main ul.dot_normal li ul{
+	line-height:		1.5em;
+	/* text-indent:14px;*//*addto*//* Delete NMP 20171221*/
+}
+
+body.int_main p.pra_normal img,
+body.int_main ul.dot_normal li img{
+	vertical-align:		middle;
+}
+
+/* イラスト中央揃え */
+p.illust{
+	margin-top:			1em;
+	text-align:			center;
+}
+
+/* 画像 */
+img.figure{
+	margin-bottom:6px;
+}
+
+/* 手順 */
+/*手順フレーム*/
+ol.step_frame{
+	margin:				12px 0px 0px 5px;
+	padding:			7px 17px 17px 5px;
+	list-style:			decimal;
+	border:				solid 3px  #CCCCCC;
+}
+
+ol.caption_step{
+	margin:				12px 0px 0px 6px;
+	padding:			0em;
+	list-style:			decimal;
+}
+
+/*手順文*/
+li.stepLevel1{
+	font-weight:		bold;
+	margin-top:			1.5em;
+	margin-left:		32px;
+}
+
+li.step_no_number{
+	font-weight:		bold;
+	margin-left:		0px;
+	list-style-type:	none;
+}
+
+
+
+/*結果文*/
+ol.step_frame p.step_body{
+	margin-top:			8px;
+}
+
+ol.step_frame ul.step_bodydot{
+	margin-top:			8px;
+}
+
+ol.caption_step p.step_body{
+	margin-top:			1em;
+}
+
+ol.step_frame p.step_subhead,
+ol.caption_step p.step_subhead{
+	margin-top:			2em;
+	font-weight:		bold;
+	margin-left:		1.2em;
+}
+
+ol.step_frame p.step_subhead:before,
+ol.caption_step p.step_subhead:before{
+	display:			inline-block;
+	content:			"◆";
+	width:1.2em;
+	margin-left:-1.2em;
+}
+
+/*結果 インデントなし*/
+div.step_noindent{
+	margin-left:		-32px;
+}
+
+.listLevel2{
+	margin:				3px 17px 0px 37px;
+}
+
+.stepLevel1 img,
+.step_body img,
+.listLevel2 img{
+	vertical-align:		middle;
+}
+
+/*サブ手順（iframe）*/
+span.hidden_tilte{
+	margin-top:8px;
+	color:#3030D6;
+	cursor:Pointer;
+	text-decoration:underline;
+}
+
+span.hidden_tilte:hover{
+	color:#3399FF;
+}
+
+.closed{
+	display:none;
+}
+
+.opened{
+	display:block;
+	margin-top:8px;
+	width:100%;
+	height:10em;
+	border:none;
+}
+
+/******************	QA以外用スタイル　ここまで		******************/
+
+
+
+/******************	QA用スタイル　ここから			******************/
+
+/********** QA Common **********/
+body.qa_contents{
+	margin:				2px 10px 24px 10px;
+	padding-bottom:		10%;
+}
+
+/********** QA TOC **********/
+body.qa_contents div.int_main{
+	line-height:		1.35em;
+}
+
+/**********目次ページ ここから **********/
+
+/********** 見出し **********/
+body.qa_contents h1{
+	margin:				0em;
+	padding:			2px 2px 5px 0px;
+	font-size:			200%;
+	font-weight:		normal;
+	line-height:		1.3em;
+}
+
+body.qa_contents h1 img{
+	vertical-align:		middle;
+}
+
+/********** 本文 **********/
+body.qa_contents p.title_middle_link{
+	font-size:			125%;
+	font-weight:		bold;
+	margin:				0px 0px 7px 42px;
+	text-indent:		-42px;
+	margin-bottom:		17px;
+}
+
+body.qa_contents p.title_middle_link img{
+	vertical-align:		middle;
+}
+
+body.qa_contents p.title_middle_link a{
+	color:				#3030D6;
+}
+
+body.qa_contents p.title_middle_link a:hover{
+	color:				#3399FF;
+}
+
+body.qa_contents p.title_middle_link a:hover span.model{
+	color:				#3399FF;
+}
+
+body.qa_contents p.title_middle_link a div.model{
+	color:				#FF3333;
+	text-decoration:	none;
+	margin-top:			-10px;
+	text-indent:		6px;
+}
+/********** 目次ページ ここまで **********/
+
+/********** QA Contents ここから **********/
+
+/********** 見出し **********/
+body.qa_contents h2.question{
+	font-weight:		bold;
+	font-size:			130%;
+	font-weight:		bold;
+	margin:				0px 0px 0px 52px;
+	min-height:			40px;
+}
+
+body.qa_contents h2.question:before{
+	content:url(../img/qa_q.astpng);
+	vertical-align:top;
+	margin-left:-52px;
+	position:absolute;
+}
+
+body.qa_contents h2.question img{
+	vertical-align:		middle;
+}
+
+body.qa_contents h3.answer{
+	font-size:			130%;
+	font-weight:		normal;
+	color:				#CC0000;
+	border-top:			dashed 1px #000000;
+	margin:				10px 0px 0px 0px;
+	padding-top:		10px;
+	padding-left:		52px;
+	min-height:			40px;
+}
+
+body.qa_contents h3.answer:before{
+	content:url(../img/answer.astpng);
+	vertical-align:top;
+	margin-left:-52px;
+	position:absolute;
+}
+
+/********** 本文 **********/
+body.qa_contents p.textLevel1{
+	line-height:		1.35em;
+	margin:				8px 12px 0px 0px;
+}
+
+body.qa_contents p.textLevel1 img{
+	vertical-align:		middle;
+}
+
+body.qa_contents ul li.listLevel1{
+	line-height:		1.35em;
+	margin-left:		3px;
+}
+
+body.qa_contents ul li.listLevel1 img{
+	vertical-align:		middle;
+}
+/********** QA Contents ここまで **********/
+
+/******************	QA用スタイル　ここまで			******************/
+
+@media screen{
+	.freespace{
+	margin-top:300px;
+	}
+}
+
+.selected{
+background-color:		#000;
+color:					#fff;
+}
+
+div.support_frame{
+	border:				Solid 1px #999999;
+	padding:			10px;
+}
+
+/******************	iframe用スタイル　ここから		******************/
+
+body.sub{
+	margin:0px;
+	padding:1em 8px 0px 8px;
+	background-color:#CCCCCC;
+}
+
+body.sub p.step_subhead{
+	font-weight:		bold;
+	margin-left:		1.2em;
+}
+
+body.sub p.step_subhead:before{
+	display:			inline-block;
+	content:			"◆";
+	width:1.2em;
+	margin-left:-1.2em;
+}
+
+body.sub ol.sub_step{
+	margin-top:0.5em;
+	margin-bottom:0em;
+}
+
+body.sub ol.sub_step li{
+	margin:0.5em 0em 0em 0em;
+}
+
+/******************	iframe用スタイル　ここまで		******************/
+
+
+/******************	ページトップ用　ここから		******************/
+
+#to_top_page{
+	position: fixed;
+	bottom: 0;
+	right: 40px;
+	display:none;
+	width: 180px;
+	height:30px;
+	text-align: center;
+}
+
+#to_top_page a {
+	text-decoration: none;
+	color: #ffffff;
+	line-height:30px;
+	font-size:12px;
+	display:block;
+	padding-right:20px;
+	background: url(../img/top.astpng) no-repeat;
+}
+
+#to_top_page a:hover {
+	background-position:0 -30px;
+}
+/******************	ページトップ用　ここまで		******************/
+
+/******************	カラム用　ここから		******************/
+/*addto*/
+.clmbox_wrap,.clmbox_wrap *{
+	-o-box-sizing:border-box;
+	-ms-box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	-webkit-box-sizing:border-box;
+	box-sizing:border-box;
+}
+.clmbox_wrap{
+	width:100%;
+}
+.clmbox_press{
+	/* margin:0 25px 15px 0; */
+	position:relative;
+	display:-webkit-box;
+	display:-ms-flexbox;
+	display:-webkit-flex;
+	display:flex;
+}
+.clmbox{
+	width:50%;
+	/* text-align:center; *//* Disabled NMP */
+}
+
+/* Add NMP */
+.clmbox_app{
+	width:40%; /* before 50% 20180717 NMP */
+	text-align:center;
+	padding:16px;
+	float:right;
+}
+
+.clmbox_app img{
+	width:100%;
+	max-width:330px;
+	margin: 8px;
+}
+
+.clear_float {
+	clear:both;
+}
+
+/* 20180206 */
+
+/* Add NMP */
+.clmbox_web{
+	width:50%;
+	text-align:center;
+	padding:0 16px 16px 16px;
+	float:right;
+}
+
+.clmbox_web img{
+	width:100%;
+	max-width:330px;
+	padding:0 8px 8px 8px;
+}
+
+/* 20180425 */
+
+.nodeco {
+	text-decoration:none;
+}
+
+/* Add NMP */
+
+/*
+.clmbox ul{
+	text-align:left;
+	font-size:0;
+	margin-right:10px;
+	margin-left:10px;
+}
+.clmbox ul li{
+	font-size:1rem;
+}
+.clmbox ul li:last-child{
+	margin-bottom:0;
+}
+*//* 他のリスト指定と干渉するため一時無効化 */
+.clmbox h2{
+	margin-top:0!important;
+}
+.clmbox img{
+	width:100%;
+	max-width:330px;
+}
+/******************	カラム用　ここまで		******************/
+
+/******************	Head Object用　ここから		******************/
+/*addto*/
+#SoftRunOcx{
+	display:inherit;
+}
+/******************	Head Object用　ここまで		******************/
+
+/******************	WEB コンテンツ用　ここから		******************/
+.int_web *, .int_web *:before, .int_web *:after{
+box-sizing:border-box;
+-moz-box-sizing:border-box;
+-webkit-box-sizing:border-box;
+-ms-box-sizing:border-box;
+}
+.int_web ul, .int_web ol, .int_web li{
+margin:0;
+padding:0;
+list-style-type:none;
+}
+.int_web .container:before, .int_web .container:after{
+content: " ";
+display: table;
+}
+/* Micro clearfix */
+.int_web .cf:before, .int_web .cf:after{
+content:"";
+display:table;
+}
+.int_web .cf:after{clear:both;}
+/* For IE 6/7 (trigger hasLayout) */
+.int_web .cf{zoom:1;}
+/*=======
+Content
+=====================*/
+.int_web{
+	/* width:100%; */
+	margin:0;
+}
+.int_web .flex--box{
+display:-webkit-box;
+display:-ms-flexbox;
+display:-webkit-flex;
+display:flex;
+-webkit-box-align:center; /* ADD 201804 → CO */
+-ms-flex-align:center; /* ADD 201804 → CO */
+-webkit-align-items:center; /* ADD 201804 → CO */
+align-items:center; /* ADD 201804 → CO */
+}
+/* ▽ Add to NMP */
+.int_web .flex--main{
+display:-webkit-box;
+display:-ms-flexbox;
+display:-webkit-flex;
+display:flex;
+}
+/* △ Add to NMP */
+
+.int_web_inner{
+	width:100%;
+	padding:0 0 25px;
+}
+.int_web_head{
+	width:100%;
+	padding:0;
+	margin-bottom:15px;
+}
+.int_web_title{
+	/* width:100%; *//* CO by NMP */
+	background:#F6CB49;
+	min-height:80px;
+	margin-top: -10px;/* Add by NMP */
+	margin-left: -25px;/* Add by NMP */
+	margin-right: -25px;/* Add by NMP */
+	position:relative;/* Add 201804 */
+}
+.int_web_head h1{
+	position:relative;
+	width:74.4444445%;
+	text-align:left;
+	padding:15px 0 15px 25px;/* Add 201804 */
+	line-height:1.1;
+	/* font-size:1.75rem; */ /* CO by NMP */
+	font-size:1.45rem;
+}
+.int_web_head h1.img--only{font-size:0;}
+.int_web_head h1 img{
+	/* width:100%; *//* CO by NMP */
+	max-width:50px;
+	max-height:50px;
+	vertical-align:middle;/* Add by NMP */
+}
+.int_web_head h1.title--imgtxt em{
+	padding-left:15px;
+	font-style:normal;
+	font-weight:bold;/* Add by NMP */
+	color:#333;
+}
+.int_web_head h2{
+	margin-top:15px;
+	font-size:1.125rem;
+	padding:0 25px;
+}
+.int_web_clm{
+	width:100%;
+	margin-bottom:20px;
+	padding:0 25px;
+}
+.int_web_box{
+	width:100%;
+}
+.int_web_clm.clm--two .int_web_box{
+	text-align:left;
+}
+.int_web_clm.clm--two .int_web_box:first-child{
+	width:50%;
+	padding-right:20px;
+}
+.int_web_clm.clm--two .int_web_box:last-child{
+	width:50%;
+}
+.int_web_box p{
+	margin-bottom:15px;
+	line-height:1.8em;
+}
+.int_web_box p span{
+	display:block;
+}
+/*
+.int_web_box h2{
+	margin-bottom:15px;
+	font-size:1.125rem;
+}
+*/
+.site_view{
+width:100%;
+text-align:center !important;
+}
+.site_view img{
+width:100%;
+max-width:330px;
+}
+.int_web_inner .operation_button a{
+	border-bottom:0;
+	text-decoration:none;
+}
+.int_web_inner .operation_button{text-align:center;}
+.int_web_inner .operation_button a{
+	width:auto; min-width:200px;
+	padding:15px;
+	margin-bottom:10px;
+	display:inline-block;
+	color:#333;
+	font-size:1rem;
+	font-weight:bold;
+	text-align:center;
+	cursor:pointer;
+	box-shadow:2.12px 2.12px 1px 1px rgba(35,24,21,.2);/* Add 201804 */
+}
+.int_web_inner .operation_button a span{
+	display:inline-block;
+	background-repeat:no-repeat;
+	background-position:0 center;
+	background-size:30px auto;
+	padding-left:35px;
+}
+.int_web_inner .operation_button a.icon_site span{
+	background-image:url("../img/site.astpng");
+}
+.int_web_inner .operation_button a{background:#F6CB49;}
+.int_web_inner .operation_button a:hover{background:#F6BB48;}
+.int_web_inner .operation_button a:active,
+.int_web_inner .operation_button a:focus{
+	background:#F29119; color:#fff;
+}
+.int_web_inner .operation_button a.icon_site:active span,
+.int_web_inner .operation_button a.icon_site:focus span{
+	background-image:url("../img/site_down.astpng");
+}
+
+/* 20180206 */
+.logo_div{
+	display:-webkit-box;
+	display:-ms-flexbox;
+	display:-webkit-flex;
+	display:flex;
+	-webkit-box-orient:inline-axis;
+	-webkit-box-direction:normal;
+	-ms-flex-direction:row;
+	-webkit-flex-direction:row;
+	flex-direction:row;
+	-webkit-box-align:center;
+	-ms-flex-align:center;
+	-webkit-align-items:center;
+	align-items:center;
+}
+
+/* ショートカットボタン Add 201804 */
+.shortcut__wrap{
+width:25.55555555%;
+padding-right:1.666666666%;
+padding-left:1.666666666%;
+}
+.shortcut__button{
+	width:100%;
+	vertical-align:middle;
+	position:relative;
+}
+.shortcut__button a{
+	width:100%;
+	max-width:200px;
+	display:block;
+	cursor:pointer;
+	box-shadow:2.12px 2.12px 1px 1px rgba(35,24,21,.2);
+	text-decoration:none;
+	border:0;
+	position:relative;
+	float:right;
+}
+.shortcut__button a:before{
+	display:block;
+	content:"";
+	padding-top:20%;
+	clear:both;
+}
+.shortcut__button a.icon_site{
+	background:url("../img/shortcut.astpng") no-repeat center center #fff5de;
+	background-size:100% auto;
+}
+.shortcut__button a:hover{
+	background:url("../img/shortcut_down.astpng") no-repeat center center #ffb23f;
+	color:#fff;
+	background-size:100% auto;
+}
+.shortcut__button a:active,
+.shortcut__button a:focus{
+	background:url("../img/shortcut_down.astpng") no-repeat center center #ff7a26;
+	color:#fff;
+	box-shadow:0 0 4px 4px rgba(35,24,21,.2) inset;
+	background-size:100% auto;
+}
+
+/* 20180213 提出版 */
+/* タイトルのリンクについての空きと装飾を調整する */
+/* ソースで<em>→<a>のネストにする */
+
+a.webicon{
+	border:0;
+}
+
+a.webtitle{
+	border:0;
+	color:#333333;
+	text-decoration:underline;
+}
+
+a.webtitle:link{
+	color:#333333;
+	text-decoration:underline;
+}
+
+a.webtitle:visited,a.webtitle:active{
+	color:#333333;
+	text-decoration:underline;
+}
+
+a.webtitle:hover{
+	color:#999999;
+	text-decoration:underline;
+}
+
+.logo_div em{
+	display:block;
+}
+
+/* Add NMP */
+
+/******************	WEB コンテンツ用　ここまで		******************/
