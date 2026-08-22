@@ -44,9 +44,11 @@
 
     <div class="buttons">
 
-        <button onclick="train()">🏋️ 訓練</button>
+        <button onclick="openTrainingMenu()">🏋️ 訓練</button>
 
-        <button onclick="adventure()">🌳 冒険</button>
+        <button onclick="openStatusMenu()">📊 ステータス</button>
+
+        <button onclick="openDungeon()">🗺️ ダンジョン</button>
 
         <button onclick="heal()">❤️ 回復</button>
 
@@ -62,6 +64,7 @@
 
     </div>
 
+    
     <div class="log">
 
         <h3>ログ</h3>
@@ -119,13 +122,126 @@
     <div id="equipmentList"></div>
 </div>
 
-    
+
+
+
+    <div id="dungeonScreen" class="screen" style="display:none;">
+
+    <h2>🗺️ ダンジョン</h2>
+
+    <button onclick="startDungeon('grassland')">
+    🌳 草原
+    </button>
+
+    <button onclick="startDungeon('cave')">
+    🕳️ 洞窟
+    </button>
+
+    <button onclick="startDungeon('volcano')">
+    🌋 火山
+    </button>
+
+    <button onclick="startDungeon('castle')">
+    🏰 魔王城
+    </button>
+
+    <br><br>
+
+    <button onclick="closeDungeon()">
+        戻る
+    </button>
 </div>
+<div id="trainingMenu" style="display:none;">
+
+    <h3>🏋️ 訓練</h3>
+
+    <button onclick="train('atk')">
+        ⚔️ 攻撃訓練
+    </button>
+
+    <button onclick="train('def')">
+        🛡️ 防御訓練
+    </button>
+
+    <button onclick="train('hp')">
+        ❤️ 体力訓練
+    </button>
+
+    <button onclick="train('mp')">
+        ✨ 魔力訓練
+    </button>
+
+    <button onclick="closeTrainingMenu()">
+        戻る
+    </button>
+
+    </div>
+
+       <div id="statusMenu" style="display:none;">
+
+        <h2>📊 ステータス</h2>
+
+        <p>
+        ⭐ ステータスポイント：
+        <span id="statusPoints">0</span>
+        </p>
+
+        <div class="statusRow">
+        <span>⚔️ 攻撃力</span>
+        <span id="statusAtk">0</span>
+        <button onclick="addStatusPoint('atk')">＋</button>
+        </div>
+
+        <div class="statusRow">
+        <span>🛡️ 防御力</span>
+        <span id="statusDef">0</span>
+        <button onclick="addStatusPoint('def')">＋</button>
+        </div>
+
+        <div class="statusRow">
+        <span>❤️ 最大HP</span>
+        <span id="statusMaxHp">0</span>
+        <button onclick="addStatusPoint('hp')">＋</button>
+        </div>
+
+        <div class="statusRow">
+        <span>🔵 最大MP</span>
+        <span id="statusMaxMp">0</span>
+        <button onclick="addStatusPoint('mp')">＋</button>
+        </div>
+        <button onclick="resetStatusPoints()">
+        🔄 ステータスリセット（100G）
+        </button>
+
+        <button onclick="closeStatusMenu()">戻る</button>
+
+        
+
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
 </div>
 
 <script src="script.js"></script>
 
+<button onclick="testGold()">テスト：1000G000</button>
+<button onclick="testForestBoss()">🧪 森の王テスト</button>
+
 </body>
+
 </html>
 
 
@@ -133,4 +249,3 @@
 
 
 
-<button onclick="testGold()">テスト：1000G</button>
