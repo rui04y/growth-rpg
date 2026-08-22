@@ -112,3 +112,19 @@ button:hover{
     max-height: 200px;
     overflow-y: auto;
 }
+.status p {
+    display: block;
+    margin: 8px 0;
+}
+.statusRow{
+    display: grid;
+    grid-template-columns: 120px 70px 40px;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.statusRow button{
+    width: 35px;
+    height: 30px;
+    padding: 0;
+}
