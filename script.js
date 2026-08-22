@@ -1,56 +1,118 @@
 let player = {
+
+
     level: 1,
     hp: 100,
     maxHp: 100,
+
     exp: 0,
     nextExp: 100,
+
     atk: 10,
     def: 5,
+    statusPoints: 0,
+
+    statusBonus: {
+    atk: 0,
+    def: 0,
+    hp: 0,
+    mp: 0
+    },
+
+    mp: 30,
+    maxMp: 30,
+
     gold: 100,
-    mp: 20,
-maxMp: 20,
 
 
-
-
-
-items: {
-    potion: 0,
-    manaPotion: 0,
-},
-equipment: {
-    weapon: "なし",
-    armor: "なし"
-},
-
-inventory: [],
-skills: {
-    strong: {
-        learned: true,
-        level: 1,
-        useCount: 0
+    unlockedStages: {
+    grassland: true,
+    cave: true,
+    volcano: false,
+    castle: false
+    },
+    bossDefeated: {
+    grassland: false,
+    cave: false,
+    volcano: false,
+    castle: false
     },
 
-    fireball: {
-        learned: true,
-        level: 1,
-        useCount: 0
+    // ====================
+    // 🏋️ 訓練回数
+    // ====================
+
+    trainingCount: {
+        
+        atk: 0,
+        def: 0,
+        hp: 0,
+        mp: 0
+    },
+    trainingLastRecovery: Date.now(),
+
+    // ====================
+    // 🎒 アイテム
+    // ====================
+
+    items: {
+        potion: 0,
+        manaPotion: 0
     },
 
-    thunder: {
-        learned: false,
-        level: 1,
-        useCount: 0
+
+    // ====================
+    // 🛡️ 装備
+    // ====================
+
+    equipment: {
+        weapon: "なし",
+        armor: "なし"
     },
+    
 
-    ultimate: {
-        learned: false,
-        level: 1,
-        useCount: 0
-    }
-}
+    // ====================
+    // 🎒 インベントリ
+    // ====================
 
+    inventory: [],
+
+
+    // ====================
+    // ✨ スキル
+    // ====================
+
+    skills: {
+
+        strong: {
+            learned: true,
+            level: 1,
+            useCount: 0
+        },
+
+        fireball: {
+            learned: true,
+            level: 1,
+            useCount: 0
+        },
+
+        thunder: {
+            learned: false,
+            level: 1,
+            useCount: 0
+        },
+
+        ultimate: {
+            learned: false,
+            level: 1,
+            useCount: 0
+        }
+
+    },
+    effects: []
 };
+
+let currentDungeon = null;
 
 
 const equipmentData = [
@@ -132,6 +194,41 @@ const equipmentData = [
     attack: 0,
     defense: 110
 },
+
+
+{
+    name: "森王の剣",
+    type: "weapon",
+    attack: 20,
+    effect: "skillPowerUp",
+    effectText: "🌲 強撃ダメージ +10%"
+},
+
+{
+    name: "岩王の剣",
+    type: "weapon",
+    attack: 35,
+    effect: "skillPowerUp15",
+    effectText: "🪨 強撃ダメージ +15%"
+},
+
+{
+    name: "炎帝の剣",
+    type: "weapon",
+    attack: 50,
+    effect: "fireballPowerUp",
+    effectText: "🔥 ファイアボールダメージ +20%"
+},
+{
+    name: "魔王の剣",
+    type: "weapon",
+    attack: 80,
+    effect: "allSkillPowerUp",
+    effectText: "👿 全スキルダメージ +15%"
+},
+
+
+
 ];
 
 let currentEquipment = null;
@@ -197,23 +294,181 @@ function log(text) {
     logElement.scrollTop = logElement.scrollHeight;
 }
 
-function train() {
-    let gain = Math.floor(Math.random() * 16) + 15;
-    player.exp += gain;
-    log(`🏋️ 訓練した！ EXP +${gain}`);
+function train(type) {
 
-    while (player.exp >= player.nextExp) {
-        player.exp -= player.nextExp;
-        levelUp();
+    if(inBattle){
+        log("⚔️ 戦闘中は訓練できません！");
+        return;
+    }
+
+    // この分野の訓練回数
+    player.trainingCount[type]++;
+
+    // 訓練回数に応じて効率低下
+    let efficiency = Math.max(
+        0.5,
+        1 - (player.trainingCount[type] - 1) * 0.1
+    );
+
+    // ====================
+    // ⚔️ 攻撃訓練
+    // ====================
+
+    if(type === "atk"){
+
+        let baseGain = Math.floor(Math.random() * 2) + 1;
+
+        let gain = Math.max(
+            1,
+            Math.floor(baseGain * efficiency)
+        );
+
+        player.atk += gain;
+
+        log(
+            `⚔️ 攻撃訓練！ ATK +${gain} ` +
+            `(効率 ${Math.floor(efficiency * 100)}%)`
+        );
+    }
+
+
+    // ====================
+    // 🛡️ 防御訓練
+    // ====================
+
+    else if(type === "def"){
+
+        let baseGain = Math.floor(Math.random() * 2) + 1;
+
+        let gain = Math.max(
+            1,
+            Math.floor(baseGain * efficiency)
+        );
+
+        player.def += gain;
+
+        log(
+            `🛡️ 防御訓練！ DEF +${gain} ` +
+            `(効率 ${Math.floor(efficiency * 100)}%)`
+        );
+    }
+
+
+    // ====================
+    // ❤️ 体力訓練
+    // ====================
+
+    else if(type === "hp"){
+
+        let baseGain = Math.floor(Math.random() * 6) + 5;
+
+        let gain = Math.max(
+            1,
+            Math.floor(baseGain * efficiency)
+        );
+
+        player.maxHp += gain;
+        player.hp += gain;
+
+        log(
+            `❤️ 体力訓練！ 最大HP +${gain} ` +
+            `(効率 ${Math.floor(efficiency * 100)}%)`
+        );
+    }
+
+
+    // ====================
+    // ✨ 魔力訓練
+    // ====================
+
+    else if(type === "mp"){
+
+        let baseGain = Math.floor(Math.random() * 3) + 1;
+
+        let gain = Math.max(
+            1,
+            Math.floor(baseGain * efficiency)
+        );
+
+        player.maxMp += gain;
+        player.mp += gain;
+
+        log(
+            `✨ 魔力訓練！ 最大MP +${gain} ` +
+            `(効率 ${Math.floor(efficiency * 100)}%)`
+        );
     }
 
     updateScreen();
+    autoSave();
 }
+
+
+function recoverTrainingEfficiency() {
+
+    const now = Date.now();
+
+    const elapsed = now - player.trainingLastRecovery;
+
+    // 1時間 = 3600000ミリ秒
+    const hours = Math.floor(elapsed / 3600000);
+
+    if(hours <= 0){
+        return;
+    }
+
+    // 1時間につき訓練回数を1回分減らす
+    player.trainingCount.atk = Math.max(
+        0,
+        player.trainingCount.atk - hours
+    );
+
+    player.trainingCount.def = Math.max(
+        0,
+        player.trainingCount.def - hours
+    );
+
+    player.trainingCount.hp = Math.max(
+        0,
+        player.trainingCount.hp - hours
+    );
+
+    player.trainingCount.mp = Math.max(
+        0,
+        player.trainingCount.mp - hours
+    );
+
+    // 回復した時間を記録
+    player.trainingLastRecovery += hours * 3600000;
+}
+
+
+function openTrainingMenu(){
+
+    if(inBattle){
+        log("⚔️ 戦闘中は訓練できません！");
+        return;
+    }
+
+    document.getElementById("trainingMenu").style.display = "block";
+    autoSave();
+}
+
+
+function closeTrainingMenu(){
+
+    document.getElementById("trainingMenu").style.display = "none";
+}
+
+
+
+
 
 function levelUp() {
 
     player.level++;
 
+    // 通常のステータス上昇
     player.maxHp += 20;
     player.hp = player.maxHp;
 
@@ -224,7 +479,11 @@ function levelUp() {
 
     player.mp = player.maxMp;
 
+    // ⭐ ステータスポイント獲得
+    player.statusPoints += 3;
+
     log(`🎉 レベルアップ！ Lv.${player.level}になった！`);
+    log(`⭐ ステータスポイントを3獲得！`);
 
     checkSkillLearn();
 }
@@ -247,96 +506,241 @@ function checkSkillLearn(){
     }
 }
 
-function adventure() {
+function adventure(dungeonType = "grassland") {
 
     if (inBattle) {
         log("すでに戦闘中！");
         return;
     }
-    document.getElementById("log").innerHTML = "";
 
-    const enemies = [
-        // ===== 序盤 =====
-        {name:"スライム", hp:50, maxHp:50, atk:8, exp:20, gold:15},
-        {name:"ゴブリン", hp:80, maxHp:80, atk:12, exp:35, gold:30},
-        {name:"オオカミ", hp:120, maxHp:120, atk:16, exp:50, gold:45},
-
-        // ===== 中盤 =====
-        {name:"オーク", hp:180, maxHp:180, atk:22, exp:75, gold:70},
-        {name:"リザードマン", hp:240, maxHp:240, atk:28, exp:100, gold:90},
-        {name:"ドラゴン", hp:400, maxHp:400, atk:40, exp:200, gold:150},
-
-        // ===== 後半 =====
-        {name:"ゴーレム", hp:500, maxHp:500, atk:45, exp:250, gold:180},
-        {name:"デーモン", hp:650, maxHp:650, atk:55, exp:300, gold:220},
-        {name:"ワイバーン", hp:800, maxHp:800, atk:65, exp:350, gold:250},
-        {name:"フェンリル", hp:1000, maxHp:1000, atk:75, exp:400, gold:300},
-
-        // ===== 最終級 =====
-        {name:"魔王", hp:1500, maxHp:1500, atk:90, exp:700, gold:500}
-    ];
+    currentDungeon = dungeonType;
 
 
-    // レベルに応じて出現する敵を変更
 
-    let availableEnemies;
+    const enemies = {
 
-if (player.level <= 2) {
+        // 🌳 草原
+        grassland: [
+            {name:"スライム", hp:50, maxHp:50, atk:8, exp:20, gold:15},
+            {name:"ゴブリン", hp:80, maxHp:80, atk:12, exp:35, gold:30},
+            {name:"オオカミ", hp:100, maxHp:100, atk:15, exp:50, gold:45}
+        ],
 
-    availableEnemies = enemies.slice(0, 2);
+        // 🕳️ 洞窟
+        cave: [
+            {name:"ゴブリン", hp:100, maxHp:100, atk:15, exp:40, gold:35},
+            {name:"オーク", hp:180, maxHp:180, atk:22, exp:80, gold:70},
+            {name:"リザードマン", hp:220, maxHp:220, atk:27, exp:110, gold:100}
+        ],
 
-} else if (player.level <= 4) {
+        // 🌋 火山
+        volcano: [
+            {name:"オーク", hp:250, maxHp:250, atk:30, exp:100, gold:90},
+            {name:"炎の魔物", hp:350, maxHp:350, atk:38, exp:150, gold:130},
+            {name:"ドラゴン", hp:500, maxHp:500, atk:50, exp:300, gold:250}
+        ],
 
-    availableEnemies = enemies.slice(0, 4);
-
-} else if (player.level <= 7) {
-
-    availableEnemies = enemies.slice(0, 6);
-
-} else if (player.level <= 10) {
-
-    availableEnemies = enemies.slice(0, 8);
-
-} else if (player.level <= 15) {
-
-    availableEnemies = enemies.slice(0, 10);
-
-} else {
-
-    availableEnemies = enemies;
-}
+        // 🏰 魔王城
+        castle: [
+            {name:"リザードマン", hp:400, maxHp:400, atk:45, exp:180, gold:150},
+            {name:"デーモン", hp:600, maxHp:600, atk:55, exp:250, gold:220},
+            {name:"魔王軍騎士", hp:800, maxHp:800, atk:65, exp:350, gold:300}
+        ]
+    };
 
 
-    // 敵をランダム選択
-    enemy = {
-    ...availableEnemies[
-        Math.floor(Math.random() * availableEnemies.length)
-    ],
-    burn: 0,
-    paralysis: 0
-};
+    // =========================
+    // 中ボス
+    // =========================
+
+    const miniBosses = {
+
+        grassland:
+            {name:"🐺 巨大オオカミ", hp:300, maxHp:300, atk:30, exp:150, gold:120, miniBoss:true},
+
+        cave:
+            {name:"🪨 岩石巨人", hp:600, maxHp:600, atk:45, exp:300, gold:250, miniBoss:true},
+
+        volcano:
+            {name:"🔥 炎竜", hp:1000, maxHp:1000, atk:70, exp:600, gold:500, miniBoss:true},
+
+        castle:
+            {name:"⚔️ 魔将", hp:1500, maxHp:1500, atk:90, exp:1000, gold:800, miniBoss:true}
+    };
+
+
+    // =========================
+    // ボス
+    // =========================
+
+    const bosses = {
+
+        grassland:
+            {name:"👑 森の王", hp:600, maxHp:600, atk:50, exp:500, gold:500, boss:true},
+
+        cave:
+            {name:"👹 洞窟の主", hp:1200, maxHp:1200, atk:70, exp:1000, gold:1000, boss:true},
+
+        volcano:
+            {name:"🐉 火山の王", hp:2500, maxHp:2500, atk:110, exp:2000, gold:2000, boss:true},
+
+        castle:
+            {name:"👿 魔王", hp:5000, maxHp:5000, atk:150, exp:5000, gold:5000, boss:true}
+    };
+
+
+    const enemyList = enemies[dungeonType];
+
+    const random = Math.random();
+
+    // =========================
+    // 敵を決定
+    // =========================
+
+    if(random < 0.03){
+
+        // 3% → ボス
+        enemy = {...bosses[dungeonType]};
+
+        log(`👑 BOSS！ ${enemy.name} が現れた！`);
+
+    }
+    else if(random < 0.15){
+
+        // 12% → 中ボス
+        enemy = {...miniBosses[dungeonType]};
+
+        log(`⚠️ 強敵！ ${enemy.name} が現れた！`);
+
+    }
+    else{
+
+        // 85% → 通常敵
+        enemy = {
+            ...enemyList[
+                Math.floor(Math.random() * enemyList.length)
+            ]
+        };
+
+        log(enemy.name + " が現れた！");
+    }
 
 
     inBattle = true;
 
-
-    // 戦闘画面を表示
     document.getElementById("battle").style.display = "block";
 
-
-    // 敵情報を表示
     document.getElementById("enemyName").textContent = enemy.name;
-
     document.getElementById("enemyHp").textContent = enemy.hp;
-
     document.getElementById("enemyMaxHp").textContent = enemy.maxHp;
-
     document.getElementById("enemyHpBar").style.width = "100%";
+}
+
+function bossReward() {
+
+    if(player.bossDefeated[currentDungeon]){
+        return;
+    }
+
+    player.bossDefeated[currentDungeon] = true;
+
+    let rewardGold = 0;
+    let rewardItem = null;
+
+    if(currentDungeon === "grassland"){
+
+        rewardGold = 500;
+
+        rewardItem = "森王の剣";
+
+    }
+
+    else if(currentDungeon === "cave"){
+
+        rewardGold = 1000;
+
+        rewardItem = "岩石の盾";
+
+    }
+
+    else if(currentDungeon === "volcano"){
+
+        rewardGold = 2000;
+
+        rewardItem = "炎帝の剣";
+
+    }
+
+    else if(currentDungeon === "castle"){
+
+        rewardGold = 5000;
+
+        rewardItem = "魔王の鎧";
+
+    }
 
 
-    log(enemy.name + " が現れた！");
+    // GOLD獲得
+    player.gold += rewardGold;
+
+
+    // 装備をインベントリに追加
+    if(rewardItem){
+
+        player.inventory.push(rewardItem);
+    }
+
+
+    log(
+        `🎉 初回ボス撃破報酬！\n` +
+        `💰 GOLD +${rewardGold}G\n` +
+        `⚔️ ${rewardItem} を獲得！`
+    );
+
+
+    autoSave();
+}
+
+
+
+function unlockNextStage() {
+
+    if(currentDungeon === "grassland" ||
+       currentDungeon === "cave") {
+
+        if(!player.unlockedStages.volcano) {
+
+            player.unlockedStages.volcano = true;
+
+            log("🎉 🌋 火山が解放された！");
+        }
+    }
+
+    else if(currentDungeon === "volcano") {
+
+        if(!player.unlockedStages.castle) {
+
+            player.unlockedStages.castle = true;
+
+            log("🎉 🏰 魔王城が解放された！");
+        }
+    }
+
+    else if(currentDungeon === "castle") {
+
+        log("👑 魔王城を完全攻略した！");
+    }
+
+    autoSave();
 }
 function heal() {
+
+    if(inBattle){
+        log("⚔️ 戦闘中は回復できません！");
+        return;
+    }
+
+
     player.hp = player.maxHp;
     log("❤️ 全回復した！");
     updateScreen();
@@ -346,15 +750,51 @@ function saveGame() {
     localStorage.setItem("growthRPG", JSON.stringify(player));
     log("💾 セーブしました！");
 }
+function autoSave() {
+    localStorage.setItem("growthRPG", JSON.stringify(player));
+}
 
 function loadGame() {
+
     let save = localStorage.getItem("growthRPG");
 
     if (save) {
+
         player = JSON.parse(save);
+
+        // ====================
+        // 古いセーブデータ対策
+        // ====================
+
+        if(!player.trainingCount){
+
+            player.trainingCount = {
+                atk: 0,
+                def: 0,
+                hp: 0,
+                mp: 0
+            };
+        }
+
+        if(!player.trainingLastRecovery){
+
+            player.trainingLastRecovery = Date.now();
+        }
+
+
+        // ====================
+        // 訓練効率を時間経過で回復
+        // ====================
+
+        recoverTrainingEfficiency();
+
+
         updateScreen();
+
         log("📂 ロードしました！");
+
     } else {
+
         log("セーブデータがありません。");
     }
 }
@@ -388,7 +828,10 @@ function attack(){
         updateScreen();
 
         log(enemy.name + " を倒した！");
-
+        if(enemy.boss){
+        bossReward();
+        unlockNextStage(currentDungeon);
+        }
         inBattle = false;
 
         document.getElementById("battle").style.display = "none";
@@ -479,7 +922,10 @@ function enemyAttack(){
             updateScreen();
 
             log(enemy.name + " はやけどで倒れた！");
-
+            if(enemy.boss){
+                bossReward();
+            unlockNextStage(currentDungeon);
+            }
             inBattle = false;
             enemy = null;
 
@@ -531,6 +977,8 @@ function defend(){
 }
 function skill(){
 
+    console.log("skill発動", player.effects);
+
     if(!inBattle) return;
 
     if(player.mp < 5){
@@ -541,6 +989,12 @@ function skill(){
     player.mp -= 5;
 
     let damage = player.atk * 2 + Math.floor(Math.random()*10);
+
+    // 森王の剣の特殊効果
+    if(player.effects && player.effects.includes("skillPowerUp")){
+    damage = Math.floor(damage * 1.1);
+    log("🌲 森王の剣の効果発動！");
+    }
 
     enemy.hp -= damage;
 
@@ -569,7 +1023,10 @@ function skill(){
         updateScreen();
 
         log(enemy.name + " を倒した！");
-
+        if(enemy.boss){
+            bossReward();
+        unlockNextStage(currentDungeon);
+        }
         inBattle = false;
         enemy = null;
 
@@ -581,6 +1038,14 @@ function skill(){
     enemyAttack();
 }
 function shop(){
+
+
+    if(inBattle){
+        log("⚔️ 戦闘中はショップを利用できません！");
+        return;
+    }
+
+
 
     let choice = prompt(
 
@@ -985,55 +1450,6 @@ function buyArmor(name,price,defense){
 
 
 
-function useItem(){
-
-    let choice = prompt(
-`
-🎒 アイテム
-
-1. ポーション ×${player.items.potion}
-
-2. マナポーション ×${player.items.manaPotion}`
-);
-
-    switch(choice){
-
-        case "1":
-
-            if(player.items.potion > 0){
-
-                player.items.potion--;
-
-                player.hp = Math.min(player.maxHp, player.hp + 50);
-
-                log("❤️ ポーションを使った！");
-            }else{
-                log("ポーションがありません！");
-            }
-
-            break;
-
-        case "2":
-
-            if(player.items.manaPotion > 0){
-
-                player.items.manaPotion--;
-
-                player.mp = Math.min(player.maxMp, player.mp + 20);
-
-                log("🔵 マナポーションを使った！");
-            }else{
-                log("マナポーションがありません！");
-            }
-
-            break;
-    }
-
-    updateScreen();
-    document.getElementById("weapon").textContent = player.equipment.weapon;
-    document.getElementById("armor").textContent = player.equipment.armor;
-}
-
 
 
 
@@ -1045,39 +1461,19 @@ function closeEquipment(){
 
 
 
-function removeEquipment(){
-
-    // 武器を外す
-    player.atk -= player.equipment.weaponAtk || 0;
-
-    // 防具を外す
-    player.def -= player.equipment.armorDef || 0;
-
-
-    player.equipment.weapon = "なし";
-    player.equipment.armor = "なし";
-
-
-    player.equipment.weaponAtk = 0;
-    player.equipment.armorDef = 0;
-
-
-    log("装備を外した！");
-
-
-    updateEquipmentStatus();
-
-    showEquipment();
-
-}}
+}
 function openEquipment(){
+
+    if(inBattle){
+        log("⚔️ 戦闘中は装備を変更できません！");
+        return;
+    }
 
     console.log("装備画面開いた");
 
     document.getElementById("equipmentScreen").style.display = "block";
 
     showEquipment();
-
 }
 
 
@@ -1129,6 +1525,14 @@ function equipItem(index){
     }
 
 
+   // ⭐ 装備の特殊効果を更新
+    player.effects = [];
+
+    if(item.effect){
+    player.effects.push(item.effect);
+    
+    }
+
     log("⚔️ " + item.name + "を装備した！");
 
 
@@ -1178,8 +1582,9 @@ function showEquipment(){
         }
 
         div.innerHTML = `
-            ${item.name} ${equipped}<br>
-            攻撃力 +${item.attack}
+        ${item.name} ${equipped}<br>
+         攻撃力 +${item.attack}
+        ${item.effectText ? `<br>${item.effectText}` : ""}
         `;
 
         div.onclick = function(){
@@ -1217,10 +1622,10 @@ function showEquipment(){
         }
 
         div.innerHTML = `
-            ${item.name} ${equipped}<br>
-            防御力 +${item.defense}
+        ${item.name} ${equipped}<br>
+        防御力 +${item.defense}
+        ${item.effectText ? `<br>${item.effectText}` : ""}
         `;
-
         div.onclick = function(){
             equipItem(index);
         };
@@ -1271,7 +1676,7 @@ function removeEquipment(){
     player.equipment.weaponAtk = 0;
     player.equipment.armorDef = 0;
 
-
+    player.effects = [];
     log("装備を外した！");
 
 
@@ -1433,11 +1838,24 @@ function burnDamage(){
 
         player.mp -= mpCost;
 
-        const damage =
+        let damage =
             player.atk * (2 + (player.skills.strong.level - 1) * 0.5) +
             Math.floor(Math.random() * 10);
+           
 
-        enemy.hp -= Math.floor(damage);
+           if(player.effects && player.effects.includes("skillPowerUp")){
+            damage = damage * 1.1;
+            log("🌲 森王の剣の効果発動！");
+            }
+
+            if(player.effects && player.effects.includes("skillPowerUp15")){
+            damage = damage * 1.15;
+            log("🪨 岩王の剣の効果発動！");
+            if(player.effects && player.effects.includes("allSkillPowerUp")){
+            damage = damage * 1.15;
+            log("👿 魔王の剣の効果発動！");
+            }
+        }
 
         if(enemy.hp < 0){
             enemy.hp = 0;
@@ -1462,9 +1880,21 @@ function burnDamage(){
 
         player.mp -= mpCost;
 
-        const damage =
-            player.atk * (3 + (player.skills.fireball.level - 1) * 0.5) +
-            Math.floor(Math.random() * 10);
+        let damage =
+        player.atk * (3 + (player.skills.fireball.level - 1) * 0.5) +
+        Math.floor(Math.random() * 10);
+
+
+        // 🔥 炎帝の剣の特殊効果
+        if(player.effects && player.effects.includes("fireballPowerUp")){
+        damage = damage * 1.2;
+        log("🔥 炎帝の剣の効果発動！");
+        }
+        if(player.effects && player.effects.includes("allSkillPowerUp")){
+        damage = damage * 1.15;
+        log("👿 魔王の剣の効果発動！");
+        }
+        
 
         enemy.hp -= Math.floor(damage);
 
@@ -1499,9 +1929,16 @@ function burnDamage(){
 
         player.mp -= mpCost;
 
-        const damage =
-            player.atk * (5 + (player.skills.ultimate.level - 1) * 0.5) +
-            Math.floor(Math.random() * 20);
+        let damage =
+        player.atk * (5 + (player.skills.ultimate.level - 1) * 0.5) +
+        Math.floor(Math.random() * 20);
+
+
+        // 👿 魔王の剣の特殊効果
+        if(player.effects && player.effects.includes("allSkillPowerUp")){
+        damage = damage * 1.15;
+        log("👿 魔王の剣の効果発動！");
+        }   
 
         enemy.hp -= Math.floor(damage);
 
@@ -1528,10 +1965,15 @@ function burnDamage(){
 
         player.mp -= mpCost;
 
-        const damage =
-            player.atk * (2.5 + (player.skills.thunder.level - 1) * 0.5) +
-            Math.floor(Math.random() * 15);
+        let damage =
+        player.atk * (2.5 + (player.skills.thunder.level - 1) * 0.5) +
+        Math.floor(Math.random() * 15);
 
+        // 👿 魔王の剣の特殊効果
+        if(player.effects && player.effects.includes("allSkillPowerUp")){
+        damage = damage * 1.15;
+        log("👿 魔王の剣の効果発動！");
+        }
         enemy.hp -= Math.floor(damage);
 
         if(enemy.hp < 0){
@@ -1591,7 +2033,10 @@ function burnDamage(){
         updateScreen();
 
         log(enemy.name + " を倒した！");
-
+        if(enemy.boss){
+            bossReward();
+        unlockNextStage(currentDungeon);
+        }
         inBattle = false;
         enemy = null;
 
@@ -1633,6 +2078,339 @@ function checkSkillLevelUp(skillName){
         log(`✨ ${skillDisplayName} がLv.${skill.level}になった！`);
     }
 }
+function openDungeon(){
+
+function openDungeon(){
+
+    if(inBattle){
+        log("⚔️ 戦闘中は冒険先を変更できません！");
+        return;
+    }
+
+    document.getElementById("dungeonScreen").style.display = "block";
+}
+
+
+    if(inBattle){
+        log("すでに戦闘中！");
+        return;
+    }
+
+    document.getElementById("dungeonScreen").style.display = "block";
+    autoSave();
+}
+
+
+function closeDungeon(){
+
+    document.getElementById("dungeonScreen").style.display = "none";
+}
+
+function startDungeon(type){
+
+
+    clearLog();
+
+    // ↓今ある処理
+    const dungeonName = {
+        grassland: "🌳 草原",
+        cave: "🕳️ 洞窟",
+        volcano: "🌋 火山",
+        castle: "🏰 魔王城"
+    };
+
+    // ====================
+    // 🔒 ステージ解放チェック
+    // ====================
+
+    if(!player.unlockedStages[type]){
+
+        log(`${dungeonName[type]}はまだ解放されていません！`);
+
+        return;
+    }
+
+    closeDungeon();
+
+    log(`${dungeonName[type]}へ向かった！`);
+
+    adventure(type);
+}
+function autoSave() {
+    localStorage.setItem("growthRPG", JSON.stringify(player));
+}
+
+setInterval(function() {
+    autoSave();
+}, 30000);
+
+function unlockNextStage() {
+
+    if (currentDungeon === "grassland" ||
+        currentDungeon === "cave") {
+
+        if (!player.unlockedStages.volcano) {
+
+            player.unlockedStages.volcano = true;
+
+            log("🎉 🌋 火山が解放された！");
+        }
+    }
+
+    else if (currentDungeon === "volcano") {
+
+        if (!player.unlockedStages.castle) {
+
+            player.unlockedStages.castle = true;
+
+            log("🎉 🏰 魔王城が解放された！");
+        }
+    }
+
+    else if (currentDungeon === "castle") {
+
+        log("👑 魔王城を完全攻略した！");
+    }
+
+    autoSave();
+}
+
+
+window.useItem = function(){
+
+    let choice = prompt(
+`
+🎒 アイテム
+
+1. ポーション ×${player.items.potion}
+
+2. マナポーション ×${player.items.manaPotion}`
+    );
+
+    switch(choice){
+
+        case "1":
+
+            if(player.items.potion > 0){
+
+                player.items.potion--;
+
+                player.hp = Math.min(player.maxHp, player.hp + 50);
+
+                log("❤️ ポーションを使った！");
+            }else{
+                log("ポーションがありません！");
+            }
+
+            break;
+
+        case "2":
+
+            if(player.items.manaPotion > 0){
+
+                player.items.manaPotion--;
+
+                player.mp = Math.min(player.maxMp, player.mp + 20);
+
+                log("🔵 マナポーションを使った！");
+            }else{
+                log("マナポーションがありません！");
+            }
+
+            break;
+    }
+
+    updateScreen();
+
+    document.getElementById("weapon").textContent =
+        player.equipment.weapon;
+
+    document.getElementById("armor").textContent =
+        player.equipment.armor;
+};
+
+function openStatusMenu(){
+
+    if(inBattle){
+        log("⚔️ 戦闘中はステータスを開けません！");
+        return;
+    }
+
+    document.getElementById("statusMenu").style.display = "block";
+
+    updateStatusMenu();
+}
+
+
+function closeStatusMenu(){
+
+    document.getElementById("statusMenu").style.display = "none";
+
+}
+
+
+function updateStatusMenu(){
+
+    document.getElementById("statusPoints").textContent =
+        player.statusPoints;
+
+    document.getElementById("statusAtk").textContent =
+        player.atk;
+
+    document.getElementById("statusDef").textContent =
+        player.def;
+
+    document.getElementById("statusMaxHp").textContent =
+        player.maxHp;
+
+    document.getElementById("statusMaxMp").textContent =
+        player.maxMp;
+
+}
+
+
+function addStatusPoint(type){
+
+    if(player.statusPoints <= 0){
+
+        log("⭐ ステータスポイントがありません！");
+        return;
+
+    }
+
+
+    if(!player.statusBonus){
+        player.statusBonus = {
+            atk: 0,
+            def: 0,
+            hp: 0,
+            mp: 0
+        };
+    }
+
+
+    if(type === "atk"){
+
+        player.atk += 1;
+        player.statusBonus.atk += 1;
+
+    }
+    else if(type === "def"){
+
+        player.def += 1;
+        player.statusBonus.def += 1;
+
+    }
+    else if(type === "hp"){
+
+        player.maxHp += 5;
+        player.hp += 5;
+        player.statusBonus.hp += 5;
+
+    }
+    else if(type === "mp"){
+
+        player.maxMp += 3;
+        player.mp += 3;
+        player.statusBonus.mp += 3;
+
+    }
+
+
+    player.statusPoints--;
+
+    updateStatusMenu();
+    updateScreen();
+
+}
+function resetStatusPoints(){
+
+    if(player.statusPoints === 0 &&
+       (!player.statusBonus ||
+        (
+            player.statusBonus.atk === 0 &&
+            player.statusBonus.def === 0 &&
+            player.statusBonus.hp === 0 &&
+            player.statusBonus.mp === 0
+        ))){
+
+        log("⭐ リセットするポイントがありません！");
+        return;
+
+    }
+
+
+    if(player.gold < 100){
+
+        log("💰 リセットには100G必要です！");
+        return;
+
+    }
+
+
+    if(!confirm("⭐ ステータスポイントをリセットしますか？\n100Gかかります。")){
+        return;
+    }
+
+
+    if(!player.statusBonus){
+        player.statusBonus = {
+            atk: 0,
+            def: 0,
+            hp: 0,
+            mp: 0
+        };
+    }
+
+
+    // 振り分けた分だけ元に戻す
+    player.atk -= player.statusBonus.atk;
+    player.def -= player.statusBonus.def;
+
+    player.maxHp -= player.statusBonus.hp;
+    player.maxMp -= player.statusBonus.mp;
+
+
+    // 最大値を超えないように調整
+    player.hp = Math.min(player.hp, player.maxHp);
+    player.mp = Math.min(player.mp, player.maxMp);
+
+
+    // 振り分けたポイントを返す
+    player.statusPoints +=
+        player.statusBonus.atk +
+        player.statusBonus.def +
+        player.statusBonus.hp / 5 +
+        player.statusBonus.mp / 3;
+
+
+    // 記録をリセット
+    player.statusBonus = {
+        atk: 0,
+        def: 0,
+        hp: 0,
+        mp: 0
+    };
+
+
+    player.gold -= 100;
+
+
+    log("🔄 ステータスポイントをリセットした！");
+
+    updateStatusMenu();
+    updateScreen();
+
+}
+function clearLog(){
+
+    document.getElementById("log").textContent = "";
+
+}
+
+
+
+
 
 
 
@@ -1653,9 +2431,56 @@ function checkSkillLevelUp(skillName){
 
 
 function testGold(){
-    player.gold += 1000;
+
+    player.gold += 100000;
+
     updateScreen();
-    log("💰 テスト用に1000G追加！");
+
+    log("💰 100000Gを追加しました！");
 }
 
+function testForestBoss() {
 
+    if(inBattle){
+        log("すでに戦闘中！");
+        return;
+    }
+
+    currentDungeon = "grassland";
+
+    enemy = {
+        name: "👑 森の王",
+        hp: 600,
+        maxHp: 600,
+        atk: 50,
+        exp: 500,
+        gold: 500,
+        boss: true
+    };
+
+    inBattle = true;
+
+    document.getElementById("battle").style.display = "block";
+
+    document.getElementById("enemyName").textContent = enemy.name;
+    document.getElementById("enemyHp").textContent = enemy.hp;
+    document.getElementById("enemyMaxHp").textContent = enemy.maxHp;
+    document.getElementById("enemyHpBar").style.width = "100%";
+
+    log("🧪 テスト：森の王が現れた！");
+}
+function testAllEquipment(){
+
+    equipmentData.forEach(item => {
+
+        if(!player.inventory.includes(item.name)){
+            player.inventory.push(item.name);
+        }
+
+    });
+
+    showEquipment();
+    updateScreen();
+
+    log("🛠️ テスト用に全装備を取得しました！");
+}
