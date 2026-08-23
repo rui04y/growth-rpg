@@ -38,6 +38,10 @@ let player = {
     castle: false
     },
 
+
+
+
+
     // ====================
     // 🏋️ 訓練回数
     // ====================
@@ -80,6 +84,7 @@ let player = {
     // 🎒 インベントリ
     // ====================
 
+    materials: {},
     inventory: [],
 
 
@@ -565,34 +570,34 @@ function adventure(dungeonType = "grassland") {
 
         // 🌳 草原
         grassland: [
-            {name:"スライム", hp:50, maxHp:50, atk:8, exp:20, gold:15},
-            {name:"グレムリン", hp:50, maxHp:50, atk:10, exp:20, gold:15},
-            {name:"ゴブリン", hp:80, maxHp:80, atk:12, exp:35, gold:15},
-            {name:"オオカミ", hp:100, maxHp:100, atk:15, exp:50, gold:25}
+            {name:"スライム", hp:50, maxHp:50, atk:8, exp:20, gold:15, drop:"slimeGel",dropRate:0.5},
+            {name:"グレムリン", hp:50, maxHp:50, atk:10, exp:20, gold:15, drop:"gremlinClaw",dropRate:0.4},
+            {name:"ゴブリン", hp:80, maxHp:80, atk:12, exp:35, gold:15, drop:"goblinFang",dropRate:0.5},
+            {name:"オオカミ", hp:100, maxHp:100, atk:15, exp:50, gold:25, drop:"wolfFur",dropRate:0.6}
         ],
 
         // 🕳️ 洞窟
         cave: [
-            {name:"ゾンビ", hp:150, maxHp:150, atk:10, exp:20, gold:15},
-            {name:"ゴブリン", hp:100, maxHp:100, atk:15, exp:40, gold:35},
-            {name:"オーク", hp:180, maxHp:180, atk:22, exp:80, gold:35},
-            {name:"リザードマン", hp:220, maxHp:220, atk:27, exp:110, gold:50}
+            {name:"ゾンビ", hp:150, maxHp:150, atk:10, exp:20, gold:15,drop:"zombieBone",dropRate:0.5},
+            {name:"ゴブリン", hp:100, maxHp:100, atk:15, exp:40, gold:35, drop:"goblinFang",dropRate:0.5},
+            {name:"オーク", hp:180, maxHp:180, atk:22, exp:80, gold:35,drop:"orcHorn",dropRate:0.45},
+            {name:"リザードマン", hp:220, maxHp:220, atk:27, exp:110, gold:50,drop:"lizardScale",dropRate:0.4}
         ],
 
         // 🌋 火山
         volcano: [
-            {name:"サラマンダー", hp:450, maxHp:450, atk:60, exp:250, gold:100},
-            {name:"オーク", hp:250, maxHp:250, atk:30, exp:100, gold:45},
-            {name:"炎の魔物", hp:350, maxHp:350, atk:38, exp:150, gold:65},
-            {name:"ドラゴン", hp:500, maxHp:500, atk:50, exp:300, gold:125}
+            {name:"サラマンダー", hp:450, maxHp:450, atk:60, exp:250, gold:100,drop:"salamanderFlame",dropRate:0.4},
+            {name:"オーク", hp:250, maxHp:250, atk:30, exp:100, gold:45,drop:"orcHorn",dropRate:0.5},
+            {name:"炎の魔物", hp:350, maxHp:350, atk:38, exp:150, gold:65,drop:"fireCrystal",dropRate:0.45},
+            {name:"ドラゴン", hp:500, maxHp:500, atk:50, exp:300, gold:125,drop:"dragonFang",dropRate:0.35}
         ],
 
         // 🏰 魔王城
         castle: [
-            {name:"リッチ", hp:700, maxHp:700, atk:50, exp:50, gold:80},
-            {name:"リザードマン", hp:400, maxHp:400, atk:45, exp:180, gold:75},
-            {name:"デーモン", hp:600, maxHp:600, atk:55, exp:250, gold:110},
-            {name:"魔王軍騎士", hp:800, maxHp:800, atk:65, exp:350, gold:150}
+            {name:"リッチ", hp:700, maxHp:700, atk:50, exp:50, gold:80,drop:"lichSoul",dropRate:0.35},
+            {name:"リザードマン", hp:400, maxHp:400, atk:45, exp:180, gold:75,drop:"lizardScale",dropRate:0.45},
+            {name:"デーモン", hp:600, maxHp:600, atk:55, exp:250, gold:110,drop:"demonHorn",dropRate:0.4},
+            {name:"魔王軍騎士", hp:800, maxHp:800, atk:65, exp:350, gold:150,drop:"knightMedal",dropRate:0.3}
         ]
     };
 
@@ -604,16 +609,25 @@ function adventure(dungeonType = "grassland") {
     const miniBosses = {
 
         grassland:
-            {name:"🐺 巨大オオカミ", hp:300, maxHp:300, atk:30, exp:150, gold:120, miniBoss:true},
+            {name:"🐺 巨大オオカミ", hp:300, maxHp:300, atk:30, exp:150, gold:120, miniBoss:true,
+        drop:"giantWolfFang",
+        dropRate:1},
 
         cave:
-            {name:"🪨 岩石巨人", hp:600, maxHp:600, atk:45, exp:300, gold:250, miniBoss:true},
+            {name:"🪨 岩石巨人", hp:600, maxHp:600, atk:45, exp:300, gold:250, miniBoss:true,
+        drop:"giantCore",
+        dropRate:1},
 
         volcano:
-            {name:"🔥 炎竜", hp:2000, maxHp:2000, atk:200, exp:600, gold:500, miniBoss:true},
+            {name:"🔥 炎竜", hp:2000, maxHp:2000, atk:200, exp:600, gold:500, miniBoss:true,
+        drop:"fireDragonHeart",
+        dropRate:1},
 
         castle:
-            {name:"⚔️ 魔将", hp:15000, maxHp:15000, atk:600, exp:1000, gold:800, miniBoss:true}
+            {name:"⚔️ 魔将", hp:15000, maxHp:15000, atk:600, exp:1000, gold:800, miniBoss:true,
+        drop:"demonGeneralCore",
+        dropRate:1
+    }
     };
 
 
@@ -651,6 +665,15 @@ function adventure(dungeonType = "grassland") {
         castle:
             {name:"なんか珍しいやつ", hp:50000, maxHp:50000, atk:1, exp:7000, gold:5000, boss:true}
     };
+
+
+    
+
+
+
+
+
+
 
 
 
@@ -709,6 +732,58 @@ function adventure(dungeonType = "grassland") {
     document.getElementById("enemyHp").textContent = enemy.hp;
     document.getElementById("enemyMaxHp").textContent = enemy.maxHp;
     document.getElementById("enemyHpBar").style.width = "100%";
+}
+const materialData = {
+    slimeGel: "🟢 スライムジェル",
+    gremlinClaw: "🦴 グレムリンの爪",
+    goblinFang: "🦷 ゴブリンの牙",
+    wolfFur: "🐺 オオカミの毛皮",
+
+    zombieBone: "🦴 ゾンビの骨",
+    orcHorn: "🦏 オークの角",
+    lizardScale: "🐲 リザードマンの鱗",
+
+    salamanderFlame: "🔥 サラマンダーの炎",
+    fireCrystal: "🔴 炎の魔石",
+    dragonFang: "🐉 ドラゴンの牙",
+
+    lichSoul: "👻 リッチの魂",
+    demonHorn: "👿 デーモンの角",
+    knightMedal: "⚔️ 魔王軍騎士の勲章",
+
+    giantWolfFang: "🐺 巨大オオカミの牙",
+    giantCore: "🪨 岩石巨人の核",
+    fireDragonHeart: "🔥 炎竜の心臓",
+    demonGeneralCore: "⚔️ 魔将の核"
+};
+
+
+function enemyDrop(enemy){
+
+    // ドロップ設定がない敵
+    if(!enemy.drop){
+        return;
+    }
+
+    // ドロップ確率判定
+    if(Math.random() >= enemy.dropRate){
+        return;
+    }
+
+    // 古いセーブデータ対策
+    if(!player.materials){
+        player.materials = {};
+    }
+
+    // 初めて入手した素材なら0個から開始
+    if(player.materials[enemy.drop] === undefined){
+        player.materials[enemy.drop] = 0;
+    }
+
+    // 素材を1個追加
+    player.materials[enemy.drop]++;
+
+    log(`🎁 ${materialData[enemy.drop]}を入手した！`);
 }
 
 function bossReward() {
@@ -891,10 +966,10 @@ function attack(){
     document.getElementById("enemyHpBar").style.width = percent + "%";
 
     if(enemy.hp <= 0){
-
+    
         player.exp += enemy.exp;
         player.gold += enemy.gold;
-
+        enemyDrop(enemy);
         while(player.exp >= player.nextExp){
             player.exp -= player.nextExp;
             levelUp();
@@ -1087,9 +1162,10 @@ function skill(){
     log("✨ 強撃！ " + damage + "ダメージ！");
 
     if(enemy.hp <= 0){
+     
         player.exp += enemy.exp;
         player.gold += enemy.gold;
-
+        enemyDrop(enemy);
         while(player.exp >= player.nextExp){
             player.exp -= player.nextExp;
             levelUp();
@@ -2099,10 +2175,10 @@ function useSkill(type){
     // ====================
 
     if(enemy.hp <= 0){
-
+    
         player.exp += enemy.exp;
         player.gold += enemy.gold;
-
+        enemyDrop(enemy);
         while(player.exp >= player.nextExp){
             player.exp -= player.nextExp;
             levelUp();
@@ -2506,6 +2582,111 @@ function clearLog(){
 
     document.getElementById("log").textContent = "";
 
+}
+function openInventory(){
+
+    if(inBattle){
+        log("⚔️ 戦闘中はインベントリを開けません！");
+        return;
+    }
+
+    document.getElementById("inventoryScreen").style.display = "block";
+
+    updateInventory();
+}
+
+
+function closeInventory(){
+
+    document.getElementById("inventoryScreen").style.display = "none";
+}
+
+
+function updateInventory(){
+
+    // ====================
+    // 🧪 消費アイテム
+    // ====================
+
+    const itemList = document.getElementById("itemList");
+
+    itemList.innerHTML = `
+        ❤️ ポーション ×${player.items.potion}<br>
+        🔵 マナポーション ×${player.items.manaPotion}
+    `;
+
+
+    // ====================
+    // 🛠️ 素材
+    // ====================
+
+    const materialList =
+        document.getElementById("materialList");
+
+    materialList.innerHTML = "";
+
+    if(!player.materials){
+        materialList.textContent = "素材を持っていません";
+    }
+    else{
+
+        let hasMaterial = false;
+
+        for(let material in player.materials){
+
+            if(player.materials[material] > 0){
+
+                materialList.innerHTML +=
+                    `${materialData[material] || material} ×${player.materials[material]}<br>`;
+
+                hasMaterial = true;
+            }
+        }
+
+        if(!hasMaterial){
+            materialList.textContent = "素材を持っていません";
+        }
+    }
+
+
+    // ====================
+    // ⚔️ 装備
+    // ====================
+
+    const equipmentList =
+        document.getElementById("inventoryEquipmentList");
+
+    equipmentList.innerHTML = "";
+
+    if(!player.inventory || player.inventory.length === 0){
+
+        equipmentList.textContent = "装備を持っていません";
+
+    }
+    else{
+
+        player.inventory.forEach(item => {
+
+            equipmentList.innerHTML +=
+                `⚔️ ${item}<br>`;
+
+        });
+    }
+}
+function openMenu(){
+
+    if(inBattle){
+        log("⚔️ 戦闘中はメニューを開けません！");
+        return;
+    }
+
+    document.getElementById("menuScreen").style.display = "block";
+}
+
+
+function closeMenu(){
+
+    document.getElementById("menuScreen").style.display = "none";
 }
 
 
