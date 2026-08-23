@@ -128,3 +128,13 @@ button:hover{
     height: 30px;
     padding: 0;
 }
+.menuButtons{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.menuButtons button{
+    box-sizing: border-box;
+}
