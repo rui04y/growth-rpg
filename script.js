@@ -602,7 +602,7 @@ function adventure(dungeonType = "grassland") {
             {name:"🪨 岩石巨人", hp:600, maxHp:600, atk:45, exp:300, gold:250, miniBoss:true},
 
         volcano:
-            {name:"🔥 炎竜", hp:2000, maxHp:1000, atk:70, exp:600, gold:500, miniBoss:true},
+            {name:"🔥 炎竜", hp:2000, maxHp:2000, atk:70, exp:600, gold:500, miniBoss:true},
 
         castle:
             {name:"⚔️ 魔将", hp:15000, maxHp:15000, atk:600, exp:1000, gold:800, miniBoss:true}
