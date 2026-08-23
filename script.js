@@ -1921,7 +1921,7 @@ function burnDamage(){
         player.mp -= mpCost;
 
         let damage =
-        player.atk * (3 + (player.skills.fireball.level - 1) * 0.5) +
+        player.atk * (1.5 + (player.skills.fireball.level - 1) * 0.5) +
         Math.floor(Math.random() * 10);
 
 
