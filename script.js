@@ -50,6 +50,8 @@ let player = {
         mp: 0
     },
     trainingLastRecovery: Date.now(),
+    trainingCount: 0,
+    maxTrainingCount: 10,
 
     // ====================
     // 🎒 アイテム
@@ -296,9 +298,45 @@ function log(text) {
 
 function train(type) {
 
+    // 古いセーブデータへの対応
+    if(player.totalTrainingCount === undefined){
+        player.totalTrainingCount = 0;
+    }
+
+    if(player.maxTrainingCount === undefined){
+        player.maxTrainingCount = 10;
+    }
+
+    // 訓練回数の上限チェック
+    if(player.totalTrainingCount >= player.maxTrainingCount){
+
+        log("🏋️ 訓練回数を使い切りました！");
+        return;
+
+    }
+
+    // 戦闘中チェック
     if(inBattle){
         log("⚔️ 戦闘中は訓練できません！");
         return;
+    }
+
+    // 訓練回数データが古い形式なら作り直す
+    if(
+        !player.trainingCount ||
+        typeof player.trainingCount !== "object"
+    ){
+        player.trainingCount = {
+            atk: 0,
+            def: 0,
+            hp: 0,
+            mp: 0
+        };
+    }
+
+    // この種類の訓練回数がなければ0
+    if(player.trainingCount[type] === undefined){
+        player.trainingCount[type] = 0;
     }
 
     // この分野の訓練回数
@@ -309,7 +347,6 @@ function train(type) {
         0.5,
         1 - (player.trainingCount[type] - 1) * 0.1
     );
-
     // ====================
     // ⚔️ 攻撃訓練
     // ====================
@@ -398,9 +435,12 @@ function train(type) {
             `(効率 ${Math.floor(efficiency * 100)}%)`
         );
     }
+      // 全体の訓練回数を増やす
+    player.totalTrainingCount++;
 
     updateScreen();
     autoSave();
+
 }
 
 
@@ -469,10 +509,10 @@ function levelUp() {
     player.level++;
 
     // 通常のステータス上昇
-    player.maxHp += 20;
+    player.maxHp += 10;
     player.hp = player.maxHp;
 
-    player.atk += 3;
+    player.atk += 2;
     player.def += 2;
 
     player.nextExp += 50;
@@ -522,29 +562,29 @@ function adventure(dungeonType = "grassland") {
         // 🌳 草原
         grassland: [
             {name:"スライム", hp:50, maxHp:50, atk:8, exp:20, gold:15},
-            {name:"ゴブリン", hp:80, maxHp:80, atk:12, exp:35, gold:30},
-            {name:"オオカミ", hp:100, maxHp:100, atk:15, exp:50, gold:45}
+            {name:"ゴブリン", hp:80, maxHp:80, atk:12, exp:35, gold:15},
+            {name:"オオカミ", hp:100, maxHp:100, atk:15, exp:50, gold:25}
         ],
 
         // 🕳️ 洞窟
         cave: [
             {name:"ゴブリン", hp:100, maxHp:100, atk:15, exp:40, gold:35},
-            {name:"オーク", hp:180, maxHp:180, atk:22, exp:80, gold:70},
-            {name:"リザードマン", hp:220, maxHp:220, atk:27, exp:110, gold:100}
+            {name:"オーク", hp:180, maxHp:180, atk:22, exp:80, gold:35},
+            {name:"リザードマン", hp:220, maxHp:220, atk:27, exp:110, gold:50}
         ],
 
         // 🌋 火山
         volcano: [
-            {name:"オーク", hp:250, maxHp:250, atk:30, exp:100, gold:90},
-            {name:"炎の魔物", hp:350, maxHp:350, atk:38, exp:150, gold:130},
-            {name:"ドラゴン", hp:500, maxHp:500, atk:50, exp:300, gold:250}
+            {name:"オーク", hp:250, maxHp:250, atk:30, exp:100, gold:45},
+            {name:"炎の魔物", hp:350, maxHp:350, atk:38, exp:150, gold:65},
+            {name:"ドラゴン", hp:500, maxHp:500, atk:50, exp:300, gold:125}
         ],
 
         // 🏰 魔王城
         castle: [
-            {name:"リザードマン", hp:400, maxHp:400, atk:45, exp:180, gold:150},
-            {name:"デーモン", hp:600, maxHp:600, atk:55, exp:250, gold:220},
-            {name:"魔王軍騎士", hp:800, maxHp:800, atk:65, exp:350, gold:300}
+            {name:"リザードマン", hp:400, maxHp:400, atk:45, exp:180, gold:75},
+            {name:"デーモン", hp:600, maxHp:600, atk:55, exp:250, gold:110},
+            {name:"魔王軍騎士", hp:800, maxHp:800, atk:65, exp:350, gold:150}
         ]
     };
 
@@ -562,10 +602,10 @@ function adventure(dungeonType = "grassland") {
             {name:"🪨 岩石巨人", hp:600, maxHp:600, atk:45, exp:300, gold:250, miniBoss:true},
 
         volcano:
-            {name:"🔥 炎竜", hp:1000, maxHp:1000, atk:70, exp:600, gold:500, miniBoss:true},
+            {name:"🔥 炎竜", hp:2000, maxHp:1000, atk:70, exp:600, gold:500, miniBoss:true},
 
         castle:
-            {name:"⚔️ 魔将", hp:1500, maxHp:1500, atk:90, exp:1000, gold:800, miniBoss:true}
+            {name:"⚔️ 魔将", hp:15000, maxHp:15000, atk:600, exp:1000, gold:800, miniBoss:true}
     };
 
 
@@ -582,10 +622,10 @@ function adventure(dungeonType = "grassland") {
             {name:"👹 洞窟の主", hp:1200, maxHp:1200, atk:70, exp:1000, gold:1000, boss:true},
 
         volcano:
-            {name:"🐉 火山の王", hp:2500, maxHp:2500, atk:110, exp:2000, gold:2000, boss:true},
+            {name:"🐉 火山の王", hp:5000, maxHp:5000, atk:210, exp:2000, gold:2000, boss:true},
 
         castle:
-            {name:"👿 魔王", hp:5000, maxHp:5000, atk:150, exp:5000, gold:5000, boss:true}
+            {name:"👿 魔王", hp:60000, maxHp:60000, atk:900, exp:5000, gold:5000, boss:true}
     };
 
 
@@ -1201,8 +1241,8 @@ function weaponShop(){
 2. 鉄の剣　300G
 3. 鋼の剣　700G
 4. ミスリルソード　1500G
-5. ドラゴンソード　3000G
-6. 伝説の剣　6000G
+5. ドラゴンソード　30000G
+6. 伝説の剣　99999G
 
 
 番号を入力してください。
@@ -1247,7 +1287,7 @@ function weaponShop(){
         
          case "5":
 
-            buyWeapon("ドラゴンソード", 3000, 70);
+            buyWeapon("ドラゴンソード", 30000, 70);
 
             break;
 
@@ -1255,7 +1295,7 @@ function weaponShop(){
 
          case "6":
 
-            buyWeapon("伝説の剣", 6000, 110);
+            buyWeapon("伝説の剣", 99999, 110);
 
             break;
 
@@ -1334,8 +1374,8 @@ function armorShop(){
 2. 鉄の盾　400G
 3. 鋼の盾　800G
 4. ミスリルシールド　1800G
-5. ドラゴンシールド　3500G
-6. 伝説の盾　7000G
+5. ドラゴンシールド　35000G
+6. 伝説の盾　99999G
 番号を入力してください。
 `
 );
@@ -1376,7 +1416,7 @@ function armorShop(){
 
         case "5":
             
-            buyArmor("ドラゴンシールド", 3500, 70);
+            buyArmor("ドラゴンシールド", 35000, 60);
             
             break;
 
@@ -1384,7 +1424,7 @@ function armorShop(){
 
         case "6":
             
-            buyArmor("伝説の盾", 7000, 110);
+            buyArmor("伝説の盾", 99999, 80);
             
             break;
 
