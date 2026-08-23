@@ -51,7 +51,10 @@ let player = {
     },
     trainingLastRecovery: Date.now(),
     trainingCount: 0,
-    maxTrainingCount: 10,
+    maxTrainingCount: 30,
+
+    itemUseCount: 0,
+    maxItemUseCount: 3,
 
     // ====================
     // 🎒 アイテム
@@ -548,6 +551,7 @@ function checkSkillLearn(){
 
 function adventure(dungeonType = "grassland") {
 
+    player.itemUseCount = 0;
     if (inBattle) {
         log("すでに戦闘中！");
         return;
@@ -606,7 +610,7 @@ function adventure(dungeonType = "grassland") {
             {name:"🪨 岩石巨人", hp:600, maxHp:600, atk:45, exp:300, gold:250, miniBoss:true},
 
         volcano:
-            {name:"🔥 炎竜", hp:2000, maxHp:2000, atk:70, exp:600, gold:500, miniBoss:true},
+            {name:"🔥 炎竜", hp:2000, maxHp:2000, atk:200, exp:600, gold:500, miniBoss:true},
 
         castle:
             {name:"⚔️ 魔将", hp:15000, maxHp:15000, atk:600, exp:1000, gold:800, miniBoss:true}
@@ -626,11 +630,30 @@ function adventure(dungeonType = "grassland") {
             {name:"👹 洞窟の主", hp:1200, maxHp:1200, atk:70, exp:1000, gold:1000, boss:true},
 
         volcano:
-            {name:"🐉 火山の王", hp:5000, maxHp:5000, atk:210, exp:2000, gold:2000, boss:true},
+            {name:"🐉 火山の王", hp:5000, maxHp:5000, atk:310, exp:2000, gold:2000, boss:true},
 
         castle:
             {name:"👿 魔王", hp:60000, maxHp:60000, atk:900, exp:5000, gold:5000, boss:true}
     };
+
+
+
+    const rare = { 
+        grassland:
+            {name:"なんか珍しいやつ", hp:400, maxHp:400, atk:1, exp:1500, gold:500, boss:true},
+
+        cave:
+            {name:"なんか珍しいやつ", hp:1000, maxHp:1000, atk:1, exp:2000, gold:1000, boss:true},
+
+        volcano:
+            {name:"なんか珍しいやつ", hp:4500, maxHp:4500, atk:1, exp:4000, gold:2000, boss:true},
+
+        castle:
+            {name:"なんか珍しいやつ", hp:50000, maxHp:50000, atk:1, exp:7000, gold:5000, boss:true}
+    };
+
+
+
 
 
     const enemyList = enemies[dungeonType];
@@ -649,12 +672,20 @@ function adventure(dungeonType = "grassland") {
         log(`👑 BOSS！ ${enemy.name} が現れた！`);
 
     }
-    else if(random < 0.15){
+    else if(random < 0.12){
 
         // 12% → 中ボス
         enemy = {...miniBosses[dungeonType]};
 
         log(`⚠️ 強敵！ ${enemy.name} が現れた！`);
+
+    }
+    else if(random < 0.00001){
+
+        // 0.001% → レアモン
+        enemy = {...rare[dungeonType]};
+
+        log(`⚠️ レア！ ${enemy.name} が現れた！`);
 
     }
     else{
@@ -669,9 +700,9 @@ function adventure(dungeonType = "grassland") {
         log(enemy.name + " が現れた！");
     }
 
-
+    
     inBattle = true;
-
+    player.itemUseCount = 0;
     document.getElementById("battle").style.display = "block";
 
     document.getElementById("enemyName").textContent = enemy.name;
@@ -1843,7 +1874,8 @@ function burnDamage(){
     if(enemy.burn <= 0){
         log("🔥 やけどが治った！");
     }
-}function useSkill(type){
+}
+function useSkill(type){
 
     let skillName;
 
@@ -1900,6 +1932,8 @@ function burnDamage(){
             log("👿 魔王の剣の効果発動！");
             }
         }
+        
+        enemy.hp -= Math.floor(damage);
 
         if(enemy.hp < 0){
             enemy.hp = 0;
@@ -2222,9 +2256,18 @@ function unlockNextStage() {
 
 window.useItem = function(){
 
+    // 戦闘中の使用回数制限
+    if(inBattle && player.itemUseCount >= player.maxItemUseCount){
+
+        log("🎒 この戦闘ではこれ以上アイテムを使えません！");
+        return;
+    }
+
     let choice = prompt(
 `
 🎒 アイテム
+
+使用回数：${player.itemUseCount} / ${player.maxItemUseCount}
 
 1. ポーション ×${player.items.potion}
 
@@ -2241,12 +2284,19 @@ window.useItem = function(){
 
                 player.hp = Math.min(player.maxHp, player.hp + 50);
 
+                // 戦闘中なら使用回数を増やす
+                if(inBattle){
+                    player.itemUseCount++;
+                }
+
                 log("❤️ ポーションを使った！");
+
             }else{
                 log("ポーションがありません！");
             }
 
             break;
+
 
         case "2":
 
@@ -2256,7 +2306,13 @@ window.useItem = function(){
 
                 player.mp = Math.min(player.maxMp, player.mp + 20);
 
+                // 戦闘中なら使用回数を増やす
+                if(inBattle){
+                    player.itemUseCount++;
+                }
+
                 log("🔵 マナポーションを使った！");
+
             }else{
                 log("マナポーションがありません！");
             }
