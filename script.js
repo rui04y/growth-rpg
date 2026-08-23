@@ -562,12 +562,14 @@ function adventure(dungeonType = "grassland") {
         // 🌳 草原
         grassland: [
             {name:"スライム", hp:50, maxHp:50, atk:8, exp:20, gold:15},
+            {name:"グレムリン", hp:50, maxHp:50, atk:10, exp:20, gold:15},
             {name:"ゴブリン", hp:80, maxHp:80, atk:12, exp:35, gold:15},
             {name:"オオカミ", hp:100, maxHp:100, atk:15, exp:50, gold:25}
         ],
 
         // 🕳️ 洞窟
         cave: [
+            {name:"ゾンビ", hp:150, maxHp:150, atk:10, exp:20, gold:15},
             {name:"ゴブリン", hp:100, maxHp:100, atk:15, exp:40, gold:35},
             {name:"オーク", hp:180, maxHp:180, atk:22, exp:80, gold:35},
             {name:"リザードマン", hp:220, maxHp:220, atk:27, exp:110, gold:50}
@@ -575,6 +577,7 @@ function adventure(dungeonType = "grassland") {
 
         // 🌋 火山
         volcano: [
+            {name:"サラマンダー", hp:450, maxHp:450, atk:60, exp:250, gold:100},
             {name:"オーク", hp:250, maxHp:250, atk:30, exp:100, gold:45},
             {name:"炎の魔物", hp:350, maxHp:350, atk:38, exp:150, gold:65},
             {name:"ドラゴン", hp:500, maxHp:500, atk:50, exp:300, gold:125}
@@ -582,6 +585,7 @@ function adventure(dungeonType = "grassland") {
 
         // 🏰 魔王城
         castle: [
+            {name:"リッチ", hp:700, maxHp:700, atk:50, exp:50, gold:80},
             {name:"リザードマン", hp:400, maxHp:400, atk:45, exp:180, gold:75},
             {name:"デーモン", hp:600, maxHp:600, atk:55, exp:250, gold:110},
             {name:"魔王軍騎士", hp:800, maxHp:800, atk:65, exp:350, gold:150}
