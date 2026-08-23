@@ -46,20 +46,13 @@
 
         <button onclick="openTrainingMenu()">🏋️ 訓練</button>
 
-        <button onclick="openStatusMenu()">📊 ステータス</button>
-
         <button onclick="openDungeon()">🗺️ ダンジョン</button>
 
         <button onclick="heal()">❤️ 回復</button>
 
-        <button onclick="openEquipment()">装備</button>
+        <button onclick="openMenu()">📊 メニュー</button>
 
-        <button onclick="shop()">🏪 ショップ</button>
-
-        <button onclick="saveGame()">💾 セーブ</button>
-
-        <button onclick="loadGame()">📂 ロード</button>
-
+    
       
 
     </div>
@@ -109,18 +102,48 @@
     <button onclick="useItem()">🎒 アイテム</button>
     <button onclick="runAway()">🏃 逃げる</button>
 </div>
-<div id="equipmentScreen" class="screen">
+
+
+<div id="menuScreen" class="screen" style="display:none;">
+
+    <h2>📊 メニュー</h2>
+
+    <div class="menuButtons">
+
+        <button onclick="openStatus()">📈 ステータス</button>
+
+        <button onclick="openInventory()">🎒 インベントリ</button>
+
+        <button onclick="openEquipment()">⚔️ 装備</button>
+
+        <button onclick="shop()">🏪 ショップ</button>
+
+        <button onclick="saveGame()">💾 セーブ</button>
+
+        <button onclick="loadGame()">📂 ロード</button>
+
+    </div>
+
+    <button onclick="closeMenu()">戻る</button>
+
+</div>
+<div id="equipmentScreen" class="screen" style="display:none;">
+
     <h2>装備一覧</h2>
 
-<button onclick="removeEquipment()">装備を外す</button>
+    <button onclick="removeEquipment()">装備を外す</button>
 
-<button onclick="closeEquipment()">戻る</button>
+    <button onclick="closeEquipment()">戻る</button>
+
     <h3>現在の装備</h3>
+
     <p id="weaponText">武器：なし</p>
     <p id="armorText">防具：なし</p>
-    
+
     <div id="equipmentList"></div>
+
 </div>
+
 
 
 
@@ -217,8 +240,23 @@
 
         
 
-        </div>
+    </div>
+ <div id="inventoryScreen" class="screen" style="display:none;">
 
+    <h2>🎒 インベントリ</h2>
+
+    <h3>🧪 消費アイテム</h3>
+    <div id="itemList"></div>
+
+    <h3>🛠️ 素材</h3>
+    <div id="materialList"></div>
+
+    <h3>⚔️ 装備</h3>
+    <div id="inventoryEquipmentList"></div>
+
+    <button onclick="closeInventory()">戻る</button>
+
+    </div>
 
 
 
