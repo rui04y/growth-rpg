@@ -121,7 +121,13 @@ let player = {
     },
     effects: []
 };
+if(player.totalTrainingCount === undefined){
+    player.totalTrainingCount = 0;
+}
 
+if(player.maxTrainingCount === undefined){
+    player.maxTrainingCount = 30;
+}
 let currentDungeon = null;
 
 
@@ -252,22 +258,26 @@ let defending = false;
 
 function updateScreen() {
 
+    applyRareMaterialEffects();
+
+    const totalMaxHp = getTotalMaxHp();
+    const totalMaxMp = getTotalMaxMp();
+
     document.getElementById("level").textContent = player.level;
-    document.getElementById("hp").textContent = player.hp;
-    document.getElementById("maxHp").textContent = player.maxHp;
+    document.getElementById("maxHp").textContent = totalMaxHp;
+    document.getElementById("maxMp").textContent = totalMaxMp;
     document.getElementById("exp").textContent = player.exp;
     document.getElementById("nextExp").textContent = player.nextExp;
 
     // 攻撃力・防御力
-    document.getElementById("atk").textContent = player.atk;
-    document.getElementById("def").textContent = player.def;
+    document.getElementById("atk").textContent = getTotalAtk();
 
+    document.getElementById("def").textContent = getTotalDef();
     // 所持金
     document.getElementById("gold").textContent = player.gold;
 
     // MP
     document.getElementById("mp").textContent = player.mp;
-    document.getElementById("maxMp").textContent = player.maxMp;
 
     // 武器・防具
     document.getElementById("weapon").textContent =
@@ -277,11 +287,18 @@ function updateScreen() {
         player.equipment.armor;
 
 
-    // HPバー
-    const hpPercent = (player.hp / player.maxHp) * 100;
-    document.getElementById("hpBar").style.width =
-        hpPercent + "%";
+   // HPバー
+    const hpPercent = (player.hp / totalMaxHp) * 100;
 
+    document.getElementById("hpBar").style.width =
+    hpPercent + "%";
+
+
+    // MPバー
+    const mpPercent = (player.mp / totalMaxMp) * 100;
+
+    document.getElementById("mpBar").style.width =
+    mpPercent + "%";
 
     // EXPバー
     const expPercent = (player.exp / player.nextExp) * 100;
@@ -289,11 +306,38 @@ function updateScreen() {
         expPercent + "%";
 
 
-    // MPバー
-    const mpPercent = (player.mp / player.maxMp) * 100;
-    document.getElementById("mpBar").style.width =
-        mpPercent + "%";
+    const remainingTraining =
+    player.maxTrainingCount - player.totalTrainingCount;
 
+    document.getElementById("trainingCountText").textContent =
+    `🏋️ 残り訓練回数：${remainingTraining} / ${player.maxTrainingCount}`;
+
+}
+function getTotalAtk(){
+
+    return player.atk +
+        (player.rareEffects?.atk || 0);
+}
+
+
+function getTotalDef(){
+
+    return player.def +
+        (player.rareEffects?.def || 0);
+}
+
+
+function getTotalMaxHp(){
+
+    return player.maxHp +
+        (player.rareEffects?.maxHp || 0);
+}
+
+
+function getTotalMaxMp(){
+
+    return player.maxMp +
+        (player.rareEffects?.maxMp || 0);
 }
 function log(text) {
     const logElement = document.getElementById("log");
@@ -518,7 +562,7 @@ function levelUp() {
 
     // 通常のステータス上昇
     player.maxHp += 10;
-    player.hp = player.maxHp;
+    player.hp = getTotalMaxHp();
 
     player.atk += 2;
     player.def += 2;
@@ -757,6 +801,123 @@ const materialData = {
     demonGeneralCore: "⚔️ 魔将の核"
 };
 
+const rareMaterialData = {
+
+    slimeCore: {
+        name: "💎 スライムコア",
+        effect: "maxHp",
+        value: 20
+    },
+
+    moonFur: {
+        name: "🌙 月光の毛皮",
+        effect: "def",
+        value: 5
+    },
+
+    dragonHeart: {
+        name: "❤️ 竜の心臓",
+        effect: "atk",
+        value: 10
+    },
+
+    demonFlame: {
+        name: "🔥 魔界の炎",
+        effect: "allSkillPowerUp",
+        value: 0.1
+    },
+
+    demonSoul: {
+        name: "👑 魔王の魂",
+        effect: "allStatus",
+        value: 10
+    }
+
+};
+
+function rareEnemyDrop(enemy){
+
+    // レアドロップ設定がない場合
+    if(!enemy.rareDrop){
+        return;
+    }
+
+    // 確率判定
+    if(Math.random() >= enemy.rareDropRate){
+        return;
+    }
+
+    // materialsがない場合の対策
+    if(!player.materials){
+        player.materials = {};
+    }
+
+    // 初めて入手
+    if(player.materials[enemy.rareDrop] === undefined){
+        player.materials[enemy.rareDrop] = 0;
+    }
+
+    player.materials[enemy.rareDrop]++;
+
+    log(
+        `✨✨ レアドロップ！ ${rareMaterialData[enemy.rareDrop].name}を入手！`
+    );
+
+    applyRareMaterialEffects();
+}
+
+function applyRareMaterialEffects(){
+
+    player.rareEffects = {
+        atk: 0,
+        def: 0,
+        maxHp: 0,
+        maxMp: 0,
+        allSkillPowerUp: 0
+    };
+
+    if(!player.materials){
+        return;
+    }
+
+    for(const rareId in rareMaterialData){
+
+        // 1個以上持っている場合
+        if(player.materials[rareId] > 0){
+
+            const rare = rareMaterialData[rareId];
+
+            if(rare.effect === "atk"){
+                player.rareEffects.atk += rare.value;
+            }
+
+            else if(rare.effect === "def"){
+                player.rareEffects.def += rare.value;
+            }
+
+            else if(rare.effect === "maxHp"){
+                player.rareEffects.maxHp += rare.value;
+            }
+
+            else if(rare.effect === "maxMp"){
+                player.rareEffects.maxMp += rare.value;
+            }
+
+            else if(rare.effect === "allStatus"){
+
+                player.rareEffects.atk += rare.value;
+                player.rareEffects.def += rare.value;
+                player.rareEffects.maxHp += rare.value;
+                player.rareEffects.maxMp += rare.value;
+            }
+
+            else if(rare.effect === "allSkillPowerUp"){
+                player.rareEffects.allSkillPowerUp += rare.value;
+            }
+        }
+    }
+}
+
 
 function enemyDrop(enemy){
 
@@ -951,9 +1112,9 @@ function loadGame() {
 function attack(){
 
     if(!inBattle) return;
-
-    let damage = Math.floor(Math.random()*player.atk)+1;
-
+    
+    let damage = Math.floor(Math.random() * getTotalAtk()) + 1;
+    
     enemy.hp -= damage;
 
     if(enemy.hp < 0){
@@ -970,6 +1131,7 @@ function attack(){
         player.exp += enemy.exp;
         player.gold += enemy.gold;
         enemyDrop(enemy);
+        rareEnemyDrop(enemy);
         while(player.exp >= player.nextExp){
             player.exp -= player.nextExp;
             levelUp();
@@ -994,7 +1156,7 @@ function attack(){
 
 function enemyAttack(){
 
-    let damage = Math.max(1, enemy.atk - Math.floor(player.def / 2));
+    let damage = Math.max(1, enemy.atk - Math.floor(getTotalDef() / 2));
 
     if(defending){
         damage = Math.floor(damage / 2);
@@ -1138,7 +1300,9 @@ function skill(){
 
     player.mp -= 5;
 
-    let damage = player.atk * 2 + Math.floor(Math.random()*10);
+   let damage =
+    getTotalAtk() * (2 + (player.skills.strong.level - 1) * 0.5) +
+    Math.floor(Math.random() * 10);
 
     // 森王の剣の特殊効果
     if(player.effects && player.effects.includes("skillPowerUp")){
@@ -1166,6 +1330,7 @@ function skill(){
         player.exp += enemy.exp;
         player.gold += enemy.gold;
         enemyDrop(enemy);
+        rareEnemyDrop(enemy);
         while(player.exp >= player.nextExp){
             player.exp -= player.nextExp;
             levelUp();
@@ -1991,7 +2156,7 @@ function useSkill(type){
         player.mp -= mpCost;
 
         let damage =
-            player.atk * (2 + (player.skills.strong.level - 1) * 0.5) +
+            getTotalAtk()* (2 + (player.skills.strong.level - 1) * 0.5) +
             Math.floor(Math.random() * 10);
            
 
@@ -2035,7 +2200,7 @@ function useSkill(type){
         player.mp -= mpCost;
 
         let damage =
-        player.atk * (1.5 + (player.skills.fireball.level - 1) * 0.5) +
+        getTotalAtk() * (1.5 + (player.skills.fireball.level - 1) * 0.5) +
         Math.floor(Math.random() * 10);
 
 
@@ -2084,7 +2249,7 @@ function useSkill(type){
         player.mp -= mpCost;
 
         let damage =
-        player.atk * (5 + (player.skills.ultimate.level - 1) * 0.5) +
+        getTotalAtk() * (5 + (player.skills.ultimate.level - 1) * 0.5) +
         Math.floor(Math.random() * 20);
 
 
@@ -2120,7 +2285,7 @@ function useSkill(type){
         player.mp -= mpCost;
 
         let damage =
-        player.atk * (2.5 + (player.skills.thunder.level - 1) * 0.5) +
+        getTotalAtk() * (2.5 + (player.skills.thunder.level - 1) * 0.5) +
         Math.floor(Math.random() * 15);
 
         // 👿 魔王の剣の特殊効果
@@ -2179,6 +2344,7 @@ function useSkill(type){
         player.exp += enemy.exp;
         player.gold += enemy.gold;
         enemyDrop(enemy);
+        rareEnemyDrop(enemy);
         while(player.exp >= player.nextExp){
             player.exp -= player.nextExp;
             levelUp();
@@ -2358,7 +2524,7 @@ window.useItem = function(){
 
                 player.items.potion--;
 
-                player.hp = Math.min(player.maxHp, player.hp + 50);
+                player.hp = Math.min(getTotalMaxHp(), player.hp + 50);
 
                 // 戦闘中なら使用回数を増やす
                 if(inBattle){
@@ -2380,7 +2546,7 @@ window.useItem = function(){
 
                 player.items.manaPotion--;
 
-                player.mp = Math.min(player.maxMp, player.mp + 20);
+                player.mp = Math.min(getTotalMaxMp(), player.mp + 20);
 
                 // 戦闘中なら使用回数を増やす
                 if(inBattle){
