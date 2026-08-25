@@ -53,7 +53,8 @@ button:hover{
     background:#111;
     padding:15px;
     border-radius:10px;
-    min-height:100px;
+    height:200px;
+    overflow:hidden;
 }
 .bar{
     width:100%;
@@ -108,9 +109,9 @@ button:hover{
 .equipmentColumns > div {
     width: 200px;
 }
-#log {
-    max-height: 200px;
-    overflow-y: auto;
+#log{
+    height:170px;
+    overflow-y:auto;
 }
 .status p {
     display: block;
