@@ -1051,8 +1051,8 @@ function heal() {
         return;
     }
 
+    player.hp = getTotalMaxHp();
 
-    player.hp = player.maxHp;
     log("❤️ 全回復した！");
     updateScreen();
 }
