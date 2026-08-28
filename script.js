@@ -1127,28 +1127,32 @@ function attack(){
     document.getElementById("enemyHpBar").style.width = percent + "%";
 
     if(enemy.hp <= 0){
-    
-        player.exp += enemy.exp;
-        player.gold += enemy.gold;
-        enemyDrop(enemy);
-        rareEnemyDrop(enemy);
-        while(player.exp >= player.nextExp){
-            player.exp -= player.nextExp;
-            levelUp();
-        }
 
-        updateScreen();
+    player.exp += enemy.exp;
+    player.gold += enemy.gold;
 
-        log(enemy.name + " を倒した！");
-        if(enemy.boss){
+    log(enemy.name + " を倒した！");
+
+    enemyDrop(enemy);
+    rareEnemyDrop(enemy);
+
+    while(player.exp >= player.nextExp){
+        player.exp -= player.nextExp;
+        levelUp();
+    }
+
+    updateScreen();
+
+    if(enemy.boss){
         bossReward();
         unlockNextStage(currentDungeon);
-        }
-        inBattle = false;
+    }
 
-        document.getElementById("battle").style.display = "none";
+    inBattle = false;
 
-        return;
+    document.getElementById("battle").style.display = "none";
+
+    return;
     }
 
     enemyAttack();
