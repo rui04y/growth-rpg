@@ -288,8 +288,15 @@ function updateScreen() {
 
 
    // HPバー
-   const hpPercent =
-    (player.hp / getTotalMaxHp()) * 100;
+  
+
+    // HP表示
+    document.getElementById("hp").textContent = player.hp;
+    document.getElementById("maxHp").textContent = totalMaxHp;
+
+    // HPバー
+    const hpPercent =
+    (player.hp / totalMaxHp) * 100;
 
     document.getElementById("hpBar").style.width =
     hpPercent + "%";
