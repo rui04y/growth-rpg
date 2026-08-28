@@ -1442,7 +1442,6 @@ function shop(){
 }
 
 
-
 function itemShop(){
 
     let choice = prompt(
@@ -1454,47 +1453,84 @@ function itemShop(){
 
 番号を入力してください。
 `
-);
-
+    );
 
     switch(choice){
 
+        // =====================
+        // ❤️ ポーション
+        // =====================
         case "1":
 
-            if(player.gold >= 30){
+            let potionAmount = prompt(
+                `❤️ ポーションを何個買いますか？\n\n` +
+                `1個：30G\n` +
+                `所持金：${player.gold}G`
+            );
 
-                player.gold -= 30;
-                player.items.potion++;
+            potionAmount = Number(potionAmount);
 
-                log("🧪 ポーションを買った！");
+            if(!Number.isInteger(potionAmount) || potionAmount <= 0){
+
+                log("購入をキャンセルしました！");
+                break;
+
+            }
+
+            const potionPrice = potionAmount * 30;
+
+            if(player.gold < potionPrice){
+
+                log("お金が足りません！");
 
             }else{
 
-                log("お金が足りません！");
+                player.gold -= potionPrice;
+                player.items.potion += potionAmount;
+
+                log(`❤️ ポーションを${potionAmount}個購入した！`);
 
             }
 
             break;
 
 
-
+        // =====================
+        // 🔵 マナポーション
+        // =====================
         case "2":
 
-            if(player.gold >= 50){
+            let manaPotionAmount = prompt(
+                `🔵 マナポーションを何個買いますか？\n\n` +
+                `1個：50G\n` +
+                `所持金：${player.gold}G`
+            );
 
-                player.gold -= 50;
-                player.items.manaPotion++;
+            manaPotionAmount = Number(manaPotionAmount);
 
-                log("🔵 マナポーションを買った！");
+            if(!Number.isInteger(manaPotionAmount) || manaPotionAmount <= 0){
+
+                log("購入をキャンセルしました！");
+                break;
+
+            }
+
+            const manaPotionPrice = manaPotionAmount * 50;
+
+            if(player.gold < manaPotionPrice){
+
+                log("お金が足りません！");
 
             }else{
 
-                log("お金が足りません！");
+                player.gold -= manaPotionPrice;
+                player.items.manaPotion += manaPotionAmount;
+
+                log(`🔵 マナポーションを${manaPotionAmount}個購入した！`);
 
             }
 
             break;
-
 
 
         default:
@@ -1503,11 +1539,9 @@ function itemShop(){
 
     }
 
-
     updateScreen();
-
+    autoSave();
 }
-
 
 
 
@@ -2528,8 +2562,10 @@ window.useItem = function(){
 
                 player.items.potion--;
 
-                player.hp = Math.min(getTotalMaxHp(), player.hp + 50);
-
+                player.hp = Math.min(
+                getTotalMaxHp(),
+                player.hp + 50
+                );
                 // 戦闘中なら使用回数を増やす
                 if(inBattle){
                     player.itemUseCount++;
@@ -2550,8 +2586,10 @@ window.useItem = function(){
 
                 player.items.manaPotion--;
 
-                player.mp = Math.min(getTotalMaxMp(), player.mp + 20);
-
+                player.mp = Math.min(
+                getTotalMaxMp(),
+                player.mp + 20
+                );
                 // 戦闘中なら使用回数を増やす
                 if(inBattle){
                     player.itemUseCount++;
