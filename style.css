@@ -107,12 +107,12 @@ button:hover{
     background:#111;
     padding:15px;
     border-radius:10px;
-    height:260px;
+    height:300px;
     box-sizing:border-box;
 }
 
 #log{
-    height:240px;
+    height:180px;
     overflow-y:auto;
     margin:0;
 }
