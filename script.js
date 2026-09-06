@@ -12,6 +12,8 @@ let player = {
     def: 5,
     statusPoints: 0,
 
+    comboCount: 0,
+
     statusBonus: {
     atk: 0,
     def: 0,
@@ -23,6 +25,7 @@ let player = {
     maxMp: 30,
 
     gold: 100,
+    magicStone: 0,
 
 
     unlockedStages: {
@@ -38,7 +41,7 @@ let player = {
     castle: false
     },
 
-
+    emergencyHealUsed: false,
 
 
 
@@ -54,7 +57,7 @@ let player = {
         mp: 0
     },
     trainingLastRecovery: Date.now(),
-    trainingCount: 0,
+    
     maxTrainingCount: 30,
 
     itemUseCount: 0,
@@ -241,6 +244,193 @@ const equipmentData = [
     attack: 80,
     effect: "allSkillPowerUp",
     effectText: "👿 全スキルダメージ +15%"
+
+},
+
+// ガチャ N
+{
+    name: "スキルドパッド",
+    type: "weapon",
+    attack: 8,
+    defense: 0
+},
+
+{
+    name: "暗黒",
+    type: "weapon",
+    attack: 6,
+    defense: 0
+},
+
+{
+    name: "鉄鋼",
+    type: "armor",
+    attack: 0,
+    defense: 8
+},
+
+// ガチャ R
+{
+    name: "ストームブレイカー",
+    type: "weapon",
+    attack: 15,
+    defense: 0,
+    effect: "criticalRateUp3",
+    effectText: "⚡ クリティカル率 +3%"
+},
+
+{
+    name: "ネクロノミコン",
+    type: "weapon",
+    attack: 11,
+    defense: 0,
+    effect: "skillDamageUp5",
+    effectText: "📖 スキルダメージ +5%"
+},
+
+{
+    name: "シャドウ",
+    type: "armor",
+    attack: 0,
+    defense: 12,
+    effect: "damageReduction",
+    effectText: "🌑 被ダメージ -5%"
+},
+
+// ガチャ SR
+{
+    name: "雷撃",
+    type: "weapon",
+    attack: 60,
+    defense: 0,
+    effect: "thunderStrike",
+    effectText: "⚡ 10%の確率で追加ダメージ"
+},
+
+{
+    name: "アサナトス",
+    type: "armor",
+    attack: 0,
+    defense: 60,
+    effect: "maxHpUp",
+    effectText: "❤️ 最大HP +10%"
+},
+
+{
+    name: "ニクス",
+    type: "weapon",
+    attack: 80,
+    defense: 0,
+    effect: "criticalDamageUp",
+    effectText: "💥 クリティカルダメージ +20%"
+},
+
+{
+    name: "アイアンメイデン",
+    type: "armor",
+    attack: 0,
+    defense: 70,
+    effect: "damageReflect",
+    effectText: "🛡️ 受けたダメージの10%を反射"
+},
+
+{
+    name: "虎の眼",
+    type: "weapon",
+    attack: 70,
+    defense: 0,
+    effect: "criticalRateUp5",
+    effectText: "🎯 クリティカル率 +5%"
+},
+
+{
+    name: "不滅の鎧",
+    type: "armor",
+    attack: 0,
+    defense: 75,
+    effect: "turnHeal5",
+    effectText: "💚 毎ターン最大HPの5%回復"
+},
+// ガチャ SSR
+{
+    name: "コキュートス",
+    type: "weapon",
+    attack: 120,
+    defense: 0,
+    effect: "enemyAtkDown20",
+    effectText: "❄️ 20%の確率で敵ATK -20%（1ターン）"
+},
+
+{
+    name: "紫煙",
+    type: "armor",
+    attack: 0,
+    defense: 90,
+    effect: "damageReduction15",
+    effectText: "🌫️ 被ダメージ -15%"
+},
+
+{
+    name: "雷撃の戦斧",
+    type: "weapon",
+    attack: 140,
+    defense: 0,
+    effect: "enemyStun",
+    effectText: "⚡ 10%の確率で敵を行動不能（1ターン）"
+},
+
+{
+    name: "イクイスース",
+    type: "armor",
+    attack: 0,
+    defense: 100,
+    effect: "emergencyHeal20",
+    effectText: "💚 HP30%以下で1回だけ最大HPの20%回復"
+},
+// ガチャ UR
+{
+    name: "カミーノ・レアル",
+    type: "weapon",
+    attack: 180,
+    defense: 0,
+    effect: "normalAttackUp",
+    effectText: "⚔️ 通常攻撃ダメージ +15%"
+},
+
+{
+    name: "ベートーヴェン",
+    type: "weapon",
+    attack: 160,
+    defense: 0,
+    effect: "lowHpAttackUp",
+    effectText: "🎼 HP50%以下で攻撃力 +20%"
+},
+
+{
+    name: "パガニーニ",
+    type: "weapon",
+    attack: 140,
+    defense: 0,
+    effect: "comboDamageUp",
+    effectText: "🎻 同じ敵への連続攻撃で1回につきダメージ +5%（最大+30%）"
+},
+
+{
+    name: "リスト",
+    type: "armor",
+    attack: 0,
+    defense: 130,
+    effect: "lowHpDamageReduction",
+    effectText: "🎹 HP50%以下で被ダメージ -25%"
+},
+
+{
+    name: "ワーグナー",
+    type: "armor",
+    attack: 0,
+    defense: 150,
+    effect: "heavyDamageReduction",
+    effectText: "🎵 最大HPの20%を超えるダメージを20%軽減"
 },
 
 
@@ -320,7 +510,11 @@ function updateScreen() {
     document.getElementById("trainingCountText").textContent =
     `🏋️ 残り訓練回数：${remainingTraining} / ${player.maxTrainingCount}`;
 
+    document.getElementById("magicStone").textContent =
+    player.magicStone;
+
 }
+
 function getTotalAtk(){
 
     return player.atk +
@@ -337,8 +531,18 @@ function getTotalDef(){
 
 function getTotalMaxHp(){
 
-    return player.maxHp +
+    let maxHp = player.maxHp +
         (player.rareEffects?.maxHp || 0);
+
+    // ❤️ アサナトス
+    if(
+        player.effects &&
+        player.effects.includes("maxHpUp")
+    ){
+        maxHp = Math.floor(maxHp * 1.1);
+    }
+
+    return maxHp;
 }
 
 
@@ -607,6 +811,7 @@ function checkSkillLearn(){
 }
 
 function adventure(dungeonType = "grassland") {
+    player.emergencyHealUsed = false;
 
     player.itemUseCount = 0;
     if (inBattle) {
@@ -739,40 +944,41 @@ function adventure(dungeonType = "grassland") {
     // 敵を決定
     // =========================
 
-    if(random < 0.03){
+    if(random < 0.00001){
 
-        // 3% → ボス
-        enemy = {...bosses[dungeonType]};
+    // 0.001% → レアモン
+    enemy = {...rare[dungeonType]};
 
-        log(`👑 BOSS！ ${enemy.name} が現れた！`);
+    log(`⚠️ レア！ ${enemy.name} が現れた！`);
+
+    }
+    else if(random < 0.03){
+
+    // 3% → ボス
+    enemy = {...bosses[dungeonType]};
+
+    log(`👑 BOSS！ ${enemy.name} が現れた！`);
 
     }
     else if(random < 0.12){
 
-        // 12% → 中ボス
-        enemy = {...miniBosses[dungeonType]};
+    // 9% → 中ボス
+    enemy = {...miniBosses[dungeonType]};
 
-        log(`⚠️ 強敵！ ${enemy.name} が現れた！`);
-
-    }
-    else if(random < 0.00001){
-
-        // 0.001% → レアモン
-        enemy = {...rare[dungeonType]};
-
-        log(`⚠️ レア！ ${enemy.name} が現れた！`);
+    log(`⚠️ 強敵！ ${enemy.name} が現れた！`);
 
     }
     else{
 
-        // 85% → 通常敵
-        enemy = {
-            ...enemyList[
-                Math.floor(Math.random() * enemyList.length)
-            ]
-        };
+    // 残り約88% → 通常敵
+    enemy = {
+        ...enemyList[
+            Math.floor(Math.random() * enemyList.length)
+        ]
+    };
 
-        log(enemy.name + " が現れた！");
+    log(enemy.name + " が現れた！");
+
     }
 
     
@@ -807,6 +1013,36 @@ const materialData = {
     giantCore: "🪨 岩石巨人の核",
     fireDragonHeart: "🔥 炎竜の心臓",
     demonGeneralCore: "⚔️ 魔将の核"
+};
+
+const materialExchangeData = {
+
+    // 🌳 草原
+    slimeGel: 5,
+    gremlinClaw: 5,
+    goblinFang: 6,
+    wolfFur: 7,
+
+    // 🕳️ 洞窟
+    zombieBone: 8,
+    orcHorn: 10,
+    lizardScale: 12,
+
+    // 🌋 火山
+    salamanderFlame: 14,
+    fireCrystal: 16,
+    dragonFang: 20,
+
+    // 🏰 魔王城
+    lichSoul: 22,
+    demonHorn: 25,
+    knightMedal: 30,
+
+    // 👑 中ボス
+    giantWolfFang: 20,
+    giantCore: 35,
+    fireDragonHeart: 60,
+    demonGeneralCore: 100
 };
 
 const rareMaterialData = {
@@ -978,7 +1214,7 @@ function bossReward() {
 
         rewardGold = 1000;
 
-        rewardItem = "岩石の盾";
+        rewardItem = "岩石の剣";
 
     }
 
@@ -994,7 +1230,7 @@ function bossReward() {
 
         rewardGold = 5000;
 
-        rewardItem = "魔王の鎧";
+        rewardItem = "魔王の剣";
 
     }
 
@@ -1121,9 +1357,113 @@ function attack(){
 
     if(!inBattle) return;
     
-    let damage = Math.floor(Math.random() * getTotalAtk()) + 1;
+    let totalAtk = getTotalAtk();
+
+    let damage = Math.floor(
+    totalAtk * 0.5 +
+    Math.random() * totalAtk * 0.5
+    );
+
+   // 💥 クリティカル
+    let criticalRate = 0.1;
+
+    // ⚡ ストームブレイカー
+        if(
+    player.effects &&
+    player.effects.includes("criticalRateUp3")
+    ){
+    criticalRate += 0.03;
+    }
+
+    // 🎯 虎の眼
+    if(
+    player.effects &&
+    player.effects.includes("criticalRateUp5")
+    ){
+    criticalRate += 0.05;
+    }
+
+    let isCritical = Math.random() < criticalRate;
+
+
+    if(isCritical){
+
+    let criticalMultiplier = 2;
+
+    // 🌙 ニクス
+    if(
+        player.effects &&
+        player.effects.includes("criticalDamageUp")
+    ){
+        criticalMultiplier += 0.2;
+
+        log("🌙 ニクスの効果発動！ クリティカルダメージ +20%");
+    }
+
+    damage = Math.floor(damage * criticalMultiplier);
+
+    log("💥 クリティカル！");
+    }
+
+
+   // ⚡ 雷撃
+    if(
+    player.effects &&
+    player.effects.includes("thunderStrike") &&
+    Math.random() < 0.1
+    ){
+    const bonusDamage = Math.floor(getTotalAtk() * 0.5);
+
+    damage += bonusDamage;
+
+    log(
+        "⚡ 雷撃発動！ +" +
+        bonusDamage +
+        "ダメージ！"
+    );
+    }
+
+    // 🎻 パガニーニ
+    if(player.effects && player.effects.includes("comboDamageUp")){
+
+    player.comboCount++;
+
+    let comboBonus = Math.min(player.comboCount * 5, 30);
+
+    damage = Math.floor(damage * (1 + comboBonus / 100));
+
+    log("🎻 パガニーニ：連続攻撃 +" + comboBonus + "%");
+
+    }
+
+    // 🏰 カミーノ・レアル
+    if(player.effects && player.effects.includes("normalAttackUp")){
+    damage = Math.floor(damage * 1.15);
+    log("🏰 カミーノ・レアルの効果発動！");
+    }
+
+    // 🎼 ベートーヴェン
+    if(
+    player.effects &&
+    player.effects.includes("lowHpAttackUp") &&
+    player.hp <= player.maxHp * 0.5
+    ){
+    damage = Math.floor(damage * 1.2);
+    log("🎼 ベートーヴェンの効果発動！");
+    }
+
+    // ⚡ 雷撃の戦斧
+    if(
+    player.effects &&
+    player.effects.includes("enemyStun") &&
+    Math.random() < 0.1
+    ){
+    enemy.stunned = 1;
+    log("⚡ 雷撃の戦斧発動！ 敵は1ターン行動不能！");
+    }
     
     enemy.hp -= damage;
+    log("⚔️ " + damage + "ダメージを与えた！");
 
     if(enemy.hp < 0){
         enemy.hp = 0;
@@ -1135,6 +1475,8 @@ function attack(){
     document.getElementById("enemyHpBar").style.width = percent + "%";
 
     if(enemy.hp <= 0){
+
+        player.comboCount = 0;
 
     player.exp += enemy.exp;
     player.gold += enemy.gold;
@@ -1166,118 +1508,7 @@ function attack(){
     enemyAttack();
 }
 
-function enemyAttack(){
 
-    let damage = Math.max(1, enemy.atk - Math.floor(getTotalDef() / 2));
-
-    if(defending){
-        damage = Math.floor(damage / 2);
-        defending = false;
-    }
-
-    player.hp -= damage;
-
-    if (player.hp <= 0) {
-        player.hp = 0;
-        updateScreen();
-
-        alert("💀 GAME OVER");
-
-        // 所持金10%減少
-        player.gold = Math.floor(player.gold * 0.9);
-
-        // HP全回復
-        player.hp = player.maxHp;
-
-        // MP全回復
-        player.mp = player.maxMp;
-
-        // 戦闘終了
-        inBattle = false;
-        enemy = null;
-
-        document.getElementById("battle").style.display = "none";
-
-        log("💀 力尽きた…。町に戻り、HPが全回復した。（所持金10%減少）");
-
-        updateScreen();
-        return;
-    }
-
-    updateScreen();
-
-    log(enemy.name + " の攻撃！ " + damage + "ダメージ！");
-
-
-    // 🔥 やけどダメージ
-    if(enemy && enemy.burn > 0){
-
-        const burnDamageAmount = 20;
-
-        enemy.hp -= burnDamageAmount;
-
-        if(enemy.hp < 0){
-            enemy.hp = 0;
-        }
-
-        enemy.burn--;
-
-        document.getElementById("enemyHp").textContent = enemy.hp;
-
-        const percent = enemy.hp / enemy.maxHp * 100;
-
-        document.getElementById("enemyHpBar").style.width =
-            percent + "%";
-
-        log(`🔥 やけど！ ${burnDamageAmount}ダメージ！`);
-
-
-        // 🔥 やけどで敵を倒した場合
-        if(enemy.hp <= 0){
-
-            player.exp += enemy.exp;
-            player.gold += enemy.gold;
-
-            while(player.exp >= player.nextExp){
-                player.exp -= player.nextExp;
-                levelUp();
-            }
-
-            updateScreen();
-
-            log(enemy.name + " はやけどで倒れた！");
-            if(enemy.boss){
-                bossReward();
-            unlockNextStage(currentDungeon);
-            }
-            inBattle = false;
-            enemy = null;
-
-            document.getElementById("battle").style.display = "none";
-
-            return;
-        }
-
-
-        // 🔥 やけど終了
-        if(enemy.burn <= 0){
-            log("🔥 " + enemy.name + " のやけどが治った！");
-        }
-
-
-
-
-    }
-    if(enemy && enemy.paralysis > 0){
-
-    log(`⚡ ${enemy.name} は麻痺して動けない！`);
-
-    enemy.paralysis--;
-
-    return;
-    }
-
-}
 function runAway(){
 
     if(!inBattle) return;
@@ -1338,6 +1569,8 @@ function skill(){
     log("✨ 強撃！ " + damage + "ダメージ！");
 
     if(enemy.hp <= 0){
+
+        player.comboCount = 0;
      
         player.exp += enemy.exp;
         player.gold += enemy.gold;
@@ -1408,48 +1641,6 @@ switch(choice){
     default:
         log("ショップを閉じた");
 }
-function shop(){
-
-    let choice = prompt(
-`
-🏪 ショップ
-
-1. アイテム
-2. 武器
-3. 防具
-
-番号を入力してください。
-`
-);
-
-
-    switch(choice){
-
-        case "1":
-            itemShop();
-            break;
-
-
-        case "2":
-            weaponShop();
-            break;
-
-
-        case "3":
-            armorShop();
-            break;
-
-
-        default:
-            log("ショップを閉じた");
-
-    }
-
-    updateScreen();
-
-}
-
-
 function itemShop(){
 
     let choice = prompt(
@@ -1890,9 +2081,22 @@ function equipItem(index){
    // ⭐ 装備の特殊効果を更新
     player.effects = [];
 
-    if(item.effect){
-    player.effects.push(item.effect);
-    
+    const weaponData = equipmentData.find(
+    e => e.name === player.equipment.weapon
+    );
+
+    const armorData = equipmentData.find(
+    e => e.name === player.equipment.armor
+    );
+
+    // 武器の効果
+    if(weaponData && weaponData.effect){
+    player.effects.push(weaponData.effect);
+    }
+
+    // 防具の効果
+    if(armorData && armorData.effect){
+    player.effects.push(armorData.effect);
     }
 
     log("⚔️ " + item.name + "を装備した！");
@@ -2162,259 +2366,7 @@ function burnDamage(){
         log("🔥 やけどが治った！");
     }
 }
-function useSkill(type){
 
-    let skillName;
-
-    if(type === 1){
-        skillName = "strong";
-    }
-    else if(type === 2){
-        skillName = "fireball";
-    }
-    else if(type === 3){
-        skillName = "ultimate";
-    }
-    else if(type === 4){
-        skillName = "thunder";
-    }
-
-    if(!inBattle){
-        return;
-    }
-
-    closeSkillMenu();
-
-
-    // ====================
-    // ⚡ 強撃
-    // ====================
-
-    if(type === 1){
-
-        const mpCost = 5;
-
-        if(player.mp < mpCost){
-            log("MPが足りない！");
-            return;
-        }
-
-        player.mp -= mpCost;
-
-        let damage =
-            getTotalAtk()* (2 + (player.skills.strong.level - 1) * 0.5) +
-            Math.floor(Math.random() * 10);
-           
-
-           if(player.effects && player.effects.includes("skillPowerUp")){
-            damage = damage * 1.1;
-            log("🌲 森王の剣の効果発動！");
-            }
-
-            if(player.effects && player.effects.includes("skillPowerUp15")){
-            damage = damage * 1.15;
-            log("🪨 岩王の剣の効果発動！");
-            if(player.effects && player.effects.includes("allSkillPowerUp")){
-            damage = damage * 1.15;
-            log("👿 魔王の剣の効果発動！");
-            }
-        }
-        
-        enemy.hp -= Math.floor(damage);
-
-        if(enemy.hp < 0){
-            enemy.hp = 0;
-        }
-
-        log(`⚡ 強撃 Lv.${player.skills.strong.level}！ ${Math.floor(damage)}ダメージ！`);
-    }
-
-
-    // ====================
-    // 🔥 火球
-    // ====================
-
-    else if(type === 2){
-
-        const mpCost = 10;
-
-        if(player.mp < mpCost){
-            log("MPが足りない！");
-            return;
-        }
-
-        player.mp -= mpCost;
-
-        let damage =
-        getTotalAtk() * (1.5 + (player.skills.fireball.level - 1) * 0.5) +
-        Math.floor(Math.random() * 10);
-
-
-        // 🔥 炎帝の剣の特殊効果
-        if(player.effects && player.effects.includes("fireballPowerUp")){
-        damage = damage * 1.2;
-        log("🔥 炎帝の剣の効果発動！");
-        }
-        if(player.effects && player.effects.includes("allSkillPowerUp")){
-        damage = damage * 1.15;
-        log("👿 魔王の剣の効果発動！");
-        }
-        
-
-        enemy.hp -= Math.floor(damage);
-
-        if(enemy.hp < 0){
-            enemy.hp = 0;
-        }
-
-        log(`🔥 火球 Lv.${player.skills.fireball.level}！ ${Math.floor(damage)}ダメージ！`);
-
-        // 30%でやけど
-        if(enemy.hp > 0 && Math.random() < 0.3){
-
-            enemy.burn = 3;
-
-            log(`🔥 ${enemy.name} はやけどした！`);
-        }
-    }
-
-
-    // ====================
-    // 💥 大技
-    // ====================
-
-    else if(type === 3){
-
-        const mpCost = 20;
-
-        if(player.mp < mpCost){
-            log("MPが足りない！");
-            return;
-        }
-
-        player.mp -= mpCost;
-
-        let damage =
-        getTotalAtk() * (5 + (player.skills.ultimate.level - 1) * 0.5) +
-        Math.floor(Math.random() * 20);
-
-
-        // 👿 魔王の剣の特殊効果
-        if(player.effects && player.effects.includes("allSkillPowerUp")){
-        damage = damage * 1.15;
-        log("👿 魔王の剣の効果発動！");
-        }   
-
-        enemy.hp -= Math.floor(damage);
-
-        if(enemy.hp < 0){
-            enemy.hp = 0;
-        }
-
-        log(`💥 大技 Lv.${player.skills.ultimate.level}！ ${Math.floor(damage)}ダメージ！`);
-    }
-
-
-    // ====================
-    // ⚡ サンダー
-    // ====================
-
-    else if(type === 4){
-
-        const mpCost = 15;
-
-        if(player.mp < mpCost){
-            log("MPが足りない！");
-            return;
-        }
-
-        player.mp -= mpCost;
-
-        let damage =
-        getTotalAtk() * (2.5 + (player.skills.thunder.level - 1) * 0.5) +
-        Math.floor(Math.random() * 15);
-
-        // 👿 魔王の剣の特殊効果
-        if(player.effects && player.effects.includes("allSkillPowerUp")){
-        damage = damage * 1.15;
-        log("👿 魔王の剣の効果発動！");
-        }
-        enemy.hp -= Math.floor(damage);
-
-        if(enemy.hp < 0){
-            enemy.hp = 0;
-        }
-
-        log(`⚡ サンダー Lv.${player.skills.thunder.level}！ ${Math.floor(damage)}ダメージ！`);
-
-        // 30%で麻痺
-        if(enemy.hp > 0 && Math.random() < 0.3){
-
-            enemy.paralysis = 1;
-
-            log(`⚡ ${enemy.name} は麻痺した！`);
-        }
-    }
-
-
-    // ====================
-    // スキル使用回数
-    // ====================
-
-    player.skills[skillName].useCount++;
-
-    checkSkillLevelUp(skillName);
-
-
-    // ====================
-    // 敵HP更新
-    // ====================
-
-    document.getElementById("enemyHp").textContent = enemy.hp;
-
-    const percent =
-        enemy.hp / enemy.maxHp * 100;
-
-    document.getElementById("enemyHpBar").style.width =
-        percent + "%";
-
-    updateScreen();
-
-
-    // ====================
-    // 敵を倒した場合
-    // ====================
-
-    if(enemy.hp <= 0){
-    
-        player.exp += enemy.exp;
-        player.gold += enemy.gold;
-        enemyDrop(enemy);
-        rareEnemyDrop(enemy);
-        while(player.exp >= player.nextExp){
-            player.exp -= player.nextExp;
-            levelUp();
-        }
-
-        updateScreen();
-
-        log(enemy.name + " を倒した！");
-        if(enemy.boss){
-            bossReward();
-        unlockNextStage(currentDungeon);
-        }
-        inBattle = false;
-        enemy = null;
-
-        document.getElementById("battle").style.display = "none";
-
-        return;
-    }
-
-
-    // 敵のターン
-    enemyAttack();
-}
 function checkSkillLevelUp(skillName){
 
     const skill = player.skills[skillName];
@@ -2444,21 +2396,11 @@ function checkSkillLevelUp(skillName){
         log(`✨ ${skillDisplayName} がLv.${skill.level}になった！`);
     }
 }
-function openDungeon(){
 
 function openDungeon(){
 
     if(inBattle){
         log("⚔️ 戦闘中は冒険先を変更できません！");
-        return;
-    }
-
-    document.getElementById("dungeonScreen").style.display = "block";
-}
-
-
-    if(inBattle){
-        log("すでに戦闘中！");
         return;
     }
 
@@ -2502,44 +2444,10 @@ function startDungeon(type){
 
     adventure(type);
 }
-function autoSave() {
-    localStorage.setItem("growthRPG", JSON.stringify(player));
-}
 
 setInterval(function() {
     autoSave();
 }, 30000);
-
-function unlockNextStage() {
-
-    if (currentDungeon === "grassland" ||
-        currentDungeon === "cave") {
-
-        if (!player.unlockedStages.volcano) {
-
-            player.unlockedStages.volcano = true;
-
-            log("🎉 🌋 火山が解放された！");
-        }
-    }
-
-    else if (currentDungeon === "volcano") {
-
-        if (!player.unlockedStages.castle) {
-
-            player.unlockedStages.castle = true;
-
-            log("🎉 🏰 魔王城が解放された！");
-        }
-    }
-
-    else if (currentDungeon === "castle") {
-
-        log("👑 魔王城を完全攻略した！");
-    }
-
-    autoSave();
-}
 
 
 window.useItem = function(){
@@ -2842,7 +2750,9 @@ function updateInventory(){
     materialList.innerHTML = "";
 
     if(!player.materials){
+
         materialList.textContent = "素材を持っていません";
+
     }
     else{
 
@@ -2852,15 +2762,26 @@ function updateInventory(){
 
             if(player.materials[material] > 0){
 
-                materialList.innerHTML +=
-                    `${materialData[material] || material} ×${player.materials[material]}<br>`;
+                materialList.innerHTML += `
+                    <div>
+                        ${materialData[material] || material}
+                        ×${player.materials[material]}
+
+                        <button onclick="exchangeMaterial('${material}')">
+                            🔮 10個→5魔石
+                        </button>
+                    </div>
+                `;
 
                 hasMaterial = true;
             }
         }
 
         if(!hasMaterial){
-            materialList.textContent = "素材を持っていません";
+
+            materialList.textContent =
+                "素材を持っていません";
+
         }
     }
 
@@ -2874,21 +2795,102 @@ function updateInventory(){
 
     equipmentList.innerHTML = "";
 
-    if(!player.inventory || player.inventory.length === 0){
+    if(!player.inventory ||
+       player.inventory.length === 0){
 
-        equipmentList.textContent = "装備を持っていません";
+        equipmentList.textContent =
+            "装備を持っていません";
 
     }
     else{
 
-        player.inventory.forEach(item => {
+        const equipmentCounts = {};
 
-            equipmentList.innerHTML +=
-                `⚔️ ${item}<br>`;
+    player.inventory.forEach(item => {
 
-        });
+    if(!equipmentCounts[item]){
+        equipmentCounts[item] = 0;
     }
+
+    equipmentCounts[item]++;
+
+    });
+
+
+    // レア度
+    const rarityOrder = {
+    UR: 5,
+    SSR: 4,
+    SR: 3,
+    R: 2,
+    N: 1
+    };
+
+
+    // ガチャデータからレア度を探す
+    function getItemRarity(item){
+
+    for(const rarity in gachaData){
+
+        if(gachaData[rarity].includes(item)){
+            return rarity;
+        }
+
+    }
+
+    return "N";
+    }
+
+
+    // レア度順に並べる
+    const sortedItems = Object.keys(equipmentCounts).sort((a, b) => {
+
+    const rarityA = getItemRarity(a);
+    const rarityB = getItemRarity(b);
+
+    return rarityOrder[rarityB] - rarityOrder[rarityA];
+
+    });
+
+
+    // 表示
+    sortedItems.forEach(item => {
+
+    const rarity = getItemRarity(item);
+
+    equipmentList.innerHTML +=
+        `${rarity} ⚔️ ${item} ×${equipmentCounts[item]}<br>`;
+
+    });
+}}
+
+function exchangeMaterial(materialId){
+
+    const amount =
+        player.materials?.[materialId] || 0;
+
+    if(amount < 10){
+
+        log("🛠️ 素材が10個必要です！");
+        return;
+    }
+
+    const reward =
+        materialExchangeData[materialId] || 1;
+
+    player.materials[materialId] -= 10;
+
+    player.magicStone += reward;
+
+    log(
+        `🔮 ${materialData[materialId] || materialId} ×10を交換して、魔石を${reward}個入手！`
+    );
+
+    updateInventory();
+    updateScreen();
+    autoSave();
 }
+
 function openMenu(){
 
     if(inBattle){
@@ -2905,6 +2907,202 @@ function closeMenu(){
     document.getElementById("menuScreen").style.display = "none";
 }
 
+// ====================
+// 🎰 ガチャランク抽選
+// ====================
+
+function drawGachaRank(){
+
+    const random = Math.random() * 100;
+
+    if(random < 1){
+        return "UR";
+    }
+    else if(random < 5){
+        return "SSR";
+    }
+    else if(random < 20){
+        return "SR";
+    }
+    else if(random < 50){
+        return "R";
+    }
+    else{
+        return "N";
+    }
+}
+
+
+// ====================
+// 🎰 ガチャ景品
+// ====================
+
+const gachaData = {
+
+    N: [
+        "スキルドパッド",
+        "暗黒",
+        "鉄鋼"
+    ],
+
+    R: [
+        "ストームブレイカー",
+        "ネクロノミコン",
+        "シャドウ",
+    ],
+
+    SR: [
+        "雷撃",
+        "アサナトス",
+        "ニクス",
+        "アイアンメイデン",
+        "虎の眼",
+        "不滅の鎧"
+    ],
+
+    SSR: [
+        "コキュートス",
+        "紫煙",
+        "雷撃の戦斧",
+        "イクイスース"
+    ],
+
+    UR: [
+        "カミーノ・レアル",
+        "ベートーヴェン",
+        "パガニーニ",
+        "リスト",
+        "ワーグナー",
+    ]
+
+};
+
+
+// ====================
+// 🎰 ガチャ画面
+// ====================
+
+function openGacha(){
+
+    document.getElementById("menuScreen").style.display = "none";
+    document.getElementById("gachaScreen").style.display = "block";
+
+    updateGachaScreen();
+}
+
+
+function closeGacha(){
+
+    document.getElementById("gachaScreen").style.display = "none";
+    document.getElementById("menuScreen").style.display = "block";
+
+}
+
+
+function updateGachaScreen(){
+
+    document.getElementById("gachaMagicStone").textContent =
+        player.magicStone || 0;
+}
+
+function drawGacha(){
+
+    if((player.magicStone || 0) < 100){
+
+        log("🔮 魔石が足りません！");
+        return;
+    }
+
+    player.magicStone -= 100;
+
+    const rank = drawGachaRank();
+    const item = getGachaItem(rank);
+
+    // インベントリに追加
+    if(!player.inventory){
+        player.inventory = [];
+    }
+
+    player.inventory.push(item);
+
+    document.getElementById("gachaResult").innerHTML =
+        `🎉 ${rank}「${item}」が当たった！`;
+
+    log(`🎰 ${rank}「${item}」を入手！`);
+
+    updateGachaScreen();
+    updateScreen();
+    autoSave();
+}
+
+
+// ====================
+// 🎁 ガチャ景品抽選
+// ====================
+
+function getGachaItem(rank){
+
+    const list = gachaData[rank];
+
+    return list[
+        Math.floor(Math.random() * list.length)
+    ];
+}
+
+function drawGacha10(){
+
+    if((player.magicStone || 0) < 900){
+
+        log("🔮 魔石が足りません！");
+        return;
+    }
+
+    player.magicStone -= 900;
+
+    let results = [];
+
+    for(let i = 0; i < 10; i++){
+
+        results.push(drawGachaRank());
+    }
+
+    // ⭐ R以上確定
+    if(!results.some(rank =>
+        rank === "R" ||
+        rank === "SR" ||
+        rank === "SSR" ||
+        rank === "UR"
+    )){
+
+        results[9] = "R";
+    }
+
+    let resultHTML = "";
+
+    results.forEach((rank, i) => {
+
+        const item = getGachaItem(rank);
+
+        if(!player.inventory){
+            player.inventory = [];
+        }
+
+        player.inventory.push(item);
+
+        resultHTML +=
+            `${i + 1}. 🎁 ${rank}「${item}」<br>`;
+
+    });
+
+    document.getElementById("gachaResult").innerHTML =
+        resultHTML;
+
+    log("🎰 10連ガチャを引いた！");
+
+    updateGachaScreen();
+    updateScreen();
+    autoSave();
+}
 
 
 
@@ -2930,6 +3128,7 @@ function closeMenu(){
 function testGold(){
 
     player.gold += 100000;
+    player.magicStone += 100000;
 
     updateScreen();
 
