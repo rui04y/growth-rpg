@@ -36,6 +36,10 @@
 
         <p>所持金 <span id="gold">100</span> G</p>
 
+        <p>
+         魔石：<span id="magicStone">0</span>
+        </p>
+
         <p>武器 <span id="weapon">なし</span></p>
         
         <p>防具 <span id="armor">なし</span></p>
@@ -110,11 +114,13 @@
 
     <div class="menuButtons">
 
-        <button onclick="openStatus()">📈 ステータス</button>
+        <button onclick="openStatusMenu()">📈 ステータス</button>
 
         <button onclick="openInventory()">🎒 インベントリ</button>
 
         <button onclick="openEquipment()">⚔️ 装備</button>
+
+        <button onclick="openGacha()">🎰 ガチャ</button>
 
         <button onclick="shop()">🏪 ショップ</button>
 
@@ -125,6 +131,26 @@
     </div>
 
     <button onclick="closeMenu()">戻る</button>
+
+</div>
+
+<div id="gachaScreen" class="screen" style="display:none;">
+
+    <h2>🎰 ガチャ</h2>
+
+    <p>🔮 魔石：<span id="gachaMagicStone">0</span></p>
+
+    <button onclick="drawGacha()">
+        🎲 1回引く（100魔石）
+    </button>
+
+    <button onclick="drawGacha10()">
+        🎲 10連　（900魔石）
+    </button>
+
+    <div id="gachaResult"></div>
+
+    <button onclick="closeGacha()">戻る</button>
 
 </div>
 <div id="equipmentScreen" class="screen" style="display:none;">
@@ -277,6 +303,8 @@
 </div>
 
 <script src="script.js"></script>
+<script src="skill.js"></script>
+<script src="battle.js"></script>
 
 <button onclick="testGold()">テスト：1000000G</button>
 <button onclick="testForestBoss()">🧪 森の王テスト</button>
