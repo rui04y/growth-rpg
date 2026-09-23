@@ -76,6 +76,25 @@ function enemyAttack(){
     );
     }   
 
+    // 🔨 鍛造装備の被ダメージ
+    const craftDamageTaken =
+    getCraftEffect("damageTaken");
+
+    if(craftDamageTaken > 0){
+
+    const originalDamage = damage;
+
+    damage = Math.max(
+        1,
+        Math.floor(damage * (1 + craftDamageTaken))
+    );
+
+    log(
+        `🔨 鍛造装備の被ダメージ +${Math.round(craftDamageTaken * 100)}% ` +
+        `${originalDamage} → ${damage}ダメージ`
+    );
+    }
+
 
 
     player.hp -= damage;
