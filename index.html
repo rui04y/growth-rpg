@@ -120,6 +120,8 @@
 
         <button onclick="openEquipment()">⚔️ 装備</button>
 
+        <button onclick="openSmithy()">🔨 鍛冶屋</button>
+
         <button onclick="openGacha()">🎰 ガチャ</button>
 
         <button onclick="shop()">🏪 ショップ</button>
@@ -153,6 +155,35 @@
     <button onclick="closeGacha()">戻る</button>
 
 </div>
+
+<div id="shopScreen" class="screen" style="display:none;">
+
+    <h2>🏪 ショップ</h2>
+
+    <p>💰 所持金：<span id="shopGold">0</span> G</p>
+
+    <div class="shopTabs">
+
+        <button onclick="showShopCategory('item')">
+            🧪 アイテム
+        </button>
+
+        <button onclick="showShopCategory('weapon')">
+            ⚔️ 武器
+        </button>
+
+        <button onclick="showShopCategory('armor')">
+            🛡️ 防具
+        </button>
+
+    </div>
+
+    <div id="shopList"></div>
+
+    <button onclick="closeShop()">戻る</button>
+
+</div>
+
 <div id="equipmentScreen" class="screen" style="display:none;">
 
     <h2>装備一覧</h2>
@@ -170,13 +201,81 @@
 
 </div>
 
+<div id="smithyScreen" class="screen" style="display:none;">
+
+    <h2>🔨 鍛冶屋</h2>
+
+    <p>素材を最大3つ選んで、オリジナル装備を鍛造しよう！</p>
+
+   <h3>⚒️ 装備タイプ</h3>
+
+    <button onclick="selectCraftType('weapon')">
+    ⚔️ 武器
+    </button>
+
+    <button onclick="selectCraftType('armor')">
+    🛡️ 防具
+    </button>
+
+    <p id="craftTypeText">選択中：なし</p>
+
+    <h3>🔨 ベース装備</h3>
+
+    <div id="craftBaseList">
+    装備タイプを選択してください。
+    </div>
+
+    <p id="craftBaseText">選択中：なし</p>
+    <h3>✏️ 装備名</h3>
+
+    <input
+        type="text"
+        id="craftName"
+        placeholder="好きな名前を入力"
+        maxlength="30"
+    >
+
+    <h3>🛠️ 素材選択</h3>
+
+    <p>最大3個まで選択できます</p>
+
+    <div id="craftMaterialList"></div>
+
+    <h3>⚒️ 選択中の素材</h3>
+
+    <div id="selectedCraftMaterials">
+    まだ素材が選択されていません。
+    </div>
+
+    <h3>📋 鍛造結果</h3>
+
+    <div id="craftPreview">
+        素材を3つ選択してください。
+    </div>
+
+    <br>
+
+    <button onclick="craftEquipment()">
+        🔨 鍛造する
+    </button>
+
+    <br><br>
+
+    <button onclick="closeSmithy()">
+        戻る
+    </button>
+
+</div>
 
 
 
 
-    <div id="dungeonScreen" class="screen" style="display:none;">
+
+<div id="dungeonScreen" class="screen" style="display:none;">
 
     <h2>🗺️ ダンジョン</h2>
+
+    <button onclick="dailyDungeon()">🌅 デイリー</button>
 
     <button onclick="startDungeon('grassland')">
     🌳 草原
@@ -305,6 +404,7 @@
 <script src="script.js"></script>
 <script src="skill.js"></script>
 <script src="battle.js"></script>
+<script src="smithy.js"></script>
 
 <button onclick="testGold()">テスト：1000000G</button>
 <button onclick="testForestBoss()">🧪 森の王テスト</button>
