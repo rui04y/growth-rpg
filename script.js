@@ -42,6 +42,8 @@ let player = {
     },
 
     emergencyHealUsed: false,
+    // 🔨 不滅／輪廻
+    immortalTraitUsed: false,
 
 
 
@@ -57,6 +59,7 @@ let player = {
         mp: 0
     },
     trainingLastRecovery: Date.now(),
+    dailyDungeonDate: null,
     
     maxTrainingCount: 30,
 
@@ -515,23 +518,107 @@ function updateScreen() {
 
 }
 
-function getTotalAtk(){
+// =========================
+// 🔨 鍛造装備の効果取得
+// =========================
 
-    return player.atk +
-        (player.rareEffects?.atk || 0);
+function getCraftEffect(effectName){
+
+    let total = 0;
+
+    const equippedNames = [
+        player.equipment?.weapon,
+        player.equipment?.armor
+    ];
+
+    equippedNames.forEach(name => {
+
+        if(!name){
+            return;
+        }
+
+        const item = equipmentData.find(
+            e => e.name === name
+        );
+
+        if(
+            item &&
+            item.crafted &&
+            item.craftEffects &&
+            item.craftEffects[effectName]
+        ){
+
+            total += item.craftEffects[effectName];
+
+        }
+
+    });
+
+    return total;
+
 }
 
+
+// =========================
+// ⚔️ 総攻撃力
+// =========================
+
+function getTotalAtk(){
+
+    let atk =
+        player.atk +
+        (player.rareEffects?.atk || 0);
+
+    // 🔨 鍛造装備 ATK%
+    const craftAtk = getCraftEffect("atk");
+
+    if(craftAtk > 0){
+
+        atk = Math.floor(
+            atk * (1 + craftAtk)
+        );
+
+    }
+
+    return atk;
+
+}
+
+
+// =========================
+// 🛡️ 総防御力
+// =========================
 
 function getTotalDef(){
 
-    return player.def +
+    let def =
+        player.def +
         (player.rareEffects?.def || 0);
+
+    // 🔨 鍛造装備 DEF%
+    const craftDef = getCraftEffect("def");
+
+    if(craftDef > 0){
+
+        def = Math.floor(
+            def * (1 + craftDef)
+        );
+
+    }
+
+    return def;
+
 }
 
 
+// =========================
+// ❤️ 総最大HP
+// =========================
+
 function getTotalMaxHp(){
 
-    let maxHp = player.maxHp +
+    let maxHp =
+        player.maxHp +
         (player.rareEffects?.maxHp || 0);
 
     // ❤️ アサナトス
@@ -539,17 +626,54 @@ function getTotalMaxHp(){
         player.effects &&
         player.effects.includes("maxHpUp")
     ){
-        maxHp = Math.floor(maxHp * 1.1);
+
+        maxHp = Math.floor(
+            maxHp * 1.1
+        );
+
+    }
+
+    // 🔨 鍛造装備 最大HP%
+    const craftMaxHp =
+        getCraftEffect("maxHp");
+
+    if(craftMaxHp > 0){
+
+        maxHp = Math.floor(
+            maxHp * (1 + craftMaxHp)
+        );
+
     }
 
     return maxHp;
+
 }
 
 
+// =========================
+// 🔵 総最大MP
+// =========================
+
 function getTotalMaxMp(){
 
-    return player.maxMp +
+    let maxMp =
+        player.maxMp +
         (player.rareEffects?.maxMp || 0);
+
+    // 🔨 鍛造装備 最大MP%
+    const craftMaxMp =
+        getCraftEffect("maxMp");
+
+    if(craftMaxMp > 0){
+
+        maxMp = Math.floor(
+            maxMp * (1 + craftMaxMp)
+        );
+
+    }
+
+    return maxMp;
+
 }
 function log(text) {
     const logElement = document.getElementById("log");
@@ -983,7 +1107,7 @@ function adventure(dungeonType = "grassland") {
 
     
     inBattle = true;
-    player.itemUseCount = 0;
+    player.immortalTraitUsed = false;
     document.getElementById("battle").style.display = "block";
 
     document.getElementById("enemyName").textContent = enemy.name;
@@ -991,6 +1115,59 @@ function adventure(dungeonType = "grassland") {
     document.getElementById("enemyMaxHp").textContent = enemy.maxHp;
     document.getElementById("enemyHpBar").style.width = "100%";
 }
+
+// =====================
+// 🌅 デイリーダンジョン
+// =====================
+
+function dailyDungeon(){
+
+    if(inBattle){
+        log("⚔️ 戦闘中はデイリーダンジョンに挑戦できません！");
+        return;
+    }
+
+    const today = new Date().toDateString();
+
+    if(player.dailyDungeonDate === today){
+        log("🌅 今日のデイリーダンジョンはもう挑戦済みです！");
+        return;
+    }
+
+    // 挑戦済みにする
+    player.dailyDungeonDate = today;
+
+    // デイリー専用の敵
+    enemy = {
+        name: "🌅 デイリーゴーレム",
+        hp: 300,
+        maxHp: 300,
+        atk: 30,
+        exp: 100,
+        gold: 300,
+        boss: false,
+        burn: 0,
+        paralysis: 0,
+        stunned: 0
+    };
+
+    inBattle = true;
+    player.immortalTraitUsed = false;
+
+    log("🌅 デイリーダンジョン！");
+    log("⚔️ " + enemy.name + " が現れた！");
+    
+    document.getElementById("battle").style.display = "block";
+
+    updateScreen();
+
+    document.getElementById("enemyHp").textContent = enemy.hp;
+
+    document.getElementById("enemyHpBar").style.width = "100%";
+
+    autoSave();
+}
+
 const materialData = {
     slimeGel: "🟢 スライムジェル",
     gremlinClaw: "🦴 グレムリンの爪",
@@ -1368,7 +1545,7 @@ function attack(){
     let criticalRate = 0.1;
 
     // ⚡ ストームブレイカー
-        if(
+    if(
     player.effects &&
     player.effects.includes("criticalRateUp3")
     ){
@@ -1383,6 +1560,12 @@ function attack(){
     criticalRate += 0.05;
     }
 
+    // 🔨 鍛造装備のクリティカル率
+    const craftCriticalRate =
+    getCraftEffect("criticalRate");
+
+    criticalRate += craftCriticalRate;
+
     let isCritical = Math.random() < criticalRate;
 
 
@@ -1390,15 +1573,22 @@ function attack(){
 
     let criticalMultiplier = 2;
 
+
     // 🌙 ニクス
     if(
-        player.effects &&
-        player.effects.includes("criticalDamageUp")
+    player.effects &&
+    player.effects.includes("criticalDamageUp")
     ){
-        criticalMultiplier += 0.2;
+    criticalMultiplier += 0.2;
 
-        log("🌙 ニクスの効果発動！ クリティカルダメージ +20%");
+    log("🌙 ニクスの効果発動！ クリティカルダメージ +20%");
     }
+
+    // 🔨 鍛造装備のクリティカルダメージ
+    const craftCriticalDamage =
+    getCraftEffect("criticalDamage");
+
+    criticalMultiplier += craftCriticalDamage;
 
     damage = Math.floor(damage * criticalMultiplier);
 
@@ -1598,228 +1788,382 @@ function skill(){
 
     enemyAttack();
 }
-function shop(){
+// =====================
+// 🏪 ショップ
+// =====================
 
+function shop(){
 
     if(inBattle){
         log("⚔️ 戦闘中はショップを利用できません！");
         return;
     }
 
+    document.getElementById("shopScreen").style.display = "block";
 
+    document.getElementById("shopGold").textContent = player.gold;
 
-    let choice = prompt(
-
-        `
-        🏪 ショップ
-
-1. アイテム
-2. 武器
-3. 防具
-
-番号を入力してください。
-`
-);
-
-switch(choice){
-
-    case "1":
-        itemShop();
-        break;
-
-
-    case "2":
-        weaponShop();
-        break;
-
-
-    case "3":
-        armorShop();
-        break;
-
-
-    default:
-        log("ショップを閉じた");
+    showShopCategory("item");
 }
-function itemShop(){
 
-    let choice = prompt(
-`
-🧪 アイテムショップ
 
-1. ポーション　30G
-2. マナポーション　50G
+// =====================
+// 🏪 ショップカテゴリー表示
+// =====================
 
-番号を入力してください。
-`
+function showShopCategory(category){
+
+    const shopList = document.getElementById("shopList");
+
+    shopList.innerHTML = "";
+
+    document.getElementById("shopGold").textContent = player.gold;
+
+
+    // =====================
+    // 🧪 アイテム
+    // =====================
+
+    if(category === "item"){
+
+    createShopConsumable(
+        "❤️ ポーション",
+        "HPを回復するアイテム",
+        30,
+        "❤️ 購入",
+        function(quantity){
+            buyItem("potion", "ポーション", 30, quantity);
+        }
     );
 
-    switch(choice){
 
-        // =====================
-        // ❤️ ポーション
-        // =====================
-        case "1":
-
-            let potionAmount = prompt(
-                `❤️ ポーションを何個買いますか？\n\n` +
-                `1個：30G\n` +
-                `所持金：${player.gold}G`
-            );
-
-            potionAmount = Number(potionAmount);
-
-            if(!Number.isInteger(potionAmount) || potionAmount <= 0){
-
-                log("購入をキャンセルしました！");
-                break;
-
-            }
-
-            const potionPrice = potionAmount * 30;
-
-            if(player.gold < potionPrice){
-
-                log("お金が足りません！");
-
-            }else{
-
-                player.gold -= potionPrice;
-                player.items.potion += potionAmount;
-
-                log(`❤️ ポーションを${potionAmount}個購入した！`);
-
-            }
-
-            break;
-
-
-        // =====================
-        // 🔵 マナポーション
-        // =====================
-        case "2":
-
-            let manaPotionAmount = prompt(
-                `🔵 マナポーションを何個買いますか？\n\n` +
-                `1個：50G\n` +
-                `所持金：${player.gold}G`
-            );
-
-            manaPotionAmount = Number(manaPotionAmount);
-
-            if(!Number.isInteger(manaPotionAmount) || manaPotionAmount <= 0){
-
-                log("購入をキャンセルしました！");
-                break;
-
-            }
-
-            const manaPotionPrice = manaPotionAmount * 50;
-
-            if(player.gold < manaPotionPrice){
-
-                log("お金が足りません！");
-
-            }else{
-
-                player.gold -= manaPotionPrice;
-                player.items.manaPotion += manaPotionAmount;
-
-                log(`🔵 マナポーションを${manaPotionAmount}個購入した！`);
-
-            }
-
-            break;
-
-
-        default:
-
-            log("アイテムショップを閉じた");
+    createShopConsumable(
+        "🔵 マナポーション",
+        "MPを回復するアイテム",
+        50,
+        "🔵 購入",
+        function(quantity){
+            buyItem("manaPotion", "マナポーション", 50, quantity);
+        }
+    );
 
     }
 
-    updateScreen();
-    autoSave();
+
+    // =====================
+    // ⚔️ 武器
+    // =====================
+
+    if(category === "weapon"){
+
+        createShopItem(
+            "⚔️ 木の剣",
+            "ATK +5",
+            100,
+            "購入",
+            function(){
+                buyWeapon("木の剣", 100, 5);
+            }
+        );
+
+
+        createShopItem(
+            "⚔️ 鉄の剣",
+            "ATK +12",
+            300,
+            "購入",
+            function(){
+                buyWeapon("鉄の剣", 300, 12);
+            }
+        );
+
+
+        createShopItem(
+            "⚔️ 鋼の剣",
+            "ATK +25",
+            700,
+            "購入",
+            function(){
+                buyWeapon("鋼の剣", 700, 25);
+            }
+        );
+
+
+        createShopItem(
+            "⚔️ ミスリルソード",
+            "ATK +45",
+            1500,
+            "購入",
+            function(){
+                buyWeapon("ミスリルソード", 1500, 45);
+            }
+        );
+
+
+        createShopItem(
+            "⚔️ ドラゴンソード",
+            "ATK +70",
+            30000,
+            "購入",
+            function(){
+                buyWeapon("ドラゴンソード", 30000, 70);
+            }
+        );
+
+
+        createShopItem(
+            "⚔️ 伝説の剣",
+            "ATK +110",
+            99999,
+            "購入",
+            function(){
+                buyWeapon("伝説の剣", 99999, 110);
+            }
+        );
+
+    }
+
+
+    // =====================
+    // 🛡️ 防具
+    // =====================
+
+    if(category === "armor"){
+
+        createShopItem(
+            "🛡️ 革の盾",
+            "DEF +8",
+            200,
+            "購入",
+            function(){
+                buyArmor("革の盾", 200, 8);
+            }
+        );
+
+
+        createShopItem(
+            "🛡️ 鉄の盾",
+            "DEF +15",
+            400,
+            "購入",
+            function(){
+                buyArmor("鉄の盾", 400, 15);
+            }
+        );
+
+
+        createShopItem(
+            "🛡️ 鋼の盾",
+            "DEF +25",
+            800,
+            "購入",
+            function(){
+                buyArmor("鋼の盾", 800, 25);
+            }
+        );
+
+
+        createShopItem(
+            "🛡️ ミスリルシールド",
+            "DEF +45",
+            1800,
+            "購入",
+            function(){
+                buyArmor("ミスリルシールド", 1800, 45);
+            }
+        );
+
+
+        createShopItem(
+            "🛡️ ドラゴンシールド",
+            "DEF +60",
+            35000,
+            "購入",
+            function(){
+                buyArmor("ドラゴンシールド", 35000, 60);
+            }
+        );
+
+
+        createShopItem(
+            "🛡️ 伝説の盾",
+            "DEF +80",
+            99999,
+            "購入",
+            function(){
+                buyArmor("伝説の盾", 99999, 80);
+            }
+        );
+
+    }
+
 }
 
 
+// =====================
+// 🏪 商品カード作成
+// =====================
 
-function weaponShop(){
+function createShopItem(name, description, price, buttonText, buyFunction){
 
-    let choice = prompt(
-`
-⚔️ 武器ショップ
+    const shopList = document.getElementById("shopList");
 
-1. 木の剣　100G
-2. 鉄の剣　300G
-3. 鋼の剣　700G
-4. ミスリルソード　1500G
-5. ドラゴンソード　30000G
-6. 伝説の剣　99999G
+    const item = document.createElement("div");
 
+    item.className = "shopItem";
 
-番号を入力してください。
-`
-);
+    item.innerHTML = `
+        <h3>${name}</h3>
 
+        <p>${description}</p>
 
-    switch(choice){
+        <p>💰 1個 ${price.toLocaleString()} G</p>
 
-
-        case "1":
-
-            buyWeapon("木の剣",100,5);
-
-            break;
+        <button>${buttonText}</button>
+    `;
 
 
-
-        case "2":
-
-            buyWeapon("鉄の剣",300,12);
-
-            break;
-
-        
-        
-        case "3":
-
-            buyWeapon("鋼の剣", 700, 25);
-
-            break;
+    const button = item.querySelector("button");
 
 
+    button.onclick = function(){
 
-         case "4":
+        buyFunction();
 
-            buyWeapon("ミスリルソード", 1500, 45);
+        document.getElementById("shopGold").textContent = player.gold;
 
-            break;
-
-
-        
-         case "5":
-
-            buyWeapon("ドラゴンソード", 30000, 70);
-
-            break;
+    };
 
 
+    shopList.appendChild(item);
 
-         case "6":
-
-            buyWeapon("伝説の剣", 99999, 110);
-
-            break;
+}
 
 
+// =====================
+// 🏪 消費アイテム用商品カード
+// =====================
+
+function createShopConsumable(
+    name,
+    description,
+    price,
+    buttonText,
+    buyFunction
+){
+
+    const shopList = document.getElementById("shopList");
+
+    const item = document.createElement("div");
+
+    item.className = "shopItem";
+
+    item.innerHTML = `
+        <h3>${name}</h3>
+
+        <p>${description}</p>
+
+        <p>💰 1個 ${price.toLocaleString()} G</p>
+
+        <label>
+            数量：
+            <input
+                type="number"
+                class="shopQuantity"
+                value="1"
+                min="1"
+                step="1"
+            >
+        </label>
+
+        <button>${buttonText}</button>
+    `;
 
 
-        default:
+    const button = item.querySelector("button");
 
-            log("武器ショップを閉じた");
+    const quantityInput =
+        item.querySelector(".shopQuantity");
+
+
+    button.onclick = function(){
+
+        const quantity = Number(quantityInput.value);
+
+
+        if(!Number.isInteger(quantity) || quantity < 1){
+
+            log("⚠️ 購入数は1以上の整数にしてください。");
+
+            return;
+
+        }
+
+
+        buyFunction(quantity);
+
+        document.getElementById("shopGold").textContent =
+            player.gold;
+
+    };
+
+
+    shopList.appendChild(item);
+
+}
+
+
+// =====================
+// 🧪 アイテム購入
+// =====================
+
+function buyItem(itemKey, itemName, price, quantity){
+
+    const totalPrice = price * quantity;
+
+
+    if(player.gold < totalPrice){
+
+        log(
+            "💰 お金が足りません！ " +
+            quantity + "個購入するには " +
+            totalPrice.toLocaleString() + " G必要です。"
+        );
+
+        return;
 
     }
+
+
+    player.gold -= totalPrice;
+
+    player.items[itemKey] += quantity;
+
+
+    log(
+        "🧪 " +
+        itemName +
+        "を " +
+        quantity +
+        "個購入した！"
+    );
+
+
+    updateScreen();
+
+    document.getElementById("shopGold").textContent = player.gold;
+
+    autoSave();
+
+}
+
+// =====================
+// 🏪 ショップを閉じる
+// =====================
+
+function closeShop(){
+
+    document.getElementById("shopScreen").style.display = "none";
 
 }
 
@@ -1876,79 +2220,6 @@ function buyWeapon(name,price,attack){
 
 
 
-
-function armorShop(){
-
-    let choice = prompt(
-`
-🛡️ 防具ショップ
-
-1. 革の盾　200G
-2. 鉄の盾　400G
-3. 鋼の盾　800G
-4. ミスリルシールド　1800G
-5. ドラゴンシールド　35000G
-6. 伝説の盾　99999G
-番号を入力してください。
-`
-);
-
-
-    switch(choice){
-
-        case "1":
-
-            buyArmor("革の盾",200,8);
-
-            break;
-
-
-
-        case "2":
-
-             buyArmor("鉄の盾", 400, 15);
-
-            break;
-
-
-
-        case "3":
-
-            buyArmor("鋼の盾", 800, 25);
-
-            break;
-
-
-        case "4":
-
-            buyArmor("ミスリルシールド", 1800, 45);
-            
-            break;
-
-
-
-        case "5":
-            
-            buyArmor("ドラゴンシールド", 35000, 60);
-            
-            break;
-
-
-
-        case "6":
-            
-            buyArmor("伝説の盾", 99999, 80);
-            
-            break;
-
-
-        default:
-
-            log("防具ショップを閉じた");
-
-    }
-
-}
 
 
 
@@ -2014,7 +2285,7 @@ function closeEquipment(){
 
 
 
-}
+
 function openEquipment(){
 
     if(inBattle){
@@ -2122,7 +2393,103 @@ function showEquipment(){
     container.className = "equipmentColumns";
 
 
+    // =========================
+    // 🔨 鍛造装備の追加情報
+    // =========================
+
+    function getCraftInfo(item){
+
+        if(!item.crafted){
+            return "";
+        }
+
+        let html = "";
+
+        // 素材効果
+        if(item.craftEffects){
+
+            html += `<br><strong>🔨 素材効果</strong>`;
+
+            const effectNames = {
+                atk: "⚔️ ATK",
+                def: "🛡️ DEF",
+                maxHp: "❤️ 最大HP",
+                maxMp: "🔵 最大MP",
+                criticalRate: "🎯 クリティカル率",
+                criticalDamage: "💥 クリティカルダメージ",
+                fireDamage: "🔥 炎ダメージ",
+                skillDamage: "✨ スキルダメージ",
+                damageTaken: "💔 被ダメージ"
+            };
+
+            for(const effectName in item.craftEffects){
+
+                const value = item.craftEffects[effectName];
+
+                if(effectNames[effectName]){
+
+                    const percent = Math.round(value * 1000) / 10;
+
+                    html += `<br>${effectNames[effectName]} ＋${percent}%`;
+
+                }
+
+            }
+
+        }
+
+
+        // 特性
+        if(item.craftTraits && item.craftTraits.length > 0){
+
+            html += `<br><strong>🏷️ 特性</strong>`;
+            html += `<br>${item.craftTraits.join("・")}`;
+
+        }
+
+
+        // 同じ特性のボーナス
+        if(
+            item.sameTraitBonuses &&
+            item.sameTraitBonuses.length > 0
+        ){
+
+            html += `<br><strong>✨ 特性ボーナス</strong>`;
+
+            item.sameTraitBonuses.forEach(bonus => {
+
+                html += `<br>${bonus}`;
+
+            });
+
+        }
+
+
+        // 特性コンボ
+        if(
+            item.traitComboBonuses &&
+            item.traitComboBonuses.length > 0
+        ){
+
+            html += `<br><strong>🔥 特性コンボ</strong>`;
+
+            item.traitComboBonuses.forEach(combo => {
+
+                html += `<br>${combo}`;
+
+            });
+
+        }
+
+        return html;
+
+    }
+
+
+    // =========================
     // ⚔️ 武器
+    // =========================
+
     const weaponColumn = document.createElement("div");
 
     weaponColumn.innerHTML = "<h3>⚔️ 武器</h3>";
@@ -2148,9 +2515,10 @@ function showEquipment(){
         }
 
         div.innerHTML = `
-        ${item.name} ${equipped}<br>
-         攻撃力 +${item.attack}
-        ${item.effectText ? `<br>${item.effectText}` : ""}
+            ${item.name} ${equipped}<br>
+            攻撃力 +${item.attack}
+            ${item.effectText ? `<br>${item.effectText}` : ""}
+            ${getCraftInfo(item)}
         `;
 
         div.onclick = function(){
@@ -2162,7 +2530,10 @@ function showEquipment(){
     });
 
 
+    // =========================
     // 🛡️ 防具
+    // =========================
+
     const armorColumn = document.createElement("div");
 
     armorColumn.innerHTML = "<h3>🛡️ 防具</h3>";
@@ -2188,10 +2559,12 @@ function showEquipment(){
         }
 
         div.innerHTML = `
-        ${item.name} ${equipped}<br>
-        防御力 +${item.defense}
-        ${item.effectText ? `<br>${item.effectText}` : ""}
+            ${item.name} ${equipped}<br>
+            防御力 +${item.defense}
+            ${item.effectText ? `<br>${item.effectText}` : ""}
+            ${getCraftInfo(item)}
         `;
+
         div.onclick = function(){
             equipItem(index);
         };
@@ -3129,6 +3502,11 @@ function testGold(){
 
     player.gold += 100000;
     player.magicStone += 100000;
+    player.materials.salamanderFlame = 10;
+    player.materials.giantCore = 10;
+    player.materials.gremlinClaw = 10;
+    player.materials.dragonFang = 10;
+    player.materials.wolfFur = 10;
 
     updateScreen();
 
@@ -3155,6 +3533,7 @@ function testForestBoss() {
     };
 
     inBattle = true;
+    player.immortalTraitUsed = false;
 
     document.getElementById("battle").style.display = "block";
 
