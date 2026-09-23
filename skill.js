@@ -66,6 +66,19 @@ function useSkill(type){
             log("📖 ネクロノミコンの効果発動！ スキルダメージ +5%");
         }
 
+        // 🔨 鍛造装備のスキルダメージ
+        const craftSkillDamage =
+        getCraftEffect("skillDamage");
+
+        if(craftSkillDamage > 0){
+
+        damage = damage * (1 + craftSkillDamage);
+
+        log(
+        `🔨 鍛造装備のスキルダメージ +${Math.round(craftSkillDamage * 100)}%`
+        );
+        }
+
 
         enemy.hp -= Math.floor(damage);
 
@@ -99,8 +112,21 @@ function useSkill(type){
 
         // 🔥 炎帝の剣
         if(player.effects && player.effects.includes("fireballPowerUp")){
-            damage = damage * 1.2;
-            log("🔥 炎帝の剣の効果発動！");
+        damage = damage * 1.2;
+        log("🔥 炎帝の剣の効果発動！");
+        }
+
+        // 🔥 鍛造装備の炎ダメージ
+        const craftFireDamage =
+        getCraftEffect("fireDamage");
+
+        if(craftFireDamage > 0){
+
+        damage = damage * (1 + craftFireDamage);
+
+        log(
+        `🔥 鍛造装備の炎ダメージ +${Math.round(craftFireDamage * 100)}%`
+        );
         }
 
         // 👿 魔王の剣
@@ -114,6 +140,21 @@ function useSkill(type){
             damage = damage * 1.05;
             log("📖 ネクロノミコンの効果発動！ スキルダメージ +5%");
         }
+
+        // 🔨 鍛造装備のスキルダメージ
+        const craftSkillDamage =
+        getCraftEffect("skillDamage");
+
+        if(craftSkillDamage > 0){
+
+        damage = damage * (1 + craftSkillDamage);
+
+            log(
+        `🔨 鍛造装備のスキルダメージ +${Math.round(craftSkillDamage * 100)}%`
+        );
+        }
+
+
 
 
         enemy.hp -= Math.floor(damage);
@@ -167,6 +208,19 @@ function useSkill(type){
             log("📖 ネクロノミコンの効果発動！ スキルダメージ +5%");
         }
 
+        // 🔨 鍛造装備のスキルダメージ
+        const craftSkillDamage =
+        getCraftEffect("skillDamage");
+
+        if(craftSkillDamage > 0){
+
+        damage = damage * (1 + craftSkillDamage);
+
+        log(
+        `🔨 鍛造装備のスキルダメージ +${Math.round(craftSkillDamage * 100)}%`
+        );
+        }               
+
 
         enemy.hp -= Math.floor(damage);
 
@@ -208,6 +262,19 @@ function useSkill(type){
         if(player.effects && player.effects.includes("skillDamageUp5")){
             damage = damage * 1.05;
             log("📖 ネクロノミコンの効果発動！ スキルダメージ +5%");
+        }
+
+        // 🔨 鍛造装備のスキルダメージ
+        const craftSkillDamage =
+        getCraftEffect("skillDamage");
+
+        if(craftSkillDamage > 0){
+
+        damage = damage * (1 + craftSkillDamage);
+
+         log(
+        `🔨 鍛造装備のスキルダメージ +${Math.round(craftSkillDamage * 100)}%`
+        );
         }
 
 
