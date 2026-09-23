@@ -88,12 +88,36 @@ button:hover{
     display: none;
 }
 
-.equipmentItem {
-    border: 1px solid #555;
-    padding: 10px;
-    margin: 5px;
-    cursor: pointer;
+/* =====================
+   ⚔️ 装備1個ずつのカード
+===================== */
+
+.equipmentItem{
+    background:#333;
+    border:1px solid #666;
+    border-radius:12px;
+    padding:15px;
+    margin:8px 0;
+    cursor:pointer;
+    box-sizing:border-box;
+
+    transition:
+        transform .2s,
+        border-color .2s,
+        box-shadow .2s;
 }
+
+
+/* カーソルを合わせた装備だけ光る */
+
+.equipmentItem:hover{
+    transform:translateY(-3px);
+    border-color:gold;
+    box-shadow:
+        0 0 8px gold,
+        0 0 18px rgba(255,215,0,.6);
+}
+
 .equipmentColumns {
     display: flex;
     gap: 80px;
@@ -112,7 +136,7 @@ button:hover{
 }
 
 #log{
-    height:270px;
+    height:180px;
     overflow-y:auto;
     margin:0;
 }
@@ -141,4 +165,628 @@ button:hover{
 
 .menuButtons button{
     box-sizing: border-box;
+}
+
+
+/* =====================
+   🏪 ショップ
+===================== */
+
+#shopScreen{
+    margin-top:20px;
+    background:#252525;
+    padding:20px;
+    border-radius:15px;
+    border:2px solid #555;
+}
+
+#shopScreen h2{
+    text-align:center;
+    color:gold;
+    margin-top:0;
+}
+
+
+/* 所持金 */
+
+#shopGold{
+    color:#ffd700;
+    font-weight:bold;
+    font-size:20px;
+}
+
+
+/* カテゴリーボタン */
+
+.shopTabs{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    margin:20px 0;
+    flex-wrap:wrap;
+}
+
+.shopTabs button{
+    width:140px;
+    height:42px;
+    margin:0;
+    background:#3d3d3d;
+    border:1px solid #777;
+}
+
+.shopTabs button:hover{
+    background:#555;
+}
+
+
+/* 商品一覧 */
+
+#shopList{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:15px;
+    margin-top:15px;
+}
+
+
+/* 商品カード */
+
+.shopItem{
+    background:#333;
+    border:1px solid #666;
+    border-radius:12px;
+    padding:15px;
+    box-sizing:border-box;
+    text-align:center;
+    transition:.2s;
+}
+
+.shopItem:hover{
+    transform:translateY(-3px);
+    border-color:gold;
+    box-shadow:0 4px 12px rgba(0,0,0,.4);
+}
+
+
+/* 商品名 */
+
+.shopItem h3{
+    margin:5px 0 10px;
+    color:#fff;
+    font-size:18px;
+}
+
+
+/* 商品説明 */
+
+.shopItem p{
+    margin:8px 0;
+    color:#ccc;
+}
+
+
+/* 値段 */
+
+.shopItem p:last-of-type{
+    color:#ffd700;
+    font-weight:bold;
+    font-size:17px;
+}
+
+
+/* 数量 */
+
+.shopQuantity{
+    width:70px;
+    height:35px;
+    margin:10px 5px;
+    padding:5px;
+    box-sizing:border-box;
+    text-align:center;
+    font-size:16px;
+    border-radius:6px;
+    border:1px solid #777;
+}
+
+
+/* 購入ボタン */
+
+.shopItem button{
+    width:130px;
+    height:40px;
+    margin:8px auto 0;
+    background:#4CAF50;
+}
+
+.shopItem button:hover{
+    background:#45a049;
+}
+
+
+/* 戻るボタン */
+
+#shopScreen > button:last-child{
+    display:block;
+    margin:20px auto 0;
+}
+
+
+/* スマホ対応 */
+
+@media (max-width:650px){
+
+    #shopList{
+        grid-template-columns:1fr;
+    }
+
+    .shopTabs button{
+        width:120px;
+    }
+
+}
+
+/* =====================
+   🎰 ガチャ
+===================== */
+
+#gachaScreen{
+    margin-top:20px;
+    background:#252525;
+    padding:20px;
+    border-radius:15px;
+    border:2px solid #555;
+    text-align:center;
+}
+
+#gachaScreen h2{
+    color:gold;
+    margin-top:0;
+}
+
+
+/* 魔石表示 */
+
+#gachaScreen > p{
+    background:#333;
+    padding:12px;
+    border-radius:10px;
+    margin:15px auto;
+    max-width:300px;
+    font-size:18px;
+}
+
+#gachaMagicStone{
+    color:#b9f2ff;
+    font-size:22px;
+    font-weight:bold;
+}
+
+
+/* ガチャボタン */
+
+#gachaScreen > button{
+    width:220px;
+    height:50px;
+    margin:8px;
+    background:#4b3f72;
+    border:1px solid #8d7cc7;
+    font-weight:bold;
+}
+
+#gachaScreen > button:hover{
+    background:#62528f;
+    transform:scale(1.05);
+}
+
+
+/* ガチャ結果 */
+
+#gachaResult{
+    margin:20px 0;
+    min-height:80px;
+}
+
+
+/* 結果カード */
+
+.gachaResultItem{
+    background:#333;
+    border:1px solid #666;
+    border-radius:12px;
+    padding:15px;
+    margin:10px auto;
+    max-width:400px;
+    box-sizing:border-box;
+}
+
+.gachaResultItem h3{
+    margin:5px 0 10px;
+}
+
+.gachaResultItem p{
+    margin:6px 0;
+}
+
+
+/* 戻るボタン */
+
+#gachaScreen > button:last-child{
+    background:#444;
+    border:1px solid #777;
+}
+
+#gachaScreen > button:last-child:hover{
+    background:#555;
+}
+
+/* =====================
+   🎒 インベントリ
+===================== */
+
+#inventoryScreen{
+    margin-top:20px;
+    background:#252525;
+    padding:20px;
+    border-radius:15px;
+    border:2px solid #555;
+}
+
+#inventoryScreen h2{
+    text-align:center;
+    color:gold;
+    margin-top:0;
+}
+
+#inventoryScreen h3{
+    background:#333;
+    padding:10px 15px;
+    border-radius:10px;
+    border-left:4px solid gold;
+    margin-top:20px;
+}
+
+
+/* アイテム一覧 */
+
+#itemList,
+#materialList,
+#inventoryEquipmentList{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:12px;
+}
+
+
+/* インベントリ内の商品・アイテム */
+
+#itemList > div,
+#materialList > div,
+#inventoryEquipmentList > div{
+    background:#333;
+    border:1px solid #666;
+    border-radius:12px;
+    padding:14px;
+    box-sizing:border-box;
+    transition:.2s;
+}
+
+#itemList > div:hover,
+#materialList > div:hover,
+#inventoryEquipmentList > div:hover{
+    transform:translateY(-3px);
+    border-color:gold;
+    box-shadow:0 4px 12px rgba(0,0,0,.4);
+}
+
+
+/* テキスト */
+
+#itemList p,
+#materialList p,
+#inventoryEquipmentList p{
+    margin:6px 0;
+}
+
+
+/* 装備 */
+
+#inventoryEquipmentList > div{
+    text-align:center;
+}
+
+#inventoryEquipmentList button{
+    width:110px;
+    height:38px;
+    margin:6px;
+}
+
+
+/* 戻るボタン */
+
+#inventoryScreen > button{
+    display:block;
+    margin:20px auto 0;
+}
+
+
+/* スマホ対応 */
+
+@media (max-width:650px){
+
+    #itemList,
+    #materialList,
+    #inventoryEquipmentList{
+        grid-template-columns:1fr;
+    }
+
+}
+
+/* =====================
+   ⚔️ 装備画面
+===================== */
+
+#equipmentScreen{
+    margin-top:20px;
+    background:#252525;
+    padding:20px;
+    border-radius:15px;
+    border:2px solid #555;
+}
+
+#equipmentScreen h2{
+    text-align:center;
+    color:gold;
+    margin-top:0;
+}
+
+
+/* =====================
+   現在の装備
+===================== */
+
+#equipmentScreen h3{
+    background:#333;
+    padding:10px 15px;
+    border-radius:10px;
+    border-left:4px solid gold;
+    margin-top:20px;
+}
+
+#weaponText,
+#armorText{
+    background:#333;
+    border:1px solid #666;
+    border-radius:12px;
+    padding:15px;
+    margin:10px 0;
+    text-align:center;
+    font-size:17px;
+}
+
+
+/* =====================
+   装備一覧
+===================== */
+
+#equipmentList{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:12px;
+    margin-top:15px;
+}
+
+
+/* 装備カード */
+
+#equipmentList > div{
+    background:#333;
+    border:1px solid #666;
+    border-radius:12px;
+    padding:15px;
+    box-sizing:border-box;
+    text-align:center;
+    transition:.2s;
+}
+
+
+
+/* 装備名 */
+
+#equipmentList h3{
+    background:none;
+    border:none;
+    padding:0;
+    margin:5px 0 10px;
+}
+
+
+/* 装備カード内ボタン */
+
+#equipmentList button{
+    width:110px;
+    height:38px;
+    margin:8px 4px 0;
+}
+
+
+/* =====================
+   装備を外すボタン
+===================== */
+
+#equipmentScreen > button:first-of-type{
+    display:block;
+    margin:10px auto;
+    background:#555;
+    border:1px solid #777;
+}
+
+#equipmentScreen > button:first-of-type:hover{
+    background:#666;
+}
+
+
+/* =====================
+   戻るボタン
+===================== */
+
+#equipmentScreen > button:last-child{
+    display:block;
+    margin:20px auto 0;
+}
+
+
+/* =====================
+   スマホ対応
+===================== */
+
+@media (max-width:650px){
+
+    #equipmentList{
+        grid-template-columns:1fr;
+    }
+
+}
+/* ==============================
+   🔨 鍛冶屋：素材一覧
+============================== */
+
+#craftMaterialList{
+
+    display:grid;
+
+    grid-template-columns:repeat(2, 1fr);
+
+    gap:10px;
+
+    max-height:420px;
+
+    overflow-y:auto;
+
+    padding:8px;
+
+    margin:10px 0 20px;
+
+    background:#1d1d1d;
+
+    border:1px solid #444;
+
+    border-radius:14px;
+
+    box-sizing:border-box;
+
+}
+
+
+/* 素材カード */
+
+.craftMaterialCard{
+
+    background:#292929;
+
+    border:2px solid #555;
+
+    border-radius:12px;
+
+    padding:14px 10px;
+
+    min-height:85px;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+    box-sizing:border-box;
+
+}
+
+
+.craftMaterialCard:hover{
+
+    transform:translateY(-2px);
+
+    border-color:gold;
+
+    box-shadow:
+        0 0 8px gold,
+        0 0 14px rgba(255,215,0,.4);
+
+}
+
+
+.craftMaterialName{
+
+    font-size:17px;
+
+    font-weight:bold;
+
+    line-height:1.4;
+
+}
+
+
+.craftMaterialAmount{
+
+    margin-top:5px;
+
+    font-size:14px;
+
+    color:#ccc;
+
+}
+
+
+/* ==============================
+   🔨 選択中の素材
+============================== */
+
+.selectedCraftMaterial{
+
+    background:#333;
+
+    border:2px solid gold;
+
+    border-radius:12px;
+
+    padding:12px 15px;
+
+    margin:8px 0;
+
+    font-size:18px;
+
+    cursor:pointer;
+
+}
+
+
+.selectedCraftMaterial span{
+
+    float:right;
+
+    color:#ff7777;
+
+}
+
+
+/* スクロールバー */
+
+#craftMaterialList::-webkit-scrollbar{
+
+    width:8px;
+
+}
+
+
+#craftMaterialList::-webkit-scrollbar-thumb{
+
+    background:#666;
+
+    border-radius:10px;
+
+}
+
+
+#craftMaterialList::-webkit-scrollbar-track{
+
+    background:#222;
+
 }
