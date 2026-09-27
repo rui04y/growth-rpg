@@ -37,6 +37,21 @@ function useSkill(type){
 
         player.mp -= mpCost;
 
+        // 😈 禁忌：最大HPの5%を消費
+        if(hasForbiddenTraitCombo()){
+
+        const hpCost = Math.floor(
+        getTotalMaxHp() * 0.05
+        );
+
+        player.hp = Math.max(
+        1,
+        player.hp - hpCost
+        );
+
+        log("😈 禁忌発動！ HP -" + hpCost);
+        }
+
         let damage =
             getTotalAtk() * (2 + (player.skills.strong.level - 1) * 0.5) +
             Math.floor(Math.random() * 10);
@@ -66,6 +81,14 @@ function useSkill(type){
             log("📖 ネクロノミコンの効果発動！ スキルダメージ +5%");
         }
 
+        // 😈 禁忌
+        if(hasForbiddenTraitCombo()){
+
+        damage = damage * 1.15;
+
+        log("😈 禁忌発動！ スキルダメージ +15%");
+        }
+
         // 🔨 鍛造装備のスキルダメージ
         const craftSkillDamage =
         getCraftEffect("skillDamage");
@@ -81,6 +104,19 @@ function useSkill(type){
 
 
         enemy.hp -= Math.floor(damage);
+
+        // 👻 魂喰らい
+        if(hasSoulEaterTraitCombo()){
+
+        const mpHeal = Math.floor(damage * 0.05);
+
+        player.mp = Math.min(
+        player.maxMp,
+        player.mp + mpHeal
+        );
+
+        log("👻 魂喰らい発動！ MP +" + mpHeal);
+        }
 
         if(enemy.hp < 0){
             enemy.hp = 0;
@@ -104,6 +140,21 @@ function useSkill(type){
         }
 
         player.mp -= mpCost;
+
+        // 😈 禁忌：最大HPの5%を消費
+        if(hasForbiddenTraitCombo()){
+
+        const hpCost = Math.floor(
+        getTotalMaxHp() * 0.05
+        );
+
+        player.hp = Math.max(
+        1,
+        player.hp - hpCost
+        );
+
+        log("😈 禁忌発動！ HP -" + hpCost);
+        }
 
         let damage =
             getTotalAtk() * (1.5 + (player.skills.fireball.level - 1) * 0.5) +
@@ -141,6 +192,14 @@ function useSkill(type){
             log("📖 ネクロノミコンの効果発動！ スキルダメージ +5%");
         }
 
+        // 😈 禁忌
+        if(hasForbiddenTraitCombo()){
+
+        damage = damage * 1.15;
+
+        log("😈 禁忌発動！ スキルダメージ +15%");
+        }
+
         // 🔨 鍛造装備のスキルダメージ
         const craftSkillDamage =
         getCraftEffect("skillDamage");
@@ -158,6 +217,19 @@ function useSkill(type){
 
 
         enemy.hp -= Math.floor(damage);
+
+        // 👻 魂喰らい
+        if(hasSoulEaterTraitCombo()){
+
+        const mpHeal = Math.floor(damage * 0.05);
+
+        player.mp = Math.min(
+        player.maxMp,
+        player.mp + mpHeal
+        );
+
+        log("👻 魂喰らい発動！ MP +" + mpHeal);
+        }
 
         if(enemy.hp < 0){
             enemy.hp = 0;
@@ -191,6 +263,21 @@ function useSkill(type){
 
         player.mp -= mpCost;
 
+        // 😈 禁忌：最大HPの5%を消費
+        if(hasForbiddenTraitCombo()){
+
+        const hpCost = Math.floor(
+        getTotalMaxHp() * 0.05
+        );
+
+        player.hp = Math.max(
+        1,
+        player.hp - hpCost
+        );
+
+        log("😈 禁忌発動！ HP -" + hpCost);
+        }
+
         let damage =
             getTotalAtk() * (5 + (player.skills.ultimate.level - 1) * 0.5) +
             Math.floor(Math.random() * 20);
@@ -208,6 +295,14 @@ function useSkill(type){
             log("📖 ネクロノミコンの効果発動！ スキルダメージ +5%");
         }
 
+        // 😈 禁忌
+        if(hasForbiddenTraitCombo()){
+
+        damage = damage * 1.15;
+
+        log("😈 禁忌発動！ スキルダメージ +15%");
+        }
+
         // 🔨 鍛造装備のスキルダメージ
         const craftSkillDamage =
         getCraftEffect("skillDamage");
@@ -223,6 +318,19 @@ function useSkill(type){
 
 
         enemy.hp -= Math.floor(damage);
+
+        // 👻 魂喰らい
+        if(hasSoulEaterTraitCombo()){
+
+        const mpHeal = Math.floor(damage * 0.05);
+
+        player.mp = Math.min(
+        player.maxMp,
+        player.mp + mpHeal
+        );
+
+        log("👻 魂喰らい発動！ MP +" + mpHeal);
+        }
 
         if(enemy.hp < 0){
             enemy.hp = 0;
@@ -247,6 +355,21 @@ function useSkill(type){
 
         player.mp -= mpCost;
 
+        // 😈 禁忌：最大HPの5%を消費
+        if(hasForbiddenTraitCombo()){
+
+        const hpCost = Math.floor(
+        getTotalMaxHp() * 0.05
+        );
+
+        player.hp = Math.max(
+        1,
+        player.hp - hpCost
+        );
+
+        log("😈 禁忌発動！ HP -" + hpCost);
+        }
+
         let damage =
             getTotalAtk() * (2.5 + (player.skills.thunder.level - 1) * 0.5) +
             Math.floor(Math.random() * 15);
@@ -264,6 +387,14 @@ function useSkill(type){
             log("📖 ネクロノミコンの効果発動！ スキルダメージ +5%");
         }
 
+        // 😈 禁忌
+        if(hasForbiddenTraitCombo()){
+
+        damage = damage * 1.15;
+
+        log("😈 禁忌発動！ スキルダメージ +15%");
+        }
+
         // 🔨 鍛造装備のスキルダメージ
         const craftSkillDamage =
         getCraftEffect("skillDamage");
@@ -279,6 +410,19 @@ function useSkill(type){
 
 
         enemy.hp -= Math.floor(damage);
+
+        // 👻 魂喰らい
+        if(hasSoulEaterTraitCombo()){
+
+        const mpHeal = Math.floor(damage * 0.05);
+
+        player.mp = Math.min(
+        player.maxMp,
+        player.mp + mpHeal
+        );
+
+        log("👻 魂喰らい発動！ MP +" + mpHeal);
+        }
 
         if(enemy.hp < 0){
             enemy.hp = 0;
@@ -350,6 +494,9 @@ function useSkill(type){
         }
 
         inBattle = false;
+
+        playTownBGM();
+
         enemy = null;
 
         document.getElementById("battle").style.display = "none";
