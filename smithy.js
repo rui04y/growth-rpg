@@ -165,12 +165,7 @@ function updateCraftBaseList(){
         return;
     }
 
-    if(!player.inventory || player.inventory.length === 0){
-        list.textContent = "このタイプの装備を持っていません。";
-        return;
-    }
-
-    // 所持している装備だけをベース候補にする
+    // 所持しているベース装備だけ表示
     const ownedBases = craftBaseData[selectedCraftType].filter(base =>
         player.inventory.includes(base.name)
     );
@@ -184,7 +179,7 @@ function updateCraftBaseList(){
 
         const div = document.createElement("div");
 
-        div.className = "craftBaseItem";
+        div.className = "craftBaseCard";
 
         if(
             selectedCraftBase &&
@@ -193,13 +188,39 @@ function updateCraftBaseList(){
             div.classList.add("selected");
         }
 
+        let statusText = "";
+
+        if(base.attack > 0){
+            statusText += `⚔️ ATK +${base.attack}`;
+        }
+
+        if(base.defense > 0){
+            if(statusText !== ""){
+                statusText += "　";
+            }
+
+            statusText += `🛡️ DEF +${base.defense}`;
+        }
+
         div.innerHTML = `
-            <strong>${base.name}</strong><br>
-            ${base.attack > 0 ? `⚔️ ATK +${base.attack}` : ""}
-            ${base.defense > 0 ? `🛡️ DEF +${base.defense}` : ""}
+            <div class="craftBaseCardName">
+                ${base.name}
+            </div>
+
+            <div class="craftBaseCardStatus">
+                ${statusText}
+            </div>
+
+            <button type="button">
+                ${selectedCraftBase &&
+                  selectedCraftBase.name === base.name
+                    ? "✓ 選択中"
+                    : "選択"}
+            </button>
         `;
 
         div.onclick = function(){
+
             selectedCraftBase = base;
 
             document.getElementById("craftBaseText").textContent =
@@ -207,6 +228,7 @@ function updateCraftBaseList(){
 
             updateCraftBaseList();
             updateCraftPreview();
+
         };
 
         list.appendChild(div);
@@ -1257,7 +1279,15 @@ function craftEquipment(){
     // ==============================
 
     equipmentData.push(
-        craftedEquipment
+    craftedEquipment
+    );
+
+    if(!player.craftedEquipment){
+    player.craftedEquipment = [];
+    }
+
+    player.craftedEquipment.push(
+    craftedEquipment
     );
 
 
