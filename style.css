@@ -790,3 +790,91 @@ button:hover{
     background:#222;
 
 }
+/* ==============================
+   🔨 鍛冶屋：ベース装備一覧
+============================== */
+
+#craftBaseList{
+
+    display:grid;
+
+    grid-template-columns:repeat(2, 1fr);
+
+    gap:10px;
+
+}
+
+
+/* ベース装備カード */
+
+.craftBaseCard{
+
+    background:#3a3a3a;
+
+    border:2px solid #555;
+
+    border-radius:12px;
+
+    padding:15px;
+
+    cursor:pointer;
+
+    transition:0.2s;
+
+}
+
+
+.craftBaseCard:hover{
+
+    transform:translateY(-2px);
+
+    border-color:#888;
+
+}
+
+
+.craftBaseCard.selected{
+
+    border-color:gold;
+
+    box-shadow:0 0 10px rgba(255,215,0,0.4);
+
+}
+
+
+.craftBaseCardName{
+
+    font-size:18px;
+
+    font-weight:bold;
+
+    margin-bottom:8px;
+
+}
+
+
+.craftBaseCardStatus{
+
+    font-size:15px;
+
+    margin-bottom:12px;
+
+}
+
+
+.craftBaseCard button{
+
+    width:100%;
+
+    padding:8px;
+
+    border:none;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    font-weight:bold;
+
+}
+
