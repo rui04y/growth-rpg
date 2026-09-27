@@ -95,9 +95,49 @@ function enemyAttack(){
     );
     }
 
+    // 🗿 不動
+    if(hasImmovableTraitCombo()){
 
+    const maxDamage = Math.floor(
+        getTotalMaxHp() * 0.25
+    );
+
+    if(damage > maxDamage){
+
+        log(
+            "🗿 不動発動！ " +
+            damage +
+            " → " +
+            maxDamage +
+            "ダメージに制限！"
+        );
+
+        damage = maxDamage;
+    }
+    }
+
+
+    // 🔨 不滅／輪廻
+            // 戦闘中に一度だけ、致死ダメージをHP1で耐える
+    if(
+    damage >= player.hp &&
+    !player.immortalTraitUsed &&
+    hasImmortalTraitCombo()
+    ){
+
+    player.immortalTraitUsed = true;
+    player.hp = 1;
+
+    log("♾️ 不滅／輪廻が発動！ HP1で耐えた！");
+
+    }else{
+
+    // 🏆 称号：ダメージを受けた
+    player.titleNoDamage = false;
 
     player.hp -= damage;
+
+    }
 
     // 💚 イクイスース
     if(
@@ -170,6 +210,22 @@ function enemyAttack(){
 
         player.comboCount = 0;
 
+        // 🏆 称号：素手でボス撃破
+        if(
+        enemy.boss &&
+        player.equipment.weapon === "なし"
+        ){
+
+        player.titleBareHandBossWins++;
+
+        
+
+        if(player.titleBareHandBossWins >= 20){
+
+        obtainTitle("真武闘");
+        }
+        }
+
         player.exp += enemy.exp;
         player.gold += enemy.gold;
 
@@ -191,6 +247,9 @@ function enemyAttack(){
         }
 
         inBattle = false;
+
+        playTownBGM();
+
         enemy = null;
 
         document.getElementById("battle").style.display = "none";
@@ -218,6 +277,9 @@ function enemyAttack(){
 
         // 戦闘終了
         inBattle = false;
+
+        playTownBGM();
+        
         enemy = null;
 
         document.getElementById("battle").style.display = "none";
@@ -261,6 +323,37 @@ function enemyAttack(){
 
             player.comboCount = 0;
 
+            // 🏆 称号：ノーダメージ勝利
+            if(player.titleNoDamage){
+
+            player.titleNoDamageWins++;
+
+            log(
+            `🏆 ノーダメージ勝利！ ` +
+            `${player.titleNoDamageWins} / 10`
+            );
+
+            if(player.titleNoDamageWins >= 10){
+
+            obtainTitle("初撃無効");
+            }
+            }
+
+            // 🏆 称号：素手でボス撃破
+            if(
+            enemy.boss &&
+            player.equipment.weapon === "なし"
+            ){
+
+            player.titleBareHandBossWins++;
+
+            if(player.titleBareHandBossWins >= 20){
+
+            obtainTitle("真武闘");
+            }
+            }
+
+
             player.exp += enemy.exp;
             player.gold += enemy.gold;
 
@@ -277,6 +370,9 @@ function enemyAttack(){
             unlockNextStage(currentDungeon);
             }
             inBattle = false;
+
+            playTownBGM();
+
             enemy = null;
 
             document.getElementById("battle").style.display = "none";
@@ -303,4 +399,40 @@ function enemyAttack(){
     return;
     }
 
+}
+
+// =========================
+// 🔨 不滅／輪廻の判定
+// =========================
+
+function hasImmortalTraitCombo(){
+
+    const equippedNames = [
+        player.equipment?.weapon,
+        player.equipment?.armor
+    ];
+
+    for(const name of equippedNames){
+
+        if(!name) continue;
+
+        const item = equipmentData.find(
+            e => e.name === name
+        );
+
+        if(
+            item &&
+            item.crafted &&
+            item.craftTraits &&
+            item.craftTraits.includes("生命") &&
+            item.craftTraits.includes("不死")
+        ){
+
+            return true;
+
+        }
+
+    }
+
+    return false;
 }
