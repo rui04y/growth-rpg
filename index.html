@@ -122,6 +122,8 @@
 
         <button onclick="openSmithy()">🔨 鍛冶屋</button>
 
+        <button onclick="openTitleMenu()">🏆 称号</button>
+
         <button onclick="openGacha()">🎰 ガチャ</button>
 
         <button onclick="shop()">🏪 ショップ</button>
@@ -135,6 +137,22 @@
     <button onclick="closeMenu()">戻る</button>
 
 </div>
+
+<div id="titleScreen" class="screen" style="display:none;">
+
+    <h2>🏆 称号</h2>
+
+    <p>
+        現在の称号：
+        <span id="equippedTitle">なし</span>
+    </p>
+
+    <div id="titleList"></div>
+
+    <button onclick="closeTitleMenu()">戻る</button>
+
+</div>
+
 
 <div id="gachaScreen" class="screen" style="display:none;">
 
@@ -266,7 +284,6 @@
     </button>
 
 </div>
-
 
 
 
