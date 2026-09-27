@@ -125,7 +125,24 @@ let player = {
         }
 
     },
-    effects: []
+    effects: [],
+
+    titles: [],
+    equippedTitle: null,
+
+    titleNoDamage: true,
+    titleFirstDamageUsed: false,
+
+    // 🏆 称号用カウンター
+    titleNoDamageWins: 0,
+    titleCriticalStreak: 0,
+    titleBareHandBossWins: 0,
+
+    // 🏆 ノーダメージ判定
+    titleNoDamage: true,
+
+    
+
 };
 if(player.totalTrainingCount === undefined){
     player.totalTrainingCount = 0;
@@ -580,6 +597,11 @@ function getTotalAtk(){
 
     }
 
+    // 🏆 真武闘
+    if(player.equippedTitle === "真武闘"){
+        atk += Math.floor(player.def * 0.3);
+    }
+
     return atk;
 
 }
@@ -604,6 +626,17 @@ function getTotalDef(){
             def * (1 + craftDef)
         );
 
+    }
+
+    // 🛡️ 守護者
+    if(
+    hasGuardianTraitCombo() &&
+    player.hp <= getTotalMaxHp() * 0.5
+    ){
+
+    def = Math.floor(def * 1.2);
+
+    log("🛡️ 守護者発動！ DEF +20%");
     }
 
     return def;
@@ -937,6 +970,9 @@ function checkSkillLearn(){
 function adventure(dungeonType = "grassland") {
     player.emergencyHealUsed = false;
 
+    // 🔨 捕食者
+    player.predatorTraitActive = false;
+
     player.itemUseCount = 0;
     if (inBattle) {
         log("すでに戦闘中！");
@@ -1107,6 +1143,19 @@ function adventure(dungeonType = "grassland") {
 
     
     inBattle = true;
+
+       
+
+    // 🏆 称号用：今回の戦闘ではまだダメージを受けていない
+    player.titleNoDamage = true;
+    player.titleFirstDamageUsed = false;
+
+    if(enemy.boss){
+    playBossBGM();
+    }else{
+    playBattleBGM();
+    }   
+    playBattleBGM();
     player.immortalTraitUsed = false;
     document.getElementById("battle").style.display = "block";
 
@@ -1152,6 +1201,18 @@ function dailyDungeon(){
     };
 
     inBattle = true;
+
+    // 🏆 称号用：今回の戦闘はノーダメージ状態
+    player.titleNoDamage = true;    
+
+    player.titleFirstDamageUsed = false;
+
+    if(enemy.boss){
+    playBossBGM();
+    }else{
+    playBattleBGM();
+    }   
+    playBattleBGM();
     player.immortalTraitUsed = false;
 
     log("🌅 デイリーダンジョン！");
@@ -1494,6 +1555,33 @@ function loadGame() {
 
         player = JSON.parse(save);
 
+        // 称号システムの旧セーブデータ対応
+        if(!player.titles){
+        player.titles = [];
+        }
+
+        if(player.equippedTitle === undefined){
+        player.equippedTitle = null;
+        }
+
+        // ====================
+        // 🔨 鍛造装備を復元
+        // ====================
+
+        if(!player.craftedEquipment){
+        player.craftedEquipment = [];
+        }
+
+        player.craftedEquipment.forEach(item => {
+
+        if(!equipmentData.some(
+        e => e.name === item.name
+        )){
+        equipmentData.push(item);
+        }
+
+        });
+
         // ====================
         // 古いセーブデータ対策
         // ====================
@@ -1530,6 +1618,275 @@ function loadGame() {
         log("セーブデータがありません。");
     }
 }
+
+// =========================
+// 🔨 狂戦士の判定
+// =========================
+
+function hasBerserkerTraitCombo(){
+
+    const equippedNames = [
+        player.equipment?.weapon,
+        player.equipment?.armor
+    ];
+
+    for(const name of equippedNames){
+
+        if(!name) continue;
+
+        const item = equipmentData.find(
+            e => e.name === name
+        );
+
+        if(
+            item &&
+            item.crafted &&
+            item.craftTraits &&
+            item.craftTraits.includes("狂暴") &&
+            item.craftTraits.includes("剛力")
+        ){
+
+            return true;
+
+        }
+
+    }
+
+    return false;
+}
+
+function hasPredatorTraitCombo(){
+
+    const equippedNames = [
+        player.equipment?.weapon,
+        player.equipment?.armor
+    ];
+
+    for(const name of equippedNames){
+
+        if(!name) continue;
+
+        const item = equipmentData.find(
+            e => e.name === name
+        );
+
+        if(
+            item &&
+            item.crafted &&
+            item.craftTraits &&
+            item.craftTraits.includes("狩猟") &&
+            item.craftTraits.includes("野性")
+        ){
+
+            return true;
+
+        }
+
+    }
+
+    return false;
+}
+
+// 🔥 竜炎の判定
+function hasDragonFlameTraitCombo(){
+
+    const equippedNames = [
+        player.equipment?.weapon,
+        player.equipment?.armor
+    ];
+
+    for(const name of equippedNames){
+
+        if(!name) continue;
+
+        const item = equipmentData.find(
+            e => e.name === name
+        );
+
+        if(
+            item &&
+            item.crafted &&
+            item.craftTraits &&
+            item.craftTraits.includes("炎") &&
+            item.craftTraits.includes("竜")
+        ){
+
+            return true;
+
+        }
+
+    }
+
+    return false;
+}
+
+// 👻 魂喰らいの判定
+function hasSoulEaterTraitCombo(){
+
+    const equippedNames = [
+        player.equipment?.weapon,
+        player.equipment?.armor
+    ];
+
+    for(const name of equippedNames){
+
+        if(!name) continue;
+
+        const item = equipmentData.find(
+            e => e.name === name
+        );
+
+        if(
+            item &&
+            item.crafted &&
+            item.craftTraits &&
+            item.craftTraits.includes("魔力") &&
+            item.craftTraits.includes("霊魂")
+        ){
+
+            return true;
+
+        }
+
+    }
+
+    return false;
+}
+
+// 🗿 不動の判定
+function hasImmovableTraitCombo(){
+
+    const equippedNames = [
+        player.equipment?.weapon,
+        player.equipment?.armor
+    ];
+
+    for(const name of equippedNames){
+
+        if(!name) continue;
+
+        const item = equipmentData.find(
+            e => e.name === name
+        );
+
+        if(
+            item &&
+            item.crafted &&
+            item.craftTraits &&
+            item.craftTraits.includes("硬質") &&
+            item.craftTraits.includes("大地")
+        ){
+
+            return true;
+
+        }
+
+    }
+
+    return false;
+}
+
+// 😈 禁忌の判定
+function hasForbiddenTraitCombo(){
+
+    const equippedNames = [
+        player.equipment?.weapon,
+        player.equipment?.armor
+    ];
+
+    for(const name of equippedNames){
+
+        if(!name) continue;
+
+        const item = equipmentData.find(
+            e => e.name === name
+        );
+
+        if(
+            item &&
+            item.crafted &&
+            item.craftTraits &&
+            item.craftTraits.includes("悪魔") &&
+            item.craftTraits.includes("霊魂")
+        ){
+
+            return true;
+
+        }
+
+    }
+
+    return false;
+}
+
+// 🛡️ 守護者の判定
+function hasGuardianTraitCombo(){
+
+    const equippedNames = [
+        player.equipment?.weapon,
+        player.equipment?.armor
+    ];
+
+    for(const name of equippedNames){
+
+        if(!name) continue;
+
+        const item = equipmentData.find(
+            e => e.name === name
+        );
+
+        if(
+            item &&
+            item.crafted &&
+            item.craftTraits &&
+            item.craftTraits.includes("騎士") &&
+            item.craftTraits.includes("生命")
+        ){
+
+            return true;
+
+        }
+
+    }
+
+    return false;
+}
+
+// 👑 竜王の怒りの判定
+function hasDragonKingRageTraitCombo(){
+
+    const equippedNames = [
+        player.equipment?.weapon,
+        player.equipment?.armor
+    ];
+
+    for(const name of equippedNames){
+
+        if(!name) continue;
+
+        const item = equipmentData.find(
+            e => e.name === name
+        );
+
+        if(
+            item &&
+            item.crafted &&
+            item.craftTraits &&
+            item.craftTraits.includes("炎") &&
+            item.craftTraits.includes("竜") &&
+            item.craftTraits.includes("狂暴")
+        ){
+
+            return true;
+
+        }
+
+    }
+
+    return false;
+}
+
+
 function attack(){
 
     if(!inBattle) return;
@@ -1540,6 +1897,29 @@ function attack(){
     totalAtk * 0.5 +
     Math.random() * totalAtk * 0.5
     );
+    // 🏆 初撃無効
+    if(
+    player.equippedTitle === "初撃無効" &&
+    !player.titleFirstDamageUsed
+    ){
+
+    player.titleFirstDamageUsed = true;
+
+    log("🛡️ 初撃無効！ 最初のダメージを無効化！");
+
+    damage = 0;
+    }
+
+    // 👑 竜王の怒り：通常攻撃を炎属性にする
+    let isFireAttack = false;
+
+    if(
+    player.hp <= player.maxHp * 0.5 &&
+    hasDragonKingRageTraitCombo()
+    ){
+    isFireAttack = true;
+    log("🔥 竜王の怒り！ 通常攻撃が炎属性になった！");
+    }
 
    // 💥 クリティカル
     let criticalRate = 0.1;
@@ -1560,6 +1940,18 @@ function attack(){
     criticalRate += 0.05;
     }
 
+
+    // 🔨 捕食者
+    if(player.predatorTraitActive){
+
+    criticalRate += 0.10;
+
+    log("🐺 捕食者発動！ 次の攻撃クリティカル率 +10%");
+
+    // 次の攻撃で効果を消費
+    player.predatorTraitActive = false;
+    }
+
     // 🔨 鍛造装備のクリティカル率
     const craftCriticalRate =
     getCraftEffect("criticalRate");
@@ -1568,10 +1960,38 @@ function attack(){
 
     let isCritical = Math.random() < criticalRate;
 
+    
+
 
     if(isCritical){
 
+    // 🏆 称号：クリティカル連続回数
+    player.titleCriticalStreak++;
+
+    log(
+        `🏆 クリティカル連続！ ` +
+        `${player.titleCriticalStreak} / 8`
+    );
+
+    if(player.titleCriticalStreak >= 8){
+        obtainTitle("加算");
+    }
+
+    else{
+
+    player.titleCriticalStreak = 0;
+
+    }
+
     let criticalMultiplier = 2;
+
+    
+
+
+    if(hasPredatorTraitCombo()){
+    player.predatorTraitActive = true;
+    log("🐺 捕食者発動準備！ 次の攻撃のクリティカル率 +10%");
+    }
 
 
     // 🌙 ニクス
@@ -1642,6 +2062,63 @@ function attack(){
     log("🎼 ベートーヴェンの効果発動！");
     }
 
+    // 🔨 狂戦士
+    if(
+    player.hp <= player.maxHp * 0.5 &&
+    hasBerserkerTraitCombo()
+    ){
+    damage = Math.floor(damage * 1.2);
+
+    log("🔥 狂戦士発動！ 通常攻撃ダメージ +20%");
+    }
+
+    // 👑 竜王の怒り
+    if(
+    player.hp <= player.maxHp * 0.5 &&
+    hasDragonKingRageTraitCombo()
+    ){
+
+    damage = Math.floor(damage * 1.2);
+
+    log("👑 竜王の怒り発動！ 通常攻撃ダメージ +20%");
+    }
+
+    // 👑 竜王の怒り：炎ダメージ
+    if(
+    player.hp <= player.maxHp * 0.5 &&
+    hasDragonKingRageTraitCombo()
+    ){
+
+    const bonusFireDamage = Math.floor(
+        enemy.maxHp * 0.05
+    );
+
+    damage += bonusFireDamage;
+
+    log(
+        "🔥 竜王の怒り！ +" +
+        bonusFireDamage +
+        "炎ダメージ！"
+    );
+    }
+
+    // 🔥 竜炎
+    if(
+    hasDragonFlameTraitCombo() &&
+    Math.random() < 0.1
+    ){
+    const bonusDamage = Math.floor(enemy.maxHp * 0.05);
+
+    damage += bonusDamage;
+
+    log(
+        "🔥 竜炎発動！ +" +
+        bonusDamage +
+        "炎ダメージ！"
+    );
+    }
+
+
     // ⚡ 雷撃の戦斧
     if(
     player.effects &&
@@ -1652,6 +2129,14 @@ function attack(){
     log("⚡ 雷撃の戦斧発動！ 敵は1ターン行動不能！");
     }
     
+    // 🏆 加算
+    if(player.equippedTitle === "加算"){
+
+    damage = Math.floor(damage * 1.5);
+
+    log("➕ 加算発動！ 与えるダメージ +50%");
+    }
+
     enemy.hp -= damage;
     log("⚔️ " + damage + "ダメージを与えた！");
 
@@ -1668,15 +2153,47 @@ function attack(){
 
         player.comboCount = 0;
 
-    player.exp += enemy.exp;
-    player.gold += enemy.gold;
+        // 🏆 称号：素手でボス撃破
+        if(
+        enemy.boss &&
+        player.equipment.weapon === "なし"
+        ){
 
-    log(enemy.name + " を倒した！");
+        player.titleBareHandBossWins++;
 
-    enemyDrop(enemy);
-    rareEnemyDrop(enemy);
+        
 
-    while(player.exp >= player.nextExp){
+        if(player.titleBareHandBossWins >= 20){
+
+        obtainTitle("真武闘");
+        }
+        }
+
+        // 🏆 称号：ノーダメージ勝利
+        if(player.titleNoDamage){
+
+        player.titleNoDamageWins++;
+
+        log(
+        `🏆 ノーダメージ勝利！ ` +
+        `${player.titleNoDamageWins} / 10`
+        );
+
+        if(player.titleNoDamageWins >= 10){
+
+        obtainTitle("初撃無効");
+        }
+        }
+
+        player.exp += enemy.exp;
+        player.gold += enemy.gold;
+
+        log(enemy.name + " を倒した！");
+
+        enemyDrop(enemy);
+        rareEnemyDrop(enemy);
+
+        while(player.exp >= player.nextExp){
         player.exp -= player.nextExp;
         levelUp();
     }
@@ -1690,6 +2207,8 @@ function attack(){
 
     inBattle = false;
 
+    playTownBGM();
+
     document.getElementById("battle").style.display = "none";
 
     return;
@@ -1699,11 +2218,14 @@ function attack(){
 }
 
 
+
 function runAway(){
 
     if(!inBattle) return;
 
     inBattle = false;
+
+    playTownBGM();
 
     document.getElementById("battle").style.display = "none";
 
@@ -1761,6 +2283,38 @@ function skill(){
     if(enemy.hp <= 0){
 
         player.comboCount = 0;
+
+        // 🏆 称号：素手でボス撃破
+        if(
+        enemy.boss &&
+        player.equipment.weapon === "なし"
+        ){
+
+        player.titleBareHandBossWins++;
+
+    
+
+        if(player.titleBareHandBossWins >= 20){
+
+        obtainTitle("真武闘");
+        }
+        }
+
+        // 🏆 称号：ノーダメージ勝利
+        if(player.titleNoDamage){
+
+        player.titleNoDamageWins++;
+
+        log(
+        `🏆 ノーダメージ勝利！ ` +
+        `${player.titleNoDamageWins} / 10`
+        );
+
+        if(player.titleNoDamageWins >= 10){
+
+        obtainTitle("初撃無効");
+        }
+        }
      
         player.exp += enemy.exp;
         player.gold += enemy.gold;
@@ -1779,6 +2333,9 @@ function skill(){
         unlockNextStage(currentDungeon);
         }
         inBattle = false;
+
+        playTownBGM();
+
         enemy = null;
 
         document.getElementById("battle").style.display = "none";
@@ -3477,6 +4034,190 @@ function drawGacha10(){
     autoSave();
 }
 
+// =========================
+// 🎵 BGMシステム
+// =========================
+
+const townBGM = new Audio("audio/bgm/town.mp3");
+
+const battleBGM = new Audio("audio/bgm/battle.mp3");
+
+const bossBGM = new Audio("audio/bgm/boss06.mp3");
+
+bossBGM.loop = true;
+bossBGM.volume = 0.4;
+
+battleBGM.loop = true;
+battleBGM.volume = 0.4;
+
+townBGM.loop = true;
+townBGM.volume = 0.4;
+
+function playTownBGM(){
+
+    battleBGM.pause();
+    battleBGM.currentTime = 0;
+
+    bossBGM.pause();
+    bossBGM.currentTime = 0;
+
+    if(townBGM.paused){
+        townBGM.play().catch(() => {});
+    }
+
+}
+
+function playBattleBGM(){
+
+    townBGM.pause();
+    townBGM.currentTime = 0;
+
+    if(battleBGM.paused){
+        battleBGM.currentTime = 0;
+        battleBGM.play().catch(() => {});
+    }
+
+}
+
+function playBossBGM(){
+
+    townBGM.pause();
+    townBGM.currentTime = 0;
+
+    battleBGM.pause();
+    battleBGM.currentTime = 0;
+
+    if(bossBGM.paused){
+        bossBGM.currentTime = 0;
+        bossBGM.play().catch(() => {});
+    }
+
+}
+
+function stopTownBGM(){
+
+    townBGM.pause();
+    townBGM.currentTime = 0;
+
+}
+
+// 🎵 最初のユーザー操作でBGM開始
+document.addEventListener("click", function startBGMOnce(){
+
+    playTownBGM();
+
+    document.removeEventListener("click", startBGMOnce);
+
+});
+
+// ==============================
+// 🏆 称号システム
+// ==============================
+
+// 称号画面を開く
+function openTitleMenu(){
+
+    if(inBattle){
+        log("⚔️ 戦闘中は称号を確認できません！");
+        return;
+    }
+
+    document.getElementById("titleScreen").style.display = "block";
+
+    updateTitleMenu();
+}
+
+
+// 称号画面を閉じる
+function closeTitleMenu(){
+
+    document.getElementById("titleScreen").style.display = "none";
+
+}
+
+
+// 称号画面を更新
+function updateTitleMenu(){
+
+    const titleList = document.getElementById("titleList");
+    const equippedTitle = document.getElementById("equippedTitle");
+
+    titleList.innerHTML = "";
+
+    // 現在装備中の称号
+    if(player.equippedTitle){
+
+        equippedTitle.textContent = player.equippedTitle;
+
+    }else{
+
+        equippedTitle.textContent = "なし";
+
+    }
+
+
+    // 未獲得なら何も一覧に出さない
+    if(player.titles.length === 0){
+
+        titleList.innerHTML = "<p>まだ称号を獲得していません。</p>";
+        return;
+
+    }
+
+
+    // 獲得済みの称号だけ表示
+    player.titles.forEach(title => {
+
+        const button = document.createElement("button");
+
+        button.textContent =
+            title === player.equippedTitle
+            ? `🏆 ${title}（装備中）`
+            : `🏆 ${title}`;
+
+        button.onclick = function(){
+
+            equipTitle(title);
+
+        };
+
+        titleList.appendChild(button);
+
+    });
+
+}
+
+
+// 称号を獲得する
+function obtainTitle(title){
+
+    if(player.titles.includes(title)){
+        return;
+    }
+
+    player.titles.push(title);
+
+    log(`🏆 新しい称号を獲得しました！「${title}」`);
+
+    updateTitleMenu();
+
+    autoSave();
+
+}
+
+
+// 称号を装備する
+function equipTitle(title){
+    if(!player.titles.includes(title)){ return; }
+
+    player.equippedTitle = title;
+
+    log(`🏆 称号「${title}」を装備しました！`);
+
+    updateTitleMenu();
+    updateScreen();
+    autoSave();
+}
 
 
 
@@ -3533,6 +4274,14 @@ function testForestBoss() {
     };
 
     inBattle = true;
+    if(enemy.boss){
+    playBossBGM();
+    }else{
+    playBattleBGM();
+    }
+
+    
+    playBattleBGM();
     player.immortalTraitUsed = false;
 
     document.getElementById("battle").style.display = "block";
