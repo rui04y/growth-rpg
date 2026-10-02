@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Growth RPG - 称号</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="game">
+
+    <h1>🏆 称号</h1>
+
+    <!-- ログ用 -->
+    <div id="log" style="display:none;"></div>
+
+
+    <div id="titleScreen">
+
+        <h2>現在の称号</h2>
+
+        <p>
+            🏆
+            <span id="equippedTitle">なし</span>
+        </p>
+
+
+        <h2>獲得した称号</h2>
+
+        <div id="titleList"></div>
+
+    </div>
+
+
+    <br>
+
+    <button onclick="location.href='index.html'">
+        🏠 戻る
+    </button>
+
+</div>
+
+
+<script src="script.js"></script>
+
+<script>
+loadGame();
+playTownBGM();
+updateTitleMenu();
+</script>
+
+</body>
+
+</html>
