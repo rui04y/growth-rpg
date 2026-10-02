@@ -1,3 +1,4 @@
+let battleDrops = [];
 let player = {
 
 
@@ -473,66 +474,75 @@ function updateScreen() {
     const totalMaxHp = getTotalMaxHp();
     const totalMaxMp = getTotalMaxMp();
 
-    document.getElementById("level").textContent = player.level;
-    document.getElementById("maxHp").textContent = totalMaxHp;
-    document.getElementById("maxMp").textContent = totalMaxMp;
-    document.getElementById("exp").textContent = player.exp;
-    document.getElementById("nextExp").textContent = player.nextExp;
+    const level = document.getElementById("level");
+    if(level) level.textContent = player.level;
 
-    // 攻撃力・防御力
-    document.getElementById("atk").textContent = getTotalAtk();
+    const maxHp = document.getElementById("maxHp");
+    if(maxHp) maxHp.textContent = totalMaxHp;
 
-    document.getElementById("def").textContent = getTotalDef();
-    // 所持金
-    document.getElementById("gold").textContent = player.gold;
+    const maxMp = document.getElementById("maxMp");
+    if(maxMp) maxMp.textContent = totalMaxMp;
 
-    // MP
-    document.getElementById("mp").textContent = player.mp;
+    const exp = document.getElementById("exp");
+    if(exp) exp.textContent = player.exp;
 
-    // 武器・防具
-    document.getElementById("weapon").textContent =
-        player.equipment.weapon;
+    const nextExp = document.getElementById("nextExp");
+    if(nextExp) nextExp.textContent = player.nextExp;
 
-    document.getElementById("armor").textContent =
-        player.equipment.armor;
+    const atk = document.getElementById("atk");
+    if(atk) atk.textContent = getTotalAtk();
 
+    const def = document.getElementById("def");
+    if(def) def.textContent = getTotalDef();
 
-   // HPバー
-  
+    const gold = document.getElementById("gold");
+    if(gold) gold.textContent = player.gold;
 
-    // HP表示
-    document.getElementById("hp").textContent = player.hp;
-    document.getElementById("maxHp").textContent = totalMaxHp;
+    const mp = document.getElementById("mp");
+    if(mp) mp.textContent = player.mp;
 
-    // HPバー
-    const hpPercent =
-    (player.hp / totalMaxHp) * 100;
+    const weapon = document.getElementById("weapon");
+    if(weapon) weapon.textContent = player.equipment.weapon;
 
-    document.getElementById("hpBar").style.width =
-    hpPercent + "%";
+    const armor = document.getElementById("armor");
+    if(armor) armor.textContent = player.equipment.armor;
 
+    const hp = document.getElementById("hp");
+    if(hp) hp.textContent = player.hp;
 
-    // MPバー
-    const mpPercent = (player.mp / totalMaxMp) * 100;
+    const hpBar = document.getElementById("hpBar");
+    if(hpBar){
+        const hpPercent = (player.hp / totalMaxHp) * 100;
+        hpBar.style.width = hpPercent + "%";
+    }
 
-    document.getElementById("mpBar").style.width =
-    mpPercent + "%";
+    const mpBar = document.getElementById("mpBar");
+    if(mpBar){
+        const mpPercent = (player.mp / totalMaxMp) * 100;
+        mpBar.style.width = mpPercent + "%";
+    }
 
-    // EXPバー
-    const expPercent = (player.exp / player.nextExp) * 100;
-    document.getElementById("expBar").style.width =
-        expPercent + "%";
+    const expBar = document.getElementById("expBar");
+    if(expBar){
+        const expPercent = (player.exp / player.nextExp) * 100;
+        expBar.style.width = expPercent + "%";
+    }
 
+    const trainingCountText =
+        document.getElementById("trainingCountText");
 
-    const remainingTraining =
-    player.maxTrainingCount - player.totalTrainingCount;
+    if(trainingCountText){
+        const remainingTraining =
+            player.maxTrainingCount - player.totalTrainingCount;
 
-    document.getElementById("trainingCountText").textContent =
-    `🏋️ 残り訓練回数：${remainingTraining} / ${player.maxTrainingCount}`;
+        trainingCountText.textContent =
+            `🏋️ 残り訓練回数：${remainingTraining} / ${player.maxTrainingCount}`;
+    }
 
-    document.getElementById("magicStone").textContent =
-    player.magicStone;
-
+    const magicStone = document.getElementById("magicStone");
+    if(magicStone){
+        magicStone.textContent = player.magicStone;
+    }
 }
 
 // =========================
@@ -1143,7 +1153,7 @@ function adventure(dungeonType = "grassland") {
 
     
     inBattle = true;
-
+    battleDrops = [];
        
 
     // 🏆 称号用：今回の戦闘ではまだダメージを受けていない
@@ -1155,7 +1165,7 @@ function adventure(dungeonType = "grassland") {
     }else{
     playBattleBGM();
     }   
-    playBattleBGM();
+    
     player.immortalTraitUsed = false;
     document.getElementById("battle").style.display = "block";
 
@@ -1163,6 +1173,8 @@ function adventure(dungeonType = "grassland") {
     document.getElementById("enemyHp").textContent = enemy.hp;
     document.getElementById("enemyMaxHp").textContent = enemy.maxHp;
     document.getElementById("enemyHpBar").style.width = "100%";
+
+
 }
 
 // =====================
@@ -1201,6 +1213,8 @@ function dailyDungeon(){
     };
 
     inBattle = true;
+
+    battleDrops = [];
 
     // 🏆 称号用：今回の戦闘はノーダメージ状態
     player.titleNoDamage = true;    
@@ -1341,9 +1355,19 @@ function rareEnemyDrop(enemy){
 
     player.materials[enemy.rareDrop]++;
 
+    const dropName =
+        rareMaterialData[enemy.rareDrop].name;
+
     log(
-        `✨✨ レアドロップ！ ${rareMaterialData[enemy.rareDrop].name}を入手！`
+        `✨✨ レアドロップ！ ${dropName}を入手！`
     );
+
+    // 戦闘結果用に記録
+    if(!battleDrops){
+        battleDrops = [];
+    }
+
+    battleDrops.push(`✨✨ ${dropName} ×1`);
 
     applyRareMaterialEffects();
 }
@@ -1426,7 +1450,16 @@ function enemyDrop(enemy){
     // 素材を1個追加
     player.materials[enemy.drop]++;
 
-    log(`🎁 ${materialData[enemy.drop]}を入手した！`);
+    const dropName = materialData[enemy.drop];
+
+    log(`🎁 ${dropName}を入手した！`);
+
+    // 戦闘結果用に記録
+    if(!battleDrops){
+        battleDrops = [];
+    }
+
+    battleDrops.push(`🎁 ${dropName} ×1`);
 }
 
 function bossReward() {
@@ -1536,7 +1569,10 @@ function heal() {
     player.hp = getTotalMaxHp();
 
     log("❤️ 全回復した！");
+
     updateScreen();
+
+    autoSave();
 }
 
 function saveGame() {
@@ -1897,18 +1933,7 @@ function attack(){
     totalAtk * 0.5 +
     Math.random() * totalAtk * 0.5
     );
-    // 🏆 初撃無効
-    if(
-    player.equippedTitle === "初撃無効" &&
-    !player.titleFirstDamageUsed
-    ){
-
-    player.titleFirstDamageUsed = true;
-
-    log("🛡️ 初撃無効！ 最初のダメージを無効化！");
-
-    damage = 0;
-    }
+    
 
     // 👑 竜王の怒り：通常攻撃を炎属性にする
     let isFireAttack = false;
@@ -1968,10 +1993,6 @@ function attack(){
     // 🏆 称号：クリティカル連続回数
     player.titleCriticalStreak++;
 
-    log(
-        `🏆 クリティカル連続！ ` +
-        `${player.titleCriticalStreak} / 8`
-    );
 
     if(player.titleCriticalStreak >= 8){
         obtainTitle("加算");
@@ -2174,11 +2195,7 @@ function attack(){
 
         player.titleNoDamageWins++;
 
-        log(
-        `🏆 ノーダメージ勝利！ ` +
-        `${player.titleNoDamageWins} / 10`
-        );
-
+       
         if(player.titleNoDamageWins >= 10){
 
         obtainTitle("初撃無効");
@@ -2206,10 +2223,11 @@ function attack(){
     }
 
     inBattle = false;
-
     playTownBGM();
 
-    document.getElementById("battle").style.display = "none";
+    autoSave();
+
+    showBattleResult();
 
     return;
     }
@@ -2220,16 +2238,17 @@ function attack(){
 
 
 function runAway(){
-
     if(!inBattle) return;
 
     inBattle = false;
-
     playTownBGM();
 
-    document.getElementById("battle").style.display = "none";
+    autoSave();
+
+    console.log("逃走時保存:", JSON.parse(localStorage.getItem("growthRPG")));
 
     log("逃げ出した！");
+    location.href = "index.html";
 }
 updateScreen();
 function defend(){
@@ -2305,10 +2324,7 @@ function skill(){
 
         player.titleNoDamageWins++;
 
-        log(
-        `🏆 ノーダメージ勝利！ ` +
-        `${player.titleNoDamageWins} / 10`
-        );
+       
 
         if(player.titleNoDamageWins >= 10){
 
@@ -2333,35 +2349,17 @@ function skill(){
         unlockNextStage(currentDungeon);
         }
         inBattle = false;
-
         playTownBGM();
 
-        enemy = null;
+        autoSave();
 
-        document.getElementById("battle").style.display = "none";
+        showBattleResult();
 
         return;
-    }
 
-    enemyAttack();
+    enemyAttack();}
 }
-// =====================
-// 🏪 ショップ
-// =====================
 
-function shop(){
-
-    if(inBattle){
-        log("⚔️ 戦闘中はショップを利用できません！");
-        return;
-    }
-
-    document.getElementById("shopScreen").style.display = "block";
-
-    document.getElementById("shopGold").textContent = player.gold;
-
-    showShopCategory("item");
-}
 
 
 // =====================
@@ -2750,6 +2748,9 @@ function buyWeapon(name,price,attack){
 
     player.inventory.push(name);
 
+    // ここで保存
+    autoSave(); 
+
 
     // 前の武器補正を削除
     player.atk -= player.equipment.weaponAtk || 0;
@@ -2768,9 +2769,7 @@ function buyWeapon(name,price,attack){
 
 
     updateEquipmentStatus();
-
     showEquipment();
-
     updateScreen();
 
 }
@@ -2804,6 +2803,9 @@ function buyArmor(name,price,defense){
 
     player.inventory.push(name);
 
+    // ここで保存
+    autoSave();
+
 
     // 前の防具補正を削除
     player.def -= player.equipment.armorDef || 0;
@@ -2822,11 +2824,8 @@ function buyArmor(name,price,defense){
 
 
     updateEquipmentStatus();
-
     showEquipment();
-
     updateScreen();
-
 }
 
 
@@ -2852,9 +2851,9 @@ function openEquipment(){
 
     console.log("装備画面開いた");
 
-    document.getElementById("equipmentScreen").style.display = "block";
-
+    updateEquipmentStatus();
     showEquipment();
+
 }
 
 
@@ -2935,7 +2934,11 @@ function equipItem(index){
     showEquipment();
     updateScreen();
 
+    // 装備状態を保存
+    autoSave();
 }
+
+
 
 
 function showEquipment(){
@@ -2943,6 +2946,10 @@ function showEquipment(){
     console.log("showEquipment動いた");
 
     const list = document.getElementById("equipmentList");
+
+    if(!list){
+        return;
+    }
 
     list.innerHTML = "";
 
@@ -3147,11 +3154,15 @@ function updateEquipmentStatus(){
     console.log("武器表示:", player.equipment.weapon);
     console.log("防具表示:", player.equipment.armor);
 
-    weaponText.textContent =
-        "武器：" + player.equipment.weapon;
+    if(weaponText){
+        weaponText.textContent =
+            "武器：" + player.equipment.weapon;
+    }
 
-    armorText.textContent =
-        "防具：" + player.equipment.armor;
+    if(armorText){
+        armorText.textContent =
+            "防具：" + player.equipment.armor;
+    }
 }
 
 function removeEquipment(){
@@ -3346,10 +3357,8 @@ function closeDungeon(){
 
 function startDungeon(type){
 
-
     clearLog();
 
-    // ↓今ある処理
     const dungeonName = {
         grassland: "🌳 草原",
         cave: "🕳️ 洞窟",
@@ -3368,17 +3377,25 @@ function startDungeon(type){
         return;
     }
 
-    closeDungeon();
+    // 選択したダンジョンを保存
+    localStorage.setItem("selectedDungeon", type);
 
-    log(`${dungeonName[type]}へ向かった！`);
-
-    adventure(type);
+    // 戦闘ページへ移動
+    location.href = "battle.html";
 }
 
 setInterval(function() {
     autoSave();
 }, 30000);
 
+function openItemMenu(){
+
+    if(!inBattle){
+        return;
+    }
+
+    useItem();
+}
 
 window.useItem = function(){
 
@@ -3452,11 +3469,6 @@ window.useItem = function(){
 
     updateScreen();
 
-    document.getElementById("weapon").textContent =
-        player.equipment.weapon;
-
-    document.getElementById("armor").textContent =
-        player.equipment.armor;
 };
 
 function openStatusMenu(){
@@ -3549,6 +3561,8 @@ function addStatusPoint(type){
 
     player.statusPoints--;
 
+    autoSave();
+
     updateStatusMenu();
     updateScreen();
 
@@ -3625,6 +3639,7 @@ function resetStatusPoints(){
 
     player.gold -= 100;
 
+    autoSave();
 
     log("🔄 ステータスポイントをリセットした！");
 
@@ -4104,7 +4119,19 @@ function stopTownBGM(){
 // 🎵 最初のユーザー操作でBGM開始
 document.addEventListener("click", function startBGMOnce(){
 
-    playTownBGM();
+    if(inBattle){
+
+        if(enemy && enemy.boss){
+            playBossBGM();
+        }else{
+            playBattleBGM();
+        }
+
+    }else{
+
+        playTownBGM();
+
+    }
 
     document.removeEventListener("click", startBGMOnce);
 
@@ -4114,8 +4141,24 @@ document.addEventListener("click", function startBGMOnce(){
 // 🏆 称号システム
 // ==============================
 
+
+const titleDescriptions = {
+
+    "加算":
+        "クリティカルを8回連続で成功させた証。与えるダメージが50%増加する。",
+
+    "真武闘":
+        "武器を使わずにボスを20回撃破した証。防御力の30%を攻撃力に加える。",
+
+    "初撃無効":
+        "ノーダメージ勝利を10回達成した証。最初に受けるダメージを無効化する。"
+
+};
+
 // 称号画面を開く
 function openTitleMenu(){
+
+    
 
     if(inBattle){
         log("⚔️ 戦闘中は称号を確認できません！");
@@ -4168,6 +4211,10 @@ function updateTitleMenu(){
     // 獲得済みの称号だけ表示
     player.titles.forEach(title => {
 
+        // 称号を入れる箱
+        const container = document.createElement("div");
+
+        // 称号ボタン
         const button = document.createElement("button");
 
         button.textContent =
@@ -4181,7 +4228,21 @@ function updateTitleMenu(){
 
         };
 
-        titleList.appendChild(button);
+
+        // 称号の説明
+        const description = document.createElement("p");
+
+        description.textContent =
+            titleDescriptions[title] ||
+            "この称号の説明は未設定です。";
+
+
+        // 箱に追加
+        container.appendChild(button);
+        container.appendChild(description);
+
+        // 一覧に追加
+        titleList.appendChild(container);
 
     });
 
@@ -4219,7 +4280,48 @@ function equipTitle(title){
     autoSave();
 }
 
+function showBattleResult(){
 
+    const result =
+        document.getElementById("battleResult");
+
+    const resultText =
+        document.getElementById("battleResultText");
+
+    if(!result || !resultText){
+        return;
+    }
+
+    let dropText = "";
+
+    if(battleDrops.length === 0){
+
+        dropText = "<p>なし</p>";
+
+    }else{
+
+        dropText = battleDrops
+            .map(drop => `<p>${drop}</p>`)
+            .join("");
+
+    }
+
+    resultText.innerHTML = `
+        <p>⚔️ ${enemy.name} を倒した！</p>
+
+        <p>⭐ EXP +${enemy.exp}</p>
+
+        <p>💰 ゴールド +${enemy.gold}</p>
+
+        <hr>
+
+        <h3>🎁 ドロップ</h3>
+
+        ${dropText}
+    `;
+
+    result.style.display = "block";
+}
 
 
 
@@ -4274,6 +4376,8 @@ function testForestBoss() {
     };
 
     inBattle = true;
+
+    battleDrops = [];
     if(enemy.boss){
     playBossBGM();
     }else{
@@ -4307,4 +4411,16 @@ function testAllEquipment(){
     updateScreen();
 
     log("🛠️ テスト用に全装備を取得しました！");
+}
+function resetTestData(){
+
+    const confirmReset = confirm(
+        "セーブデータを初期状態に戻します。\n本当にリセットしますか？"
+    );
+
+    if(!confirmReset) return;
+
+    localStorage.removeItem("growthRPG");
+
+    location.reload();
 }
