@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Growth RPG - 装備</title>
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="game">
+
+    <h1>⚔️ 装備</h1>
+
+    <!-- loadGame()のlog対策 -->
+    <div id="log" style="display:none;"></div>
+
+    <div id="equipmentScreen">
+
+        <h2>装備一覧</h2>
+
+        <button onclick="removeEquipment()">装備を外す</button>
+
+        <button onclick="location.href='index.html'">戻る</button>
+
+        <h3>現在の装備</h3>
+
+        <p id="weaponText">武器：なし</p>
+        <p id="armorText">防具：なし</p>
+
+        <div id="equipmentList"></div>
+
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+<script src="smithy.js"></script>
+
+<script>
+loadGame();
+playTownBGM();
+updateEquipmentStatus();
+openEquipment();
+</script>
+
+</body>
+</html>
