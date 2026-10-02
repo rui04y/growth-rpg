@@ -22,6 +22,17 @@ function enemyAttack(){
     }
 
     let damage = Math.max(1, enemyAtk - Math.floor(getTotalDef() / 2));
+    // 🏆 初撃無効
+    if(
+    player.equippedTitle === "初撃無効" &&
+    !player.titleFirstDamageUsed
+    ){
+    player.titleFirstDamageUsed = true;
+
+    log("🛡️ 初撃無効！ 最初に受けるダメージを無効化！");
+
+    damage = 0;
+    }
 
     if(defending){
     damage = Math.floor(damage / 2)
@@ -247,12 +258,11 @@ function enemyAttack(){
         }
 
         inBattle = false;
-
         playTownBGM();
 
-        enemy = null;
+        autoSave();
 
-        document.getElementById("battle").style.display = "none";
+        showBattleResult();
 
         return;
     }
@@ -287,6 +297,10 @@ function enemyAttack(){
         log("💀 力尽きた…。町に戻り、HPが全回復した。（所持金10%減少）");
 
         updateScreen();
+
+        autoSave();
+        location.href = "index.html";
+
         return;
     }
 
@@ -370,12 +384,11 @@ function enemyAttack(){
             unlockNextStage(currentDungeon);
             }
             inBattle = false;
-
             playTownBGM();
 
-            enemy = null;
+            autoSave();
 
-            document.getElementById("battle").style.display = "none";
+            showBattleResult();
 
             return;
         }
