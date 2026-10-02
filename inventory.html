@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Growth RPG - インベントリ</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="game">
+
+    <h1>🎒 インベントリ</h1>
+
+    <div id="log" style="display:none;"></div>
+
+
+    <!-- ==================== -->
+    <!-- 🧪 消費アイテム -->
+    <!-- ==================== -->
+
+    <h2>🧪 アイテム</h2>
+
+    <div id="itemList"></div>
+
+
+    <!-- ==================== -->
+    <!-- 🛠️ 素材 -->
+    <!-- ==================== -->
+
+    <h2>🛠️ 素材</h2>
+
+    <div id="materialList"></div>
+
+
+    <!-- ==================== -->
+    <!-- ⚔️ 装備 -->
+    <!-- ==================== -->
+
+    <h2>⚔️ 装備</h2>
+
+    <div id="inventoryEquipmentList"></div>
+
+
+    <br>
+
+    <button onclick="location.href='index.html'">
+        🏠 戻る
+    </button>
+
+</div>
+
+
+<script src="script.js"></script>
+
+
+<script>
+
+loadGame();
+
+
+function updateInventoryPage(){
+
+    // ====================
+    // 🧪 消費アイテム
+    // ====================
+
+    const itemList =
+        document.getElementById("itemList");
+
+    itemList.innerHTML = `
+        ❤️ ポーション ×${player.items.potion}
+        <br>
+        🔵 マナポーション ×${player.items.manaPotion}
+    `;
+
+
+    // ====================
+    // 🛠️ 素材
+    // ====================
+
+    const materialList =
+        document.getElementById("materialList");
+
+    materialList.innerHTML = "";
+
+
+    if(!player.materials){
+
+    player.materials = {};
+
+}
+
+let hasMaterial = false;
+
+for(const material in player.materials){
+
+    const count = player.materials[material];
+
+    if(count > 0){
+
+        const materialName =
+            materialData[material] || material;
+
+        materialList.innerHTML += `
+            <div>
+                ${materialName} ×${count}
+            </div>
+        `;
+
+        hasMaterial = true;
+
+    }
+
+}
+
+if(!hasMaterial){
+
+    materialList.textContent =
+        "素材を持っていません";
+
+}
+
+
+    // ====================
+    // ⚔️ 装備
+    // ====================
+
+    const equipmentList =
+        document.getElementById(
+            "inventoryEquipmentList"
+        );
+
+    equipmentList.innerHTML = "";
+
+
+    if(!player.inventory ||
+       player.inventory.length === 0){
+
+        equipmentList.textContent =
+            "装備を持っていません";
+
+        return;
+    }
+
+
+    // 同じ装備をまとめる
+
+    const equipmentCounts = {};
+
+
+    player.inventory.forEach(item => {
+
+        if(!equipmentCounts[item]){
+
+            equipmentCounts[item] = 0;
+
+        }
+
+        equipmentCounts[item]++;
+
+    });
+
+
+    // ====================
+    // ⭐ レア度
+    // ====================
+
+    const rarityOrder = {
+
+        UR: 5,
+        SSR: 4,
+        SR: 3,
+        R: 2,
+        N: 1
+
+    };
+
+
+    function getItemRarity(item){
+
+        for(const rarity in gachaData){
+
+            if(gachaData[rarity].includes(item)){
+
+                return rarity;
+
+            }
+
+        }
+
+        return "N";
+
+    }
+
+
+    // レア度順
+
+    const sortedItems =
+        Object.keys(equipmentCounts)
+        .sort((a, b) => {
+
+            const rarityA =
+                getItemRarity(a);
+
+            const rarityB =
+                getItemRarity(b);
+
+            return rarityOrder[rarityB]
+                 - rarityOrder[rarityA];
+
+        });
+
+
+    // ====================
+    // 表示
+    // ====================
+
+    sortedItems.forEach(item => {
+
+        const rarity =
+            getItemRarity(item);
+
+        const count =
+            equipmentCounts[item];
+
+
+        equipmentList.innerHTML += `
+
+            <div>
+
+                ${rarity}
+                「${item}」
+                ×${count}
+
+            </div>
+
+        `;
+
+    });
+
+}
+
+
+updateInventoryPage();
+
+</script>
+
+<script>
+loadGame();
+playTownBGM();
+</script>
+
+</body>
+
+</html>
