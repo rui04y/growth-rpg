@@ -1,7 +1,3 @@
-// ==============================
-// 🔨 鍛冶屋
-// ==============================
-
 function openSmithy(){
 
     document.getElementById("menuScreen").style.display = "none";
