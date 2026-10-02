@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Growth RPG - ガチャ</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="game">
+
+    <h1>🎰 ガチャ</h1>
+
+    <div id="log" style="display:none;"></div>
+
+    <p>🔮 魔石：<span id="gachaMagicStone">0</span></p>
+
+   <button onclick="drawGacha()">
+    🎲 1回引く（100魔石）
+    </button>
+
+    <button onclick="drawGacha10()">
+    🎲 10連（900魔石）
+    </button>
+
+    <div id="gachaResult"></div>
+
+    <br>
+
+    <button onclick="location.href='index.html'">
+        🏠 戻る
+    </button>
+
+</div>
+<script src="script.js"></script>
+
+<script>
+loadGame();
+playTownBGM();
+document.getElementById("gachaMagicStone").textContent = player.magicStone;
+</script>
+</body>
+</html>
