@@ -50,7 +50,9 @@
 
         <button onclick="openTrainingMenu()">🏋️ 訓練</button>
 
-        <button onclick="openDungeon()">🗺️ ダンジョン</button>
+        <button onclick="location.href='dungeon.html'">
+        🗺️ ダンジョン
+        </button>
 
         <button onclick="heal()">❤️ 回復</button>
 
@@ -114,17 +116,17 @@
 
     <div class="menuButtons">
 
-        <button onclick="openStatusMenu()">📈 ステータス</button>
+        <button onclick="location.href='status.html'">📈 ステータス</button>
 
-        <button onclick="openInventory()">🎒 インベントリ</button>
+        <button onclick="location.href='inventory.html'">🎒 インベントリ</button>
 
-        <button onclick="openEquipment()">⚔️ 装備</button>
+        <button onclick="location.href='equipment.html'">⚔️ 装備</button>
 
-        <button onclick="openSmithy()">🔨 鍛冶屋</button>
+        <button onclick="location.href='smithy.html'">🔨 鍛冶屋</button>
 
-        <button onclick="openTitleMenu()">🏆 称号</button>
+        <button onclick="location.href='title.html'">🏆 称号</button>
 
-        <button onclick="openGacha()">🎰 ガチャ</button>
+        <button onclick="location.href='gacha.html'">🎰 ガチャ</button>
 
         <button onclick="shop()">🏪 ショップ</button>
 
@@ -154,25 +156,7 @@
 </div>
 
 
-<div id="gachaScreen" class="screen" style="display:none;">
 
-    <h2>🎰 ガチャ</h2>
-
-    <p>🔮 魔石：<span id="gachaMagicStone">0</span></p>
-
-    <button onclick="drawGacha()">
-        🎲 1回引く（100魔石）
-    </button>
-
-    <button onclick="drawGacha10()">
-        🎲 10連　（900魔石）
-    </button>
-
-    <div id="gachaResult"></div>
-
-    <button onclick="closeGacha()">戻る</button>
-
-</div>
 
 <div id="shopScreen" class="screen" style="display:none;">
 
@@ -202,229 +186,25 @@
 
 </div>
 
-<div id="equipmentScreen" class="screen" style="display:none;">
 
-    <h2>装備一覧</h2>
 
-    <button onclick="removeEquipment()">装備を外す</button>
 
-    <button onclick="closeEquipment()">戻る</button>
 
-    <h3>現在の装備</h3>
 
-    <p id="weaponText">武器：なし</p>
-    <p id="armorText">防具：なし</p>
-
-    <div id="equipmentList"></div>
-
-</div>
-
-<div id="smithyScreen" class="screen" style="display:none;">
-
-    <h2>🔨 鍛冶屋</h2>
-
-    <p>素材を最大3つ選んで、オリジナル装備を鍛造しよう！</p>
-
-   <h3>⚒️ 装備タイプ</h3>
-
-    <button onclick="selectCraftType('weapon')">
-    ⚔️ 武器
-    </button>
-
-    <button onclick="selectCraftType('armor')">
-    🛡️ 防具
-    </button>
-
-    <p id="craftTypeText">選択中：なし</p>
-
-    <h3>🔨 ベース装備</h3>
-
-    <div id="craftBaseList">
-    装備タイプを選択してください。
-    </div>
-
-    <p id="craftBaseText">選択中：なし</p>
-    <h3>✏️ 装備名</h3>
-
-    <input
-        type="text"
-        id="craftName"
-        placeholder="好きな名前を入力"
-        maxlength="30"
-    >
-
-    <h3>🛠️ 素材選択</h3>
-
-    <p>最大3個まで選択できます</p>
-
-    <div id="craftMaterialList"></div>
-
-    <h3>⚒️ 選択中の素材</h3>
-
-    <div id="selectedCraftMaterials">
-    まだ素材が選択されていません。
-    </div>
-
-    <h3>📋 鍛造結果</h3>
-
-    <div id="craftPreview">
-        素材を3つ選択してください。
-    </div>
-
-    <br>
-
-    <button onclick="craftEquipment()">
-        🔨 鍛造する
-    </button>
-
-    <br><br>
-
-    <button onclick="closeSmithy()">
-        戻る
-    </button>
-
-</div>
-
-
-
-
-<div id="dungeonScreen" class="screen" style="display:none;">
-
-    <h2>🗺️ ダンジョン</h2>
-
-    <button onclick="dailyDungeon()">🌅 デイリー</button>
-
-    <button onclick="startDungeon('grassland')">
-    🌳 草原
-    </button>
-
-    <button onclick="startDungeon('cave')">
-    🕳️ 洞窟
-    </button>
-
-    <button onclick="startDungeon('volcano')">
-    🌋 火山
-    </button>
-
-    <button onclick="startDungeon('castle')">
-    🏰 魔王城
-    </button>
-
-    <br><br>
-
-    <button onclick="closeDungeon()">
-        戻る
-    </button>
-</div>
-<div id="trainingMenu" style="display:none;">
-
-    <h3>🏋️ 訓練</h3>
-    <p id="trainingCountText">
-    残り訓練回数：10 / 10
-    </p>
-
-    <button onclick="train('atk')">
-        ⚔️ 攻撃訓練
-    </button>
-
-    <button onclick="train('def')">
-        🛡️ 防御訓練
-    </button>
-
-    <button onclick="train('hp')">
-        ❤️ 体力訓練
-    </button>
-
-    <button onclick="train('mp')">
-        ✨ 魔力訓練
-    </button>
-
-    <button onclick="closeTrainingMenu()">
-        戻る
-    </button>
-
-    </div>
-
-       <div id="statusMenu" style="display:none;">
-
-        <h2>📊 ステータス</h2>
-
-        <p>
-        ⭐ ステータスポイント：
-        <span id="statusPoints">0</span>
-        </p>
-
-        <div class="statusRow">
-        <span>⚔️ 攻撃力</span>
-        <span id="statusAtk">0</span>
-        <button onclick="addStatusPoint('atk')">＋</button>
-        </div>
-
-        <div class="statusRow">
-        <span>🛡️ 防御力</span>
-        <span id="statusDef">0</span>
-        <button onclick="addStatusPoint('def')">＋</button>
-        </div>
-
-        <div class="statusRow">
-        <span>❤️ 最大HP</span>
-        <span id="statusMaxHp">0</span>
-        <button onclick="addStatusPoint('hp')">＋</button>
-        </div>
-
-        <div class="statusRow">
-        <span>🔵 最大MP</span>
-        <span id="statusMaxMp">0</span>
-        <button onclick="addStatusPoint('mp')">＋</button>
-        </div>
-        <button onclick="resetStatusPoints()">
-        🔄 ステータスリセット（100G）
-        </button>
-
-        <button onclick="closeStatusMenu()">戻る</button>
-
-        
-
-    </div>
- <div id="inventoryScreen" class="screen" style="display:none;">
-
-    <h2>🎒 インベントリ</h2>
-
-    <h3>🧪 消費アイテム</h3>
-    <div id="itemList"></div>
-
-    <h3>🛠️ 素材</h3>
-    <div id="materialList"></div>
-
-    <h3>⚔️ 装備</h3>
-    <div id="inventoryEquipmentList"></div>
-
-    <button onclick="closeInventory()">戻る</button>
-
-    </div>
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-
-</div>
 
 <script src="script.js"></script>
 <script src="skill.js"></script>
-<script src="battle.js"></script>
 <script src="smithy.js"></script>
+
+<script>
+loadGame();
+playTownBGM();
+</script>
 
 <button onclick="testGold()">テスト：1000000G</button>
 <button onclick="testForestBoss()">🧪 森の王テスト</button>
+<button onclick="resetTestData()">⚠️ テスト用データリセット</button>
+
 
 </body>
 
