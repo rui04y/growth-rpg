@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Growth RPG - 鍛冶屋</title>
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="game">
+
+    <h1>🔨 鍛冶屋</h1>
+
+    <div id="log" style="display:none;"></div>
+
+    <div id="smithyScreen">
+
+        <p>素材を最大3つ選んで、オリジナル装備を鍛造しよう！</p>
+
+        <h3>⚒️ 装備タイプ</h3>
+
+        <button onclick="selectCraftType('weapon')">
+            ⚔️ 武器
+        </button>
+
+        <button onclick="selectCraftType('armor')">
+            🛡️ 防具
+        </button>
+
+        <p id="craftTypeText">選択中：なし</p>
+
+        <h3>🔨 ベース装備</h3>
+
+        <div id="craftBaseList">
+            装備タイプを選択してください。
+        </div>
+
+        <p id="craftBaseText">選択中：なし</p>
+
+        <h3>✏️ 装備名</h3>
+
+        <input
+            type="text"
+            id="craftName"
+            placeholder="好きな名前を入力"
+            maxlength="30"
+        >
+
+        <h3>🛠️ 素材選択</h3>
+
+        <p>最大3個まで選択できます</p>
+
+        <div id="craftMaterialList"></div>
+
+        <h3>⚒️ 選択中の素材</h3>
+
+        <div id="selectedCraftMaterials">
+            まだ素材が選択されていません。
+        </div>
+
+        <h3>📋 鍛造結果</h3>
+
+        <div id="craftPreview">
+            素材を3つ選択してください。
+        </div>
+
+        <br>
+
+        <button onclick="craftEquipment()">
+            🔨 鍛造する
+        </button>
+
+    </div>
+
+    <br>
+
+    <button onclick="location.href='index.html'">
+        🏠 戻る
+    </button>
+
+</div>
+
+<script src="script.js"></script>
+<script src="smithy.js"></script>
+
+<script>
+loadGame();
+playTownBGM();
+updateCraftMaterials();
+updateCraftBaseList();
+updateCraftPreview();
+</script>
+</body>
+</html>
