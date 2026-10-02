@@ -494,12 +494,11 @@ function useSkill(type){
         }
 
         inBattle = false;
-
         playTownBGM();
 
-        enemy = null;
+        autoSave();
 
-        document.getElementById("battle").style.display = "none";
+        showBattleResult();
 
         return;
     }
