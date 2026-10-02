@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Growth RPG - ステータス</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="game">
+
+    <h1>📈 ステータス</h1>
+
+    <!-- ログ用 -->
+    <div id="log" style="display:none;"></div>
+
+
+    <!-- ステータス振り分け -->
+    <div id="statusMenu">
+
+        <h2>⭐ ステータスポイント</h2>
+
+        <p>
+            残りポイント：
+            <span id="statusPoints">0</span>
+        </p>
+
+
+        <div class="statusPointRow">
+            <span>⚔️ 攻撃力</span>
+            <span id="statusAtk">0</span>
+
+            <button onclick="addStatusPoint('atk')">
+                ＋
+            </button>
+        </div>
+
+
+        <div class="statusPointRow">
+            <span>🛡️ 防御力</span>
+            <span id="statusDef">0</span>
+
+            <button onclick="addStatusPoint('def')">
+                ＋
+            </button>
+        </div>
+
+
+        <div class="statusPointRow">
+            <span>❤️ 最大HP</span>
+            <span id="statusMaxHp">0</span>
+
+            <button onclick="addStatusPoint('hp')">
+                ＋
+            </button>
+        </div>
+
+
+        <div class="statusPointRow">
+            <span>💧 最大MP</span>
+            <span id="statusMaxMp">0</span>
+
+            <button onclick="addStatusPoint('mp')">
+                ＋
+            </button>
+        </div>
+
+
+        <br>
+
+        <button onclick="resetStatusPoints()">
+            🔄 リセット（100G）
+        </button>
+
+    </div>
+
+
+    <br>
+
+    <button onclick="location.href='index.html'">
+        🏠 戻る
+    </button>
+
+</div>
+
+
+<script src="script.js"></script>
+
+<script>
+loadGame();
+updateStatusMenu();
+playTownBGM();
+</script>
+
+</body>
+
+</html>
