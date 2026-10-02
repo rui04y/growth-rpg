@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Growth RPG - ショップ</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="game">
+
+    <h1>🏪 ショップ</h1>
+
+    <div id="log"></div>
+
+    <p>
+        💰 所持金：
+        <span id="shopGold">0</span> G
+    </p>
+
+
+    <!-- カテゴリー -->
+
+    <div class="shopCategories">
+
+        <button onclick="showShopCategory('item')">
+            🧪 アイテム
+        </button>
+
+        <button onclick="showShopCategory('weapon')">
+            ⚔️ 武器
+        </button>
+
+        <button onclick="showShopCategory('armor')">
+            🛡️ 防具
+        </button>
+
+    </div>
+
+
+    <!-- 商品一覧 -->
+
+    <div id="shopList"></div>
+
+
+    <br>
+
+    <button onclick="location.href='index.html'">
+        🏠 戻る
+    </button>
+
+</div>
+
+
+<script src="script.js"></script>
+<script src="skill.js"></script>
+<script src="smithy.js"></script>
+
+<script>
+
+loadGame();
+
+playTownBGM();
+
+showShopCategory("item");
+
+</script>
+
+</body>
+
+</html>
