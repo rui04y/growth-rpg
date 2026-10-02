@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Growth RPG - 戦闘</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="game">
+
+    <h1>⚔️ 戦闘</h1>
+
+    <div id="battle" class="battle">
+
+        <h2 id="enemyName">敵</h2>
+
+        <p>
+            HP
+            <span id="enemyHp">100</span>
+            /
+            <span id="enemyMaxHp">100</span>
+        </p>
+
+        <div class="bar">
+            <div id="enemyHpBar" class="hpBar"></div>
+        </div>
+
+        <hr>
+
+        <p>
+            勇者 HP
+            <span id="hp">100</span>
+            /
+            <span id="maxHp">100</span>
+        </p>
+
+        <div class="bar">
+            <div id="hpBar" class="hpBar"></div>
+        </div>
+
+        <p>
+            MP
+            <span id="mp">30</span>
+            /
+            <span id="maxMp">30</span>
+        </p>
+
+        <div class="bar">
+            <div id="mpBar" class="mpBar"></div>
+        </div>
+
+        <div class="buttons">
+
+            <button onclick="attack()">⚔️ 攻撃</button>
+
+            <button onclick="defend()">🛡️ 防御</button>
+
+            <button onclick="openSkillMenu()">✨ スキル</button>
+
+            <button onclick="openItemMenu()">🎒 アイテム</button>
+
+            <button onclick="runAway()">🏃 逃げる</button>
+
+        </div>
+
+        <div id="skillMenu" class="screen" style="display:none;">
+        <h3>✨ スキル</h3>
+
+        <div id="skillList"></div>
+
+        <br>
+
+        <button onclick="document.getElementById('skillMenu').style.display='none';">
+        戻る
+        </button>
+        </div>
+
+    </div>
+
+    <div class="log">
+
+        <h3>ログ</h3>
+
+        <p id="log">戦闘準備中……</p>
+
+    </div>
+
+    <div id="battleResult" class="screen" style="display:none;">
+
+    <h2>🎉 戦闘結果</h2>
+
+    <div id="battleResultText"></div>
+
+    <br>
+
+    <button onclick="location.href='index.html'">
+        🏠 ホームへ戻る
+    </button>
+
+</div>
+
+
+</div>
+
+<script src="script.js"></script>
+<script src="skill.js"></script>
+<script src="battle.js"></script>
+<script src="smithy.js"></script>
+
+<script>
+    loadGame();
+
+    const params = new URLSearchParams(location.search);
+    const dungeon = params.get("dungeon");
+
+    if(dungeon && dungeon !== "daily"){
+        localStorage.setItem("selectedDungeon", dungeon);
+    }
+
+    const selectedDungeon = localStorage.getItem("selectedDungeon");
+
+    if(selectedDungeon){
+        adventure(selectedDungeon);
+    }
+</script>
+
+</body>
+</html>
