@@ -84,9 +84,7 @@ button:hover{
     background:#3b82f6;
     transition:.3s;
 }
-#equipmentScreen {
-    display: none;
-}
+
 
 /* =====================
    ⚔️ 装備1個ずつのカード
