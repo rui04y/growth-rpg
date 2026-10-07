@@ -993,39 +993,138 @@ function adventure(dungeonType = "grassland") {
 
 
 
-    const enemies = {
+   const enemies = {
 
-        // 🌳 草原
-        grassland: [
-            {name:"スライム", hp:50, maxHp:50, atk:8, exp:20, gold:15, drop:"slimeGel",dropRate:0.5},
-            {name:"グレムリン", hp:50, maxHp:50, atk:10, exp:20, gold:15, drop:"gremlinClaw",dropRate:0.4},
-            {name:"ゴブリン", hp:80, maxHp:80, atk:12, exp:35, gold:15, drop:"goblinFang",dropRate:0.5},
-            {name:"オオカミ", hp:100, maxHp:100, atk:15, exp:50, gold:25, drop:"wolfFur",dropRate:0.6}
-        ],
+    // 🌳 草原
+    grassland: [
 
-        // 🕳️ 洞窟
-        cave: [
-            {name:"ゾンビ", hp:150, maxHp:150, atk:10, exp:20, gold:15,drop:"zombieBone",dropRate:0.5},
-            {name:"ゴブリン", hp:100, maxHp:100, atk:15, exp:40, gold:35, drop:"goblinFang",dropRate:0.5},
-            {name:"オーク", hp:180, maxHp:180, atk:22, exp:80, gold:35,drop:"orcHorn",dropRate:0.45},
-            {name:"リザードマン", hp:220, maxHp:220, atk:27, exp:110, gold:50,drop:"lizardScale",dropRate:0.4}
-        ],
+        {
+            name:"スライム",
+            hp:50, maxHp:50, atk:8, exp:20, gold:15,
+            drop:"slimeGel", dropRate:0.5,
+            rareDrop:"slimeCore", rareDropRate:0.05
+        },
 
-        // 🌋 火山
-        volcano: [
-            {name:"サラマンダー", hp:450, maxHp:450, atk:60, exp:250, gold:100,drop:"salamanderFlame",dropRate:0.4},
-            {name:"オーク", hp:250, maxHp:250, atk:30, exp:100, gold:45,drop:"orcHorn",dropRate:0.5},
-            {name:"炎の魔物", hp:350, maxHp:350, atk:38, exp:150, gold:65,drop:"fireCrystal",dropRate:0.45},
-            {name:"ドラゴン", hp:500, maxHp:500, atk:50, exp:300, gold:125,drop:"dragonFang",dropRate:0.35}
-        ],
+        {
+            name:"グレムリン",
+            hp:50, maxHp:50, atk:10, exp:20, gold:15,
+            drop:"gremlinClaw", dropRate:0.4,
+            rareDrop:"goblinSecretFang", rareDropRate:0.05
+        },
 
-        // 🏰 魔王城
-        castle: [
-            {name:"リッチ", hp:700, maxHp:700, atk:50, exp:50, gold:80,drop:"lichSoul",dropRate:0.35},
-            {name:"リザードマン", hp:400, maxHp:400, atk:45, exp:180, gold:75,drop:"lizardScale",dropRate:0.45},
-            {name:"デーモン", hp:600, maxHp:600, atk:55, exp:250, gold:110,drop:"demonHorn",dropRate:0.4},
-            {name:"魔王軍騎士", hp:800, maxHp:800, atk:65, exp:350, gold:150,drop:"knightMedal",dropRate:0.3}
-        ]
+        {
+            name:"ゴブリン",
+            hp:80, maxHp:80, atk:12, exp:35, gold:15,
+            drop:"goblinFang", dropRate:0.5,
+            rareDrop:"goblinSecretFang", rareDropRate:0.05
+        },
+
+        {
+            name:"オオカミ",
+            hp:100, maxHp:100, atk:15, exp:50, gold:25,
+            drop:"wolfFur", dropRate:0.6,
+            rareDrop:"moonFur", rareDropRate:0.05
+        }
+    ],
+
+
+    // 🕳️ 洞窟
+    cave: [
+
+        {
+            name:"ゾンビ",
+            hp:150, maxHp:150, atk:10, exp:20, gold:15,
+            drop:"zombieBone", dropRate:0.5,
+            rareDrop:"undeadCore", rareDropRate:0.05
+        },
+
+        {
+            name:"ゴブリン",
+            hp:100, maxHp:100, atk:15, exp:40, gold:35,
+            drop:"goblinFang", dropRate:0.5,
+            rareDrop:"goblinSecretFang", rareDropRate:0.05
+        },
+
+        {
+            name:"オーク",
+            hp:180, maxHp:180, atk:22, exp:80, gold:35,
+            drop:"orcHorn", dropRate:0.45,
+            rareDrop:"giantHeartCore", rareDropRate:0.05
+        },
+
+        {
+            name:"リザードマン",
+            hp:220, maxHp:220, atk:27, exp:110, gold:50,
+            drop:"lizardScale", dropRate:0.4,
+            rareDrop:"darkNightCloak", rareDropRate:0.05
+        }
+    ],
+
+
+    // 🌋 火山
+    volcano: [
+
+        {
+            name:"サラマンダー",
+            hp:450, maxHp:450, atk:60, exp:250, gold:100,
+            drop:"salamanderFlame", dropRate:0.4,
+            rareDrop:"burningCore", rareDropRate:0.05
+        },
+
+        {
+            name:"オーク",
+            hp:250, maxHp:250, atk:30, exp:100, gold:45,
+            drop:"orcHorn", dropRate:0.5,
+            rareDrop:"giantHeartCore", rareDropRate:0.05
+        },
+
+        {
+            name:"炎の魔物",
+            hp:350, maxHp:350, atk:38, exp:150, gold:65,
+            drop:"fireCrystal", dropRate:0.45,
+            rareDrop:"demonFlame", rareDropRate:0.05
+        },
+
+        {
+            name:"ドラゴン",
+            hp:500, maxHp:500, atk:50, exp:300, gold:125,
+            drop:"dragonFang", dropRate:0.35,
+            rareDrop:"dragonHeart", rareDropRate:0.05
+        }
+    ],
+
+
+    // 🏰 魔王城
+    castle: [
+
+        {
+            name:"リッチ",
+            hp:700, maxHp:700, atk:50, exp:50, gold:80,
+            drop:"lichSoul", dropRate:0.35,
+            rareDrop:"deathKnightSoul", rareDropRate:0.05
+        },
+
+        {
+            name:"リザードマン",
+            hp:400, maxHp:400, atk:45, exp:180, gold:75,
+            drop:"lizardScale", dropRate:0.45,
+            rareDrop:"darkNightCloak", rareDropRate:0.05
+        },
+
+        {
+            name:"デーモン",
+            hp:600, maxHp:600, atk:55, exp:250, gold:110,
+            drop:"demonHorn", dropRate:0.4,
+            rareDrop:"magicCrystalCore", rareDropRate:0.05
+        },
+
+        {
+            name:"魔王軍騎士",
+            hp:800, maxHp:800, atk:65, exp:350, gold:150,
+            drop:"knightMedal", dropRate:0.3,
+            rareDrop:"deathKnightSoul", rareDropRate:0.05
+        }
+    ]
     };
 
 
@@ -1035,26 +1134,53 @@ function adventure(dungeonType = "grassland") {
 
     const miniBosses = {
 
-        grassland:
-            {name:"🐺 巨大オオカミ", hp:300, maxHp:300, atk:30, exp:150, gold:120, miniBoss:true,
-        drop:"giantWolfFang",
-        dropRate:1},
+    grassland:
+        {
+            name:"🐺 巨大オオカミ",
+            hp:300, maxHp:300, atk:30,
+            exp:150, gold:120,
+            miniBoss:true,
+            drop:"giantWolfFang",
+            dropRate:1,
+            rareDrop:"dragonWingCrystal",
+            rareDropRate:0.15
+        },
 
-        cave:
-            {name:"🪨 岩石巨人", hp:600, maxHp:600, atk:45, exp:300, gold:250, miniBoss:true,
-        drop:"giantCore",
-        dropRate:1},
+    cave:
+        {
+            name:"🪨 岩石巨人",
+            hp:600, maxHp:600, atk:45,
+            exp:300, gold:250,
+            miniBoss:true,
+            drop:"giantCore",
+            dropRate:1,
+            rareDrop:"giantHeartCore",
+            rareDropRate:0.15
+        },
 
-        volcano:
-            {name:"🔥 炎竜", hp:2000, maxHp:2000, atk:200, exp:600, gold:500, miniBoss:true,
-        drop:"fireDragonHeart",
-        dropRate:1},
+    volcano:
+        {
+            name:"🔥 炎竜",
+            hp:2000, maxHp:2000, atk:200,
+            exp:600, gold:500,
+            miniBoss:true,
+            drop:"fireDragonHeart",
+            dropRate:1,
+            rareDrop:"demonKingHornFragment",
+            rareDropRate:0.15
+        },
 
-        castle:
-            {name:"⚔️ 魔将", hp:15000, maxHp:15000, atk:600, exp:1000, gold:800, miniBoss:true,
-        drop:"demonGeneralCore",
-        dropRate:1
-    }
+    castle:
+        {
+            name:"⚔️ 魔将",
+            hp:15000, maxHp:15000, atk:600,
+            exp:1000, gold:800,
+            miniBoss:true,
+            drop:"demonGeneralCore",
+            dropRate:1,
+            rareDrop:"demonGeneralBattleCore",
+            rareDropRate:0.15
+        }
     };
 
 
@@ -1064,17 +1190,45 @@ function adventure(dungeonType = "grassland") {
 
     const bosses = {
 
-        grassland:
-            {name:"👑 森の王", hp:600, maxHp:600, atk:50, exp:500, gold:500, boss:true},
+    grassland:
+        {
+            name:"👑 森の王",
+            hp:600, maxHp:600, atk:50,
+            exp:500, gold:500,
+            boss:true,
+            rareDrop:"moonFur",
+            rareDropRate:0.25
+        },
 
-        cave:
-            {name:"👹 洞窟の主", hp:1200, maxHp:1200, atk:70, exp:1000, gold:1000, boss:true},
+    cave:
+        {
+            name:"👹 洞窟の主",
+            hp:1200, maxHp:1200, atk:70,
+            exp:1000, gold:1000,
+            boss:true,
+            rareDrop:"undeadCore",
+            rareDropRate:0.25
+        },
 
-        volcano:
-            {name:"🐉 火山の王", hp:5000, maxHp:5000, atk:310, exp:2000, gold:2000, boss:true},
+    volcano:
+        {
+            name:"🐉 火山の王",
+            hp:5000, maxHp:5000, atk:310,
+            exp:2000, gold:2000,
+            boss:true,
+            rareDrop:"dragonHeart",
+            rareDropRate:0.25
+        },
 
-        castle:
-            {name:"👿 魔王", hp:60000, maxHp:60000, atk:900, exp:5000, gold:5000, boss:true}
+    castle:
+        {
+            name:"👿 魔王",
+            hp:60000, maxHp:60000, atk:900,
+            exp:5000, gold:5000,
+            boss:true,
+            rareDrop:"demonSoul",
+            rareDropRate:0.25
+        }
     };
 
 
@@ -1248,23 +1402,43 @@ const materialData = {
     gremlinClaw: "🦴 グレムリンの爪",
     goblinFang: "🦷 ゴブリンの牙",
     wolfFur: "🐺 オオカミの毛皮",
+    killerBeeNeedle: "🐝 キラービーの針",
+    goblinArrowhead: "🏹 ゴブリンの矢じり",
+    ancientBranch: "🌳 古代樹の枝",
+
 
     zombieBone: "🦴 ゾンビの骨",
     orcHorn: "🦏 オークの角",
     lizardScale: "🐲 リザードマンの鱗",
+    vampireFang: "🧛 吸血鬼の牙",
+    minotaurHorn: "🐂 ミノタウロスの角",
+    darkCloth: "🌑 闇の布",
+
 
     salamanderFlame: "🔥 サラマンダーの炎",
     fireCrystal: "🔴 炎の魔石",
     dragonFang: "🐉 ドラゴンの牙",
+    flameIron: "🔥 炎鉄",
+    magmaGel: "🌋 マグマジェル",
+    wyvernWing: "🐉 ワイバーンの翼",
 
     lichSoul: "👻 リッチの魂",
     demonHorn: "👿 デーモンの角",
     knightMedal: "⚔️ 魔王軍騎士の勲章",
+    deathKnightFragment: "💀 デスナイトの欠片",
+    demonWing: "👿 悪魔の翼",
+    magicCrystal: "💎 魔晶石",
 
     giantWolfFang: "🐺 巨大オオカミの牙",
     giantCore: "🪨 岩石巨人の核",
     fireDragonHeart: "🔥 炎竜の心臓",
     demonGeneralCore: "⚔️ 魔将の核"
+
+
+    
+    
+
+    
 };
 
 const materialExchangeData = {
@@ -1275,20 +1449,36 @@ const materialExchangeData = {
     goblinFang: 6,
     wolfFur: 7,
 
+    killerBeeNeedle: 7,
+    goblinArrowhead: 8,
+    ancientBranch: 9,
+
     // 🕳️ 洞窟
     zombieBone: 8,
     orcHorn: 10,
     lizardScale: 12,
+
+    vampireFang: 13,
+    minotaurHorn: 15,
+    darkCloth: 16,
 
     // 🌋 火山
     salamanderFlame: 14,
     fireCrystal: 16,
     dragonFang: 20,
 
+    flameIron: 20,
+    magmaGel: 22,
+    wyvernWing: 25,
+
     // 🏰 魔王城
     lichSoul: 22,
     demonHorn: 25,
     knightMedal: 30,
+
+    deathKnightFragment: 32,
+    demonWing: 35,
+    magicCrystal: 40,
 
     // 👑 中ボス
     giantWolfFang: 20,
@@ -1298,6 +1488,10 @@ const materialExchangeData = {
 };
 
 const rareMaterialData = {
+
+    // ==============================
+    // 🌳 草原
+    // ==============================
 
     slimeCore: {
         name: "💎 スライムコア",
@@ -1311,17 +1505,103 @@ const rareMaterialData = {
         value: 5
     },
 
+    goblinSecretFang: {
+        name: "🦷 ゴブリンの秘牙",
+        effect: "atk",
+        value: 8
+    },
+
+    dragonWingCrystal: {
+        name: "🐉 竜翼の結晶",
+        effect: "allSkillPowerUp",
+        value: 0.05
+    },
+
+
+    // ==============================
+    // 🕳️ 洞窟
+    // ==============================
+
+    undeadCore: {
+        name: "🧟 死者の核",
+        effect: "def",
+        value: 8
+    },
+
+    giantHeartCore: {
+        name: "🐂 巨人の心核",
+        effect: "atk",
+        value: 12
+    },
+
+    darkNightCloak: {
+        name: "🌑 闇夜の外套",
+        effect: "def",
+        value: 10
+    },
+
+
+    // ==============================
+    // 🌋 火山
+    // ==============================
+
     dragonHeart: {
         name: "❤️ 竜の心臓",
         effect: "atk",
         value: 10
     },
 
+    burningCore: {
+        name: "🔥 焼熱の核",
+        effect: "allSkillPowerUp",
+        value: 0.10
+    },
+
+    demonKingHornFragment: {
+        name: "👿 悪魔王の角片",
+        effect: "atk",
+        value: 10
+    },
+
+
+    // ==============================
+    // 🏰 魔王城
+    // ==============================
+
     demonFlame: {
         name: "🔥 魔界の炎",
         effect: "allSkillPowerUp",
-        value: 0.1
+        value: 0.10
     },
+
+    deathKnightSoul: {
+        name: "💀 死騎士の魂",
+        effect: "atk",
+        value: 10
+    },
+
+    magicCrystalCore: {
+        name: "💎 魔力の結晶核",
+        effect: "maxMp",
+        value: 10
+    },
+
+    demonWing: {
+        name: "👿 悪魔王の翼",
+        effect: "allSkillPowerUp",
+        value: 0.05
+    },
+
+    demonGeneralBattleCore: {
+        name: "⚔️ 魔将の戦核",
+        effect: "allStatus",
+        value: 8
+    },
+
+
+    // ==============================
+    // 👑 ボス
+    // ==============================
 
     demonSoul: {
         name: "👑 魔王の魂",
@@ -1393,35 +1673,55 @@ function applyRareMaterialEffects(){
 
             const rare = rareMaterialData[rareId];
 
+            // ⚔️ ATK
             if(rare.effect === "atk"){
+
                 player.rareEffects.atk += rare.value;
+
             }
 
+            // 🛡️ DEF
             else if(rare.effect === "def"){
+
                 player.rareEffects.def += rare.value;
+
             }
 
+            // ❤️ 最大HP
             else if(rare.effect === "maxHp"){
+
                 player.rareEffects.maxHp += rare.value;
+
             }
 
+            // 🔵 最大MP
             else if(rare.effect === "maxMp"){
+
                 player.rareEffects.maxMp += rare.value;
+
             }
 
+            // 👑 全ステータス
             else if(rare.effect === "allStatus"){
 
                 player.rareEffects.atk += rare.value;
                 player.rareEffects.def += rare.value;
                 player.rareEffects.maxHp += rare.value;
                 player.rareEffects.maxMp += rare.value;
+
             }
 
+            // ✨ 全スキル威力
             else if(rare.effect === "allSkillPowerUp"){
+
                 player.rareEffects.allSkillPowerUp += rare.value;
+
             }
+
         }
+
     }
+
 }
 
 
@@ -3690,13 +3990,74 @@ function updateInventory(){
     // ====================
 
     const materialList =
-        document.getElementById("materialList");
+    document.getElementById("materialList");
 
     materialList.innerHTML = "";
 
-    if(!player.materials){
+    let hasMaterial = false;
 
-        materialList.textContent = "素材を持っていません";
+
+    // ====================
+    // 🛠️ 通常素材
+    // ====================
+
+    if(player.materials){
+
+        for(let material in player.materials){
+
+            if(player.materials[material] > 0){
+
+                materialList.innerHTML += `
+                <div>
+                    ${materialData[material] || material}
+                    ×${player.materials[material]}
+
+                    <button onclick="exchangeMaterial('${material}')">
+                        🔮 10個→5魔石
+                    </button>
+                </div>
+                `;
+
+                hasMaterial = true;
+            }
+        }
+    }
+
+
+    // ====================
+    // ✨ レア素材
+    // ====================
+
+    if(player.materials){
+
+        for(let rareId in rareMaterialData){
+
+            if(player.materials[rareId] > 0){
+
+            const rare =
+                rareMaterialData[rareId];
+
+            materialList.innerHTML += `
+                <div>
+                    ✨ ${rare.name}
+                    ×${player.materials[rareId]}
+                </div>
+            `;
+
+            hasMaterial = true;
+        }
+    }
+    }
+
+
+    // ==================== 
+    // 素材がない場合
+    // ====================
+
+    if(!hasMaterial){
+
+        materialList.textContent =
+        "素材を持っていません";
 
     }
     else{
