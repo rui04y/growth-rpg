@@ -376,55 +376,159 @@ function updateSelectedCraftMaterials(){
 
 const craftMaterialData = {
 
+    // ==============================
+    // 🌳 草原
+    // ==============================
+
     slimeGel: {
-        effects: { maxHp: 0.05 },
+        effects: {
+            maxHp: 0.05
+        },
         traits: ["生命"]
     },
 
     gremlinClaw: {
-        effects: { atk: 0.03 },
+        effects: {
+            atk: 0.03
+        },
         traits: ["狂暴"]
     },
 
     goblinFang: {
-        effects: { criticalRate: 0.02 },
+        effects: {
+            criticalRate: 0.02
+        },
         traits: ["狩猟"]
     },
 
     wolfFur: {
-        effects: { criticalDamage: 0.05 },
+        effects: {
+            criticalDamage: 0.05
+        },
         traits: ["野性"]
     },
 
+    killerBeeNeedle: {
+        effects: {
+            criticalRate: 0.03
+        },
+        traits: ["狩猟"]
+    },
+
+    goblinArrowhead: {
+        effects: {
+            atk: 0.04
+        },
+        traits: ["狩猟"]
+    },
+
+    ancientBranch: {
+        effects: {
+            maxHp: 0.06
+        },
+        traits: ["生命"]
+    },
+
+
+    // ==============================
+    // 🕳️ 洞窟
+    // ==============================
+
     zombieBone: {
-        effects: { def: 0.05 },
+        effects: {
+            def: 0.05
+        },
         traits: ["不死"]
     },
 
     orcHorn: {
-        effects: { atk: 0.05 },
+        effects: {
+            atk: 0.05
+        },
         traits: ["剛力"]
     },
 
     lizardScale: {
-        effects: { def: 0.07 },
+        effects: {
+            def: 0.07
+        },
         traits: ["硬質"]
     },
 
+    vampireFang: {
+        effects: {
+            criticalDamage: 0.07
+        },
+        traits: ["不死"]
+    },
+
+    minotaurHorn: {
+        effects: {
+            atk: 0.06
+        },
+        traits: ["剛力"]
+    },
+
+    darkCloth: {
+        effects: {
+            damageTaken: 0.02
+        },
+        traits: ["悪魔"]
+    },
+
+
+    // ==============================
+    // 🌋 火山
+    // ==============================
+
     salamanderFlame: {
-        effects: { fireDamage: 0.08 },
+        effects: {
+            fireDamage: 0.08
+        },
         traits: ["炎"]
     },
 
     fireCrystal: {
-        effects: { skillDamage: 0.06 },
+        effects: {
+            skillDamage: 0.06
+        },
         traits: ["魔力"]
     },
 
     dragonFang: {
-        effects: { atk: 0.08 },
+        effects: {
+            atk: 0.08
+        },
         traits: ["竜"]
     },
+
+    flameIron: {
+        effects: {
+            fireDamage: 0.06
+        },
+        traits: ["炎"]
+    },
+
+    magmaGel: {
+        effects: {
+            maxHp: 0.05,
+            fireDamage: 0.05
+        },
+        traits: ["炎"]
+    },
+
+    wyvernWing: {
+        effects: {
+            atk: 0.05,
+            criticalRate: 0.02
+        },
+        traits: ["竜"]
+    },
+
+
+    // ==============================
+    // 🏰 魔王城
+    // ==============================
 
     lichSoul: {
         effects: {
@@ -450,13 +554,46 @@ const craftMaterialData = {
         traits: ["騎士"]
     },
 
+    deathKnightFragment: {
+        effects: {
+            def: 0.08,
+            criticalDamage: 0.05
+        },
+        traits: ["不死", "騎士"]
+    },
+
+    demonWing: {
+        effects: {
+            atk: 0.05,
+            skillDamage: 0.05
+        },
+        traits: ["悪魔", "魔力"]
+    },
+
+    magicCrystal: {
+        effects: {
+            maxMp: 0.08,
+            skillDamage: 0.05
+        },
+        traits: ["魔力"]
+    },
+
+
+    // ==============================
+    // 👑 中ボス
+    // ==============================
+
     giantWolfFang: {
-        effects: { criticalRate: 0.04 },
+        effects: {
+            criticalRate: 0.04
+        },
         traits: ["野性"]
     },
 
     giantCore: {
-        effects: { def: 0.12 },
+        effects: {
+            def: 0.12
+        },
         traits: ["大地"]
     },
 
@@ -478,7 +615,6 @@ const craftMaterialData = {
     }
 
 };
-
 // ==============================
 // 🔨 同じ効果の重複補正
 // 1個目 100%
